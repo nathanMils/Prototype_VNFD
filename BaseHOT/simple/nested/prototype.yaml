@@ -1,0 +1,26 @@
+heat_template_version: 2013-05-23
+description: 'Prototype HOT for VNF'
+
+parameters:
+  flavor:
+    type: string
+  image:
+    type: string
+  net:
+    type: string
+
+resources:
+  Prototype:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      name: Prototype
+      networks:
+        - port:
+            get_resource: Prototype_CP1
+
+  Prototype_CP1:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: net }
