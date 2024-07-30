@@ -13,7 +13,7 @@ This is designed to build a prototype Virtual Network Function Descriptor (VNFD)
 
 ## Scripts
 
-### `build.sh`
+### `package.sh`
 
 This script performs the following tasks:
 1. Calculates the SHA-256 hash of each script file in the `Scripts/` directory.
