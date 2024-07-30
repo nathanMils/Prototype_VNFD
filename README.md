@@ -2,7 +2,7 @@
 
 This is designed to build a prototype Virtual Network Function Descriptor (VNFD) for Tacker, an OpenStack project for NFV orchestration.
 
-## Structure
+## VNFD Structure
 
 - `BaseHOT/`: Contains base Heat Orchestration Templates (HOT).
 - `Definitions/`: Contains TOSCA definitions and downloaded YAML files.
@@ -10,6 +10,9 @@ This is designed to build a prototype Virtual Network Function Descriptor (VNFD)
 - `Scripts/`: Contains shell scripts for configuring various components.
 - `TOSCA-Metadata/`: Contains the `TOSCA.meta` file with metadata about the VNFD package.
 - `UserData/`: Contains user data scripts and configurations.
+
+## Other
+- `Requests/`: Contains JSON for tacker operations.
 
 ## Scripts
 

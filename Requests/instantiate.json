@@ -1,0 +1,43 @@
+{
+  "flavourId":"simple",
+  "vimConnectionInfo": {
+    "vim": {
+      "id": "3cc2c4ff-525c-48b4-94c9-29247223322f",
+      "vimId": "<VIM_ID>",
+      "vimType": "openstack"
+    }
+  },
+  "additionalParams": {
+    "lcm-operation-user-data": "./UserData/lcm_user_data.py",
+    "lcm-operation-user-data-class": "StandardUserData"
+  },
+  "Filebeat": {
+    "enabled": true,
+    "config": {
+      "filebeat.inputs": {
+        "HMAC": {
+          "enabled": true,
+          "key": "<HMAC_KEY>"
+        }
+      }
+    },
+    "output": {
+      "enabled": true,
+      "elasticsearch": {
+        "hosts": [
+          "<ELASTICSEARCH_HOST>"
+        ]
+      }
+    }
+  },
+  "Suricata": {
+    "enabled": true,
+    "config": {
+      "suricata.inputs": {
+        "network": {
+          "interface": "<INTERFACE>"
+        }
+      }
+    }
+  }
+}
