@@ -6,29 +6,16 @@ parameters:
     type: json
 
 resources:
-  # VDUs
-  Prototype:
-    type: prototype.yaml
-    properties:
-      flavor: { get_param: [ nfv, VDU, Prototype, computeFlavourId ] }
-      image: { get_param: [ nfv, VDU, Prototype, vcImageId ] }
-      internal_net: { get_resource: internal_network }
-      external_net: { get_param: [ nfv, Network, externalNetworkId ] }
-      proxy_security_group: { get_resource: proxy_security_group }
-
-  NF:
-    type: network_function.yaml
-    properties:
-      flavor: { get_param: [ nfv, VDU, NF, computeFlavourId ] }
-      image: { get_param: [ nfv, VDU, NF, vcImageId ] }
-      internal_net: { get_resource: internal_net }
-      internal_security_group: { get_resource: internal_security_group }
-
   # Networks
+
+  # internal network for NGINX Proxy <-> NF communication HTTP/HTTPS
   internal_net:
     type: OS::Neutron::Net
     properties:
       name: internal_net
+      admin_state_up: true
+      value_specs:
+        mtu: 1450
 
   # Subnets
   internal_subnet:
@@ -66,5 +53,24 @@ resources:
           direction: egress
           port_range_min: 1
           port_range_max: 65535
+  # VDUs
+  # VDU for the NGINX Proxy with Filebeat
+  Prototype:
+    type: prototype.yaml
+    properties:
+      flavor: { get_param: [ nfv, VDU, Prototype, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, Prototype, vcImageId ] }
+      internal_net: { get_resource: internal_network }
+      external_net: { get_param: [ nfv, Network, externalNetworkId ] }
+      proxy_security_group: { get_resource: proxy_security_group }
+  # VDU for the 5G Network Function / Might need to adjust this to work with existing VNFDs for 5G Network Functions with multiple VDUs
+  NF:
+    type: network_function.yaml
+    properties:
+      flavor: { get_param: [ nfv, VDU, NF, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, NF, vcImageId ] }
+      internal_net: { get_resource: internal_net }
+      internal_security_group: { get_resource: internal_security_group }
+
 
 outputs: {}

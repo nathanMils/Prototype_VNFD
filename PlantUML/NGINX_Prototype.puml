@@ -1,0 +1,33 @@
+@startuml
+
+rectangle "Internal Network" {
+    rectangle "Proxy VDU" {
+        component "Proxy VDU\nIP: [proxy_vdu_ip]\nPort: 8080"
+    }
+    rectangle "5G Network Function" {
+        component "5G Network Function\nIP: [nf_ip]\nPort: 9090"
+    }
+}
+
+rectangle "ELK Stack Network" {
+    rectangle "ELK Stack" {
+        component "Elasticsearch"
+        component "Logstash\nPort: 5044"
+        component "Kibana"
+    }
+}
+
+rectangle "Logging Infrastructure" {
+    component "Filebeat\nIP: [filebeat_ip]\nPort: 5044"
+}
+
+' Relationships
+[Proxy VDU] --> [5G Network Function] : Communicates internally
+[Proxy VDU] --> [Filebeat] : Sends logs
+[5G Network Function] --> [Filebeat] : Sends logs
+
+[Filebeat] --> [Logstash] : Forwards logs
+[Logstash] --> [Elasticsearch] : Stores logs
+[Elasticsearch] --> [Kibana] : Provides data
+
+@enduml
