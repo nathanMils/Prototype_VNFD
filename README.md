@@ -14,6 +14,12 @@ This is designed to build a prototype Virtual Network Function Descriptor (VNFD)
 ## Other
 - `Requests/`: Contains JSON for tacker operations.
 
+## Flavours
+
+- `Nginx Option/nginx_opt`: Intended to capture internal HTTP/HTTPS traffic between 5G network functions (Inline).
+- `Suricata Option/suricata_opt`: Intended to capture network level information from consumer traffic for UPF function (Inline/Not Inline).
+- `Zeek Option/zeek_opt`: Intended for a more reactive approach where inline is not possible or Network Function is unknown (Not Inline).
+
 ## Scripts
 
 ### `package.sh`
