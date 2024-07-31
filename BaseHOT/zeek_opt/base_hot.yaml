@@ -1,0 +1,46 @@
+heat_template_version: 2013-05-23
+description: 'Base HOT for VNF'
+
+parameters:
+  nfv:
+    type: json
+
+resources:
+  Prototype:
+    type: prototype.yaml
+    properties:
+      flavor: { get_param: [ nfv, VDU, Prototype, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, Prototype, vcImageId ] }
+      net: { get_resource: internalVL1 }
+
+  NF:
+    type: network_function.yaml
+    properties:
+      flavor: { get_param: [ nfv, VDU, NF, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, NF, vcImageId ] }
+      net: { get_resource: internalVL1 }
+
+  internalVL1:
+    type: OS::Neutron::Net
+
+  internalVL1_subnet:
+    type: OS::Neutron::Subnet
+    properties:
+      ip_version: 4
+      network:
+        get_resource: internalVL1
+      cidr: 10.0.1.0/24
+
+  router:
+    type: OS::Neutron::Router
+    properties:
+      external_gateway_info:
+        network: public
+
+  router_interface_internalVL1:
+    type: OS::Neutron::RouterInterface
+    properties:
+      router_id: { get_resource: router }
+      subnet_id: { get_resource: internalVL1_subnet }
+
+outputs: {}

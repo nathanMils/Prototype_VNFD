@@ -38,7 +38,9 @@ script_files=(
     'configure_main.sh'
     'configure_prototype.sh'
     'configure_network_function.sh'
+    'configure_nginx.sh'
     'configure_suricata.sh'
+    'configure_zeek.sh'
 )
 
 hashes=()

@@ -1,0 +1,26 @@
+heat_template_version: 2013-05-23
+description: '5G Network Function VDU HOT for VNF'
+
+parameters:
+  flavor:
+    type: string
+  image:
+    type: string
+  net:
+    type: string
+
+resources:
+  NF:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      name: NF
+      networks:
+        - port:
+            get_resource: NF_CP1
+
+  NF_CP1:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: net }

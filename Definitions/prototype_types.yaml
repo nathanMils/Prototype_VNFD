@@ -38,8 +38,8 @@ node_types:
         default: [ Tacker ]
       flavour_id:
         type: string
-        constraints: [ valid_values: [ simple ] ]
-        default: simple
+        constraints: [ valid_values: [ nginx_opt, suricata_opt, zeek_opt ] ]
+        default: nginx_opt
       flavour_description:
         type: string
         default: This is the default flavour description
