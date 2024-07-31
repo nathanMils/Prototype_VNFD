@@ -18,12 +18,17 @@ resources:
         mtu: 1450
 
   # Subnets
-  internal_subnet:
+
+  # Subnet for the internal network
+  int_subnet:
     type: OS::Neutron::Subnet
+    depends_on: [ internal_net ]
     properties:
-      network_id: { get_resource: internal_net }
-      cidr: 192.168.10.0/24
-      ip_version: 4
+      name: proxy_vdu_int_subnet
+      network: { get_resource: internal_net }
+      cidr: 192.168.0.0/24
+      enable_dhcp: true
+      gateway_ip: 192.168.0.254
 
   # Security Groups
   proxy_security_group:
