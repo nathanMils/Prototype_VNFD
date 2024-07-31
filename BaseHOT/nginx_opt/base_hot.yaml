@@ -6,41 +6,65 @@ parameters:
     type: json
 
 resources:
+  # VDUs
   Prototype:
     type: prototype.yaml
     properties:
       flavor: { get_param: [ nfv, VDU, Prototype, computeFlavourId ] }
       image: { get_param: [ nfv, VDU, Prototype, vcImageId ] }
-      net: { get_resource: internalVL1 }
+      internal_net: { get_resource: internal_network }
+      external_net: { get_param: [ nfv, Network, externalNetworkId ] }
+      proxy_security_group: { get_resource: proxy_security_group }
 
   NF:
     type: network_function.yaml
     properties:
       flavor: { get_param: [ nfv, VDU, NF, computeFlavourId ] }
       image: { get_param: [ nfv, VDU, NF, vcImageId ] }
-      net: { get_resource: internalVL1 }
+      internal_net: { get_resource: internal_net }
+      internal_security_group: { get_resource: internal_security_group }
 
-  internalVL1:
+  # Networks
+  internal_net:
     type: OS::Neutron::Net
+    properties:
+      name: internal_net
 
-  internalVL1_subnet:
+  # Subnets
+  internal_subnet:
     type: OS::Neutron::Subnet
     properties:
+      network_id: { get_resource: internal_net }
+      cidr: 192.168.10.0/24
       ip_version: 4
-      network:
-        get_resource: internalVL1
-      cidr: 10.0.1.0/24
 
-  router:
-    type: OS::Neutron::Router
+  # Security Groups
+  proxy_security_group:
+    type: OS::Neutron::SecurityGroup
     properties:
-      external_gateway_info:
-        network: public
+      name: proxy_sg
+      rules:
+        - protocol: tcp
+          direction: ingress
+          port_range_min: 1
+          port_range_max: 65535
+        - protocol: tcp
+          direction: egress
+          port_range_min: 1
+          port_range_max: 65535
 
-  router_interface_internalVL1:
-    type: OS::Neutron::RouterInterface
+  internal_security_group:
+    type: OS::Neutron::SecurityGroup
     properties:
-      router_id: { get_resource: router }
-      subnet_id: { get_resource: internalVL1_subnet }
+      name: internal_sg
+      rules:
+        - protocol: tcp
+          direction: ingress
+          port_range_min: 1
+          port_range_max: 65535
+        - protocol: tcp
+          direction: egress
+          port_range_min: 1
+          port_range_max: 65535
 
 outputs: {}

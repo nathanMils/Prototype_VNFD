@@ -6,7 +6,7 @@ parameters:
     type: string
   image:
     type: string
-  net:
+  internal_net:
     type: string
 
 resources:
@@ -17,10 +17,11 @@ resources:
       image: { get_param: image }
       name: NF
       networks:
-        - port:
-            get_resource: NF_CP1
+        - port: { get_resource: internal_port }
 
-  NF_CP1:
+  # Ports
+  internal_port:
     type: OS::Neutron::Port
     properties:
-      network: { get_param: net }
+      network_id: { get_param: internal_net }
+      security_groups: [ { get_param: internal_security_group } ]

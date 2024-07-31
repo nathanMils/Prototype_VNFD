@@ -6,7 +6,11 @@ parameters:
     type: string
   image:
     type: string
-  net:
+  internal_net:
+    type: string
+  external_net:
+    type: string
+  proxy_security_group:
     type: string
 
 resources:
@@ -17,10 +21,17 @@ resources:
       image: { get_param: image }
       name: Prototype
       networks:
-        - port:
-            get_resource: Prototype_CP1
+        - port: {get_resource: internal_port}
+        - port: {get_resource: external_port}
 
-  Prototype_CP1:
+  internal_port:
     type: OS::Neutron::Port
     properties:
-      network: { get_param: net }
+      network_id: { get_param: internal_net }
+      security_groups: [ { get_param: proxy_security_group } ]
+
+  external_port:
+    type: OS::Neutron::Port
+    properties:
+      network_id: { get_param: external_net }
+      security_groups: [ { get_param: proxy_security_group } ]
