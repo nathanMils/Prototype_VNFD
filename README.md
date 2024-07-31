@@ -13,6 +13,7 @@ This is designed to build a prototype Virtual Network Function Descriptor (VNFD)
 
 ## Other
 - `Requests/`: Contains JSON for tacker operations.
+- `PlantUML/`: Contains PlantUML diagrams for the VNFD and flavours.
 
 ## Flavours
 

@@ -7,7 +7,6 @@ parameters:
 
 resources:
   # Networks
-
   # internal network for NGINX Proxy <-> NF communication HTTP/HTTPS
   internal_net:
     type: OS::Neutron::Net
@@ -18,7 +17,6 @@ resources:
         mtu: 1450
 
   # Subnets
-
   # Subnet for the internal network
   int_subnet:
     type: OS::Neutron::Subnet
