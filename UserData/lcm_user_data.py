@@ -176,64 +176,7 @@ class StandardUserData(userdata_utils.AbstractUserData):
         hot_dict = vnfd.get_base_hot(flavour_id)
         top_hot = hot_dict['template']
 
-        # first modify VDU resources
-        popped_vdu = {}
-        vdu_idxes = {}
-        for vdu_name in vnfd.get_vdu_nodes(flavour_id).keys():
-            popped_vdu[vdu_name] = top_hot.get('resources', {}).pop(vdu_name)
-            vdu_idxes[vdu_name] = 0
-        zones = {}
-        for res in grant_req['addResources']:
-            if res['type'] != 'COMPUTE':
-                continue
-            vdu_name = res['resourceTemplateId']
-            if vdu_name not in popped_vdu:
-                continue
-            vdu_idx = vdu_idxes[vdu_name]
-            vdu_idxes[vdu_name] += 1
-            zones[add_idx(vdu_name, vdu_idx)] = (
-                common_script_utils.get_param_zone_by_vnfc(
-                    res['id'], grant))
-            res = add_idx_to_vdu_template(popped_vdu[vdu_name], vdu_idx)
-            top_hot['resources'][add_idx(vdu_name, vdu_idx)] = res
-
         nfv_dict = common_script_utils.init_nfv_dict(top_hot)
-
-        vdus = nfv_dict.get('VDU', {})
-        for vdu_name_idx, vdu_value in vdus.items():
-            vdu_name = rm_idx(vdu_name_idx)
-            if 'computeFlavourId' in vdu_value:
-                vdu_value['computeFlavourId'] = (
-                    common_script_utils.get_param_flavor(
-                        vdu_name, flavour_id, vnfd, grant))
-            if 'vcImageId' in vdu_value:
-                vdu_value['vcImageId'] = common_script_utils.get_param_image(
-                    vdu_name, flavour_id, vnfd, grant)
-            if 'locationConstraints' in vdu_value:
-                vdu_value['locationConstraints'] = zones[vdu_name_idx]
-
-        cps = nfv_dict.get('CP', {})
-        for cp_name, cp_value in cps.items():
-            cp_name = rm_idx(cp_name)
-            if 'network' in cp_value:
-                cp_value['network'] = common_script_utils.get_param_network(
-                    cp_name, grant, req)
-            if 'fixed_ips' in cp_value:
-                ext_fixed_ips = common_script_utils.get_param_fixed_ips(
-                    cp_name, grant, req)
-                fixed_ips = []
-                for i in range(len(ext_fixed_ips)):
-                    if i not in cp_value['fixed_ips']:
-                        break
-                    ips_i = cp_value['fixed_ips'][i]
-                    if 'subnet' in ips_i:
-                        ips_i['subnet'] = ext_fixed_ips[i].get('subnet')
-                    if 'ip_address' in ips_i:
-                        ips_i['ip_address'] = ext_fixed_ips[i].get(
-                            'ip_address')
-                    fixed_ips.append(ips_i)
-                cp_value['fixed_ips'] = fixed_ips
-
         common_script_utils.apply_ext_managed_vls(top_hot, req, grant)
         nfv_dict = _merge_additional_params(nfv_dict, req, grant)
 
