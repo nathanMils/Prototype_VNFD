@@ -5,7 +5,7 @@ description: Simple deployment flavour for Sample VNF
 imports:
   - etsi_nfv_sol001_common_types.yaml
   - etsi_nfv_sol001_vnfd_types.yaml
-  - prototypes_types.yaml
+  - prototype_types.yaml
 
 topology_template:
   inputs:
@@ -31,7 +31,7 @@ topology_template:
   substitution_mappings:
     node_type: company.provider.VNF
     properties:
-      flavour_id: nginx_opt
+      flavour_id: simple
 
   node_templates:
     VNF:
@@ -51,14 +51,14 @@ topology_template:
           scale_start: []
           scale_end: []
 
-    Prototype:
+    VDU1:
       type: tosca.nodes.nfv.Vdu.Compute
       properties:
-        name: Prototype
-        description: Prototype Proxy
+        name: VDU1
+        description: VDU1 compute node
         vdu_profile:
           min_number_of_instances: 1
-          max_number_of_instances: 1
+          max_number_of_instances: 3
         sw_image_data:
           name: cirros-0.5.2-x86_64-disk
           version: '0.5.2'
@@ -85,62 +85,21 @@ topology_template:
             virtual_local_storage:
               - size_of_storage: 1 GB
 
-    NF:
-      type: tosca.nodes.nfv.Vdu.Compute
-      properties:
-        name: NF
-        description: Network Function
-        vdu_profile:
-          min_number_of_instances: 1
-          max_number_of_instances: 1
-        sw_image_data:
-          name: cirros-0.5.2-x86_64-disk
-          version: '0.5.2'
-          checksum:
-            algorithm: sha-256
-            hash: 932fcae93574e242dc3d772d5235061747dfe537668443a1f0567d893614b464
-          container_format: bare
-          disk_format: qcow2
-          min_disk: 1 GB
-          size: 1 GB
-      capabilities:
-        virtual_compute:
-          properties:
-            requested_additional_capabilities:
-              properties:
-                requested_additional_capability_name: m1.tiny
-                support_mandatory: true
-                target_performance_parameters:
-                  entry_schema: test
-            virtual_memory:
-              virtual_mem_size: 512 MB
-            virtual_cpu:
-              num_virtual_cpu: 1
-            virtual_local_storage:
-              - size_of_storage: 1 GB
-
-    proxy_internal_port:
+    CP1:
       type: tosca.nodes.nfv.VduCp
       properties:
-          layer_protocols: [ ipv4 ]
+        layer_protocols: [ ipv4 ]
+        order: 4
       requirements:
-          - virtual_binding: Prototype
-          - virtual_link: internal_net
+        - virtual_binding: VDU1
+        - virtual_link: internalVL1
 
-    nf_internal_port:
-        type: tosca.nodes.nfv.VduCp
-        properties:
-            layer_protocols: [ ipv4 ]
-        requirements:
-            - virtual_binding: NF
-            - virtual_link: internal_net
-
-    internal_net:
+    internalVL1:
       type: tosca.nodes.nfv.VnfVirtualLink
       properties:
         connectivity_type:
           layer_protocols: [ ipv4 ]
-        description: Internal Virtual link for the Prototype and NF
+        description: Internal Virtual link in the VNF
         vl_profile:
           max_bitrate_requirements:
             root: 1048576
@@ -153,6 +112,71 @@ topology_template:
               l3_protocol_data:
                 ip_version: ipv4
                 cidr: 10.0.0.0/24
-                dhcp_enabled: true
 
   policies:
+    - scaling_aspects:
+        type: tosca.policies.nfv.ScalingAspects
+        properties:
+          aspects:
+            VDU1_scale:
+              name: VDU1_scale
+              description: VDU1 scaling aspect
+              max_scale_level: 2
+              step_deltas:
+                - delta_1
+
+    - VDU1_initial_delta:
+        type: tosca.policies.nfv.VduInitialDelta
+        properties:
+          initial_delta:
+            number_of_instances: 1
+        targets: [ VDU1 ]
+
+    - VDU1_scaling_aspect_deltas:
+        type: tosca.policies.nfv.VduScalingAspectDeltas
+        properties:
+          aspect: VDU1_scale
+          deltas:
+            delta_1:
+              number_of_instances: 1
+        targets: [ VDU1 ]
+
+    - instantiation_levels:
+        type: tosca.policies.nfv.InstantiationLevels
+        properties:
+          levels:
+            instantiation_level_1:
+              description: Smallest size
+              scale_info:
+                VDU1_scale:
+                  scale_level: 0
+            instantiation_level_2:
+              description: Largest size
+              scale_info:
+                VDU1_scale:
+                  scale_level: 2
+          default_level: instantiation_level_1
+
+    - VDU1_instantiation_levels:
+        type: tosca.policies.nfv.VduInstantiationLevels
+        properties:
+          levels:
+            instantiation_level_1:
+              number_of_instances: 1
+            instantiation_level_2:
+              number_of_instances: 3
+        targets: [ VDU1 ]
+
+    - internalVL1_instantiation_levels:
+        type: tosca.policies.nfv.VirtualLinkInstantiationLevels
+        properties:
+          levels:
+            instantiation_level_1:
+              bitrate_requirements:
+                root: 1048576
+                leaf: 1048576
+            instantiation_level_2:
+              bitrate_requirements:
+                root: 1048576
+                leaf: 1048576
+        targets: [ internalVL1 ]
