@@ -33,7 +33,7 @@ replace_hashes_in_meta() {
 scripts_dir='Scripts'
 definitions_dir='Definitions'
 meta_file_path='TOSCA-Metadata/TOSCA.meta'
-tosca_version='v2.1.6'
+tosca_version='v2.6.1'
 script_files=(
     'configure_main.sh'
     'configure_filebeat.sh'

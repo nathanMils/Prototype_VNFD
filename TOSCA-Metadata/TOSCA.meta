@@ -1,7 +1,7 @@
 TOSCA-Meta-File-Version: 1.0
 CSAR-Version: 1.1
 Created-by: Nathan_Opperman
-Entry-Definitions: Definitions/prototype_def.yaml
+Entry-Definitions: Definitions/prototype_top.yaml
 
 Name: Scripts/configure_main.sh
 Content-Type: application/x-shellscript
