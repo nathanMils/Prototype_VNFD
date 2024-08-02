@@ -10,17 +10,17 @@ parameters:
     type: string
 
 resources:
-  Prototype:
+  NF:
     type: OS::Nova::Server
     properties:
       flavor: { get_param: flavor }
       image: { get_param: image }
-      name: Prototype
+      name: Network Function
       networks:
         - port:
-            get_resource: proxy_internal_CP
+            get_resource: nf_internal_CP
 
-  proxy_internal_CP:
+  nf_internal_CP:
     type: OS::Neutron::Port
     properties:
       network: { get_param: net }

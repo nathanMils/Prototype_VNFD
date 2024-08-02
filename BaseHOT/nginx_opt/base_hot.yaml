@@ -6,11 +6,18 @@ parameters:
     type: json
 
 resources:
-  VDU1:
+  Prototype:
     type: prototype.yaml
     properties:
-      flavor: { get_param: [ nfv, VDU, VDU1, computeFlavourId ] }
-      image: { get_param: [ nfv, VDU, VDU1, vcImageId ] }
+      flavor: { get_param: [ nfv, VDU, Prototype, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, Prototype, vcImageId ] }
+      net: { get_resource: internalVL1 }
+
+  NF:
+    type: network_function.yaml
+    properties:
+      flavor: { get_param: [ nfv, VDU, NF, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, NF, vcImageId ] }
       net: { get_resource: internalVL1 }
 
   internalVL1:
