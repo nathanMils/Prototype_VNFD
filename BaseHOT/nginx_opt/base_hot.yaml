@@ -83,8 +83,8 @@ resources:
       image: { get_param: [ nfv, VDU, Prototype, vcImageId ] }
       internal_net: { get_resource: internal_network }
       external_net: { get_param: [ nfv, Network, externalNetworkId ] }
-      elk_net: { get_param: [ nfv, Network, elkNetworkId ] }
-      elk_security_group: { get_param: [ nfv, SecurityGroup, elkSecurityGroupId ] }
+#      elk_net: { get_param: [ nfv, Network, elkNetworkId ] }
+#      elk_security_group: { get_param: [ nfv, SecurityGroup, elkSecurityGroupId ] }
       security_group: { get_resource: prototype_internal_security_group }
 
 outputs: {}

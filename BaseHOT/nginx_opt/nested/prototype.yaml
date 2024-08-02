@@ -10,10 +10,10 @@ parameters:
     type: string
   external_net:
     type: string
-  elk_net:
-    type: string
-  elk_security_group:
-    type: string
+#  elk_net:
+#    type: string
+#  elk_security_group:
+#    type: string
   security_group:
     type: string
 
@@ -51,11 +51,11 @@ resources:
       security_groups: [ { get_resource: external_security_group } ]
 
   # Port for ELK network for NGINX Proxy <-> ELK communication
-  elk_port:
-    type: OS::Neutron::Port
-    properties:
-      network_id: { get_param: elk_net }
-      security_groups: [ { get_param: elk_security_group } ]
+#  elk_port:
+#    type: OS::Neutron::Port
+#    properties:
+#      network_id: { get_param: elk_net }
+#      security_groups: [ { get_param: elk_security_group } ]
 
   # VDU for the NGINX Proxy with Filebeat
   Prototype:
@@ -68,6 +68,6 @@ resources:
       networks:
         - port: { get_resource: internal_port }
         - port: { get_resource: external_port }
-        - port: { get_resource: elk_port }
+#        - port: { get_resource: elk_port }
 
 outputs: {}

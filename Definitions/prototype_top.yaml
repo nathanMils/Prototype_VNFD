@@ -6,7 +6,9 @@ imports:
   - etsi_nfv_sol001_common_types.yaml
   - etsi_nfv_sol001_vnfd_types.yaml
   - prototype_types.yaml
-  - prototype_def.yaml
+  - prototype_nginx_opt_df.yaml
+  - prototype_suricata_opt_df.yaml
+  - prototype_zeek_opt_df.yaml
 
 topology_template:
   inputs:
