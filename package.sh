@@ -14,6 +14,8 @@ replace_hashes_in_meta() {
     shift
     local hashes=("$@")
 
+    echo "Replacing hashes in $meta_file_path"
+
     local content
     content=$(<"$meta_file_path")
 
@@ -23,6 +25,7 @@ replace_hashes_in_meta() {
         script_name=$(echo "$hash_entry" | cut -d':' -f1)
         hash_value=$(echo "$hash_entry" | cut -d':' -f2)
         local placeholder="<${script_name^^}_HASH>"
+        echo "Replacing placeholder $placeholder with hash $hash_value"
         content=$(echo "$content" | sed "s|$placeholder|$hash_value|g")
     done
 
@@ -46,8 +49,13 @@ script_files=(
 hashes=()
 for script_file in "${script_files[@]}"; do
     file_path="$scripts_dir/$script_file"
-    hash_value=$(calculate_sha256 "$file_path")
-    hashes+=("$script_file:$hash_value")
+    if [ -f "$file_path" ]; then
+        hash_value=$(calculate_sha256 "$file_path")
+        hashes+=("$script_file:$hash_value")
+    else
+        echo "File $file_path not found!"
+        exit 1
+    fi
 done
 
 replace_hashes_in_meta "$meta_file_path" "${hashes[@]}"
