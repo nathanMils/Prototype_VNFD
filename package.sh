@@ -36,7 +36,7 @@ meta_file_path='TOSCA-Metadata/TOSCA.meta'
 tosca_version='v2.1.6'
 script_files=(
     'configure_main.sh'
-    'configure_prototype.sh'
+    'configure_filebeat.sh'
     'configure_network_function.sh'
     'configure_nginx.sh'
     'configure_suricata.sh'
