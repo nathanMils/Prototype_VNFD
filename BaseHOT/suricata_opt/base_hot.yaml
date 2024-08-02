@@ -6,41 +6,85 @@ parameters:
     type: json
 
 resources:
-  Prototype:
-    type: prototype.yaml
+  # Networks
+  # internal network for NGINX Proxy <-> NF communication HTTP/HTTPS
+  internal_net:
+    type: OS::Neutron::Net
     properties:
-      flavor: { get_param: [ nfv, VDU, Prototype, computeFlavourId ] }
-      image: { get_param: [ nfv, VDU, Prototype, vcImageId ] }
-      net: { get_resource: internalVL1 }
+      name: internal_net
+      admin_state_up: true
+      value_specs:
+        mtu: 1450
 
+  # Security Groups
+  prototype_internal_security_group:
+    type: OS::Neutron::SecurityGroup
+    properties:
+      name: prototype_internal_security_group
+      description: Security group for internal network
+      rules:
+        - protocol: tcp
+          port_range_min: 80
+          port_range_max: 80
+          direction: ingress
+          remote_group: { get_resource: nf_internal_security_group }
+        - protocol: tcp
+          port_range_min: 80
+          port_range_max: 80
+          direction: egress
+          remote_group: { get_resource: nf_internal_security_group }
+
+  nf_internal_security_group:
+    type: OS::Neutron::SecurityGroup
+    properties:
+      name: nf_internal_security_group
+      description: Security group for internal network
+      rules:
+        - protocol: tcp
+          port_range_min: 80
+          port_range_max: 80
+          direction: ingress
+          remote_group: { get_resource: prototype_internal_security_group }
+        - protocol: tcp
+          port_range_min: 80
+          port_range_max: 80
+          direction: egress
+          remote_group: { get_resource: prototype_internal_security_group }
+
+  # Subnets
+  # Subnet for the internal network
+  int_subnet:
+    type: OS::Neutron::Subnet
+    depends_on: [ internal_net ]
+    properties:
+      name: proxy_vdu_int_subnet
+      network: { get_resource: internal_net }
+      cidr: 10.0.0.0/24
+      enable_dhcp: true
+      gateway_ip: 10.0.0.254
+
+  # VDUs
+  # VDU for the 5G Network Function / Might need to adjust this to work with existing VNFDs for 5G Network Functions with multiple VDUs
   NF:
     type: network_function.yaml
+    depends_on: [ internal_net ]
     properties:
       flavor: { get_param: [ nfv, VDU, NF, computeFlavourId ] }
       image: { get_param: [ nfv, VDU, NF, vcImageId ] }
-      net: { get_resource: internalVL1 }
+      internal_net: { get_resource: internal_net }
+      security_group: { get_resource: nf_internal_security_group }
 
-  internalVL1:
-    type: OS::Neutron::Net
-
-  internalVL1_subnet:
-    type: OS::Neutron::Subnet
+  # VDU for the NGINX Proxy with Filebeat
+  Prototype:
+    type: prototype.yaml
+    depends_on: [ NF, internal_net ]
     properties:
-      ip_version: 4
-      network:
-        get_resource: internalVL1
-      cidr: 10.0.1.0/24
-
-  router:
-    type: OS::Neutron::Router
-    properties:
-      external_gateway_info:
-        network: public
-
-  router_interface_internalVL1:
-    type: OS::Neutron::RouterInterface
-    properties:
-      router_id: { get_resource: router }
-      subnet_id: { get_resource: internalVL1_subnet }
+      flavor: { get_param: [ nfv, VDU, Prototype, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, Prototype, vcImageId ] }
+      internal_net: { get_resource: internal_network }
+      #      external_net: { get_param: [ nfv, Network, externalNetworkId ] }
+      #      elk_net: { get_param: [ nfv, Network, elkNetworkId ] }
+      #      elk_security_group: { get_param: [ nfv, SecurityGroup, elkSecurityGroupId ] }
+      security_group: { get_resource: prototype_internal_security_group }
 
 outputs: {}

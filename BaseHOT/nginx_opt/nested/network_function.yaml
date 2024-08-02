@@ -30,3 +30,5 @@ resources:
       name: NF
       networks:
         - port: { get_resource: nf_internal_port }
+
+outputs: {}

@@ -6,10 +6,22 @@ parameters:
     type: string
   image:
     type: string
-  net:
+  internal_net:
+    type: string
+  security_group:
     type: string
 
 resources:
+
+
+  # Ports
+  # Port for internal network for NGINX Proxy <-> NF communication HTTP/HTTPS
+  nf_internal_port:
+    type: OS::Neutron::Port
+    properties:
+      network_id: { get_param: internal_net }
+      security_groups: [ { get_param: security_group } ]
+
   NF:
     type: OS::Nova::Server
     properties:
@@ -17,10 +29,6 @@ resources:
       image: { get_param: image }
       name: NF
       networks:
-        - port:
-            get_resource: NF_CP1
+        - port: { get_resource: nf_internal_port }
 
-  NF_CP1:
-    type: OS::Neutron::Port
-    properties:
-      network: { get_param: net }
+outputs: {}
