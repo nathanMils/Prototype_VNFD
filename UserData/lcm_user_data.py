@@ -16,12 +16,17 @@
 import copy
 import yaml
 
-import logging
-
 from tacker.sol_refactored.common import common_script_utils
 from tacker.sol_refactored.common import vnf_instance_utils as inst_utils
 from tacker.sol_refactored.infra_drivers.openstack import userdata_utils
 
+# Add logging
+import logging
+# Added logging.basicConfig to write logs to a file
+# NB Remember to create the directory /var/log/tacker/ if it does not exist
+# NB Remember to give the user running the tacker server write permissions to the directory /var/log/tacker/
+logging.basicConfig(filename='/var/log/tacker/lcm_debug.log', level=logging.DEBUG,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 def add_idx(name, index):
     return f'{name}-{index}'
@@ -103,9 +108,6 @@ def _merge_additional_params(nfv_dict, req, grant):
         nfv_dict = inst_utils.json_merge_patch(
             nfv_dict, grant['additionalParams']['nfv'])
     return nfv_dict
-
-logging.basicConfig(filename='/var/log/tacker/lcm_debug.log', level=logging.DEBUG,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 class StandardUserData(userdata_utils.AbstractUserData):
 
