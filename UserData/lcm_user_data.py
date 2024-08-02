@@ -16,6 +16,8 @@
 import copy
 import yaml
 
+import logging
+
 from tacker.sol_refactored.common import common_script_utils
 from tacker.sol_refactored.common import vnf_instance_utils as inst_utils
 from tacker.sol_refactored.infra_drivers.openstack import userdata_utils
@@ -102,17 +104,19 @@ def _merge_additional_params(nfv_dict, req, grant):
             nfv_dict, grant['additionalParams']['nfv'])
     return nfv_dict
 
+logging.basicConfig(filename='/var/log/tacker/lcm_debug.log', level=logging.DEBUG,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 class StandardUserData(userdata_utils.AbstractUserData):
 
     @staticmethod
     def instantiate(req, inst, grant_req, grant, tmp_csar_dir):
-        print("instantiate called with:")
-        print("req:", req)
-        print("inst:", inst)
-        print("grant_req:", grant_req)
-        print("grant:", grant)
-        print("tmp_csar_dir:", tmp_csar_dir)
+        logging.debug("Instantiate called with:")
+        logging.debug("req: %s", req)
+        logging.debug("inst: %s", inst)
+        logging.debug("grant_req: %s", grant_req)
+        logging.debug("grant: %s", grant)
+        logging.debug("tmp_csar_dir: %s", tmp_csar_dir)
 
         vnfd = common_script_utils.get_vnfd(inst['vnfdId'], tmp_csar_dir)
         flavour_id = req['flavourId']

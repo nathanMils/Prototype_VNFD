@@ -1,9 +1,9 @@
 {
-  "flavourId":"nginx_opt",
+  "flavourId":"simple",
   "vimConnectionInfo": {
     "vim": {
       "id": "3cc2c4ff-525c-48b4-94c9-29247223322f",
-      "vimId": "<VIM_ID>",
+      "vimId": "65b64caf-b46b-46e8-bead-88c45d67af5f",
       "vimType": "openstack"
     }
   },
