@@ -58,7 +58,7 @@ topology_template:
         description: Prototype compute node
         vdu_profile:
           min_number_of_instances: 1
-          max_number_of_instances: 3
+          max_number_of_instances: 1
         sw_image_data:
           name: cirros-0.5.2-x86_64-disk
           version: '0.5.2'
@@ -92,7 +92,7 @@ topology_template:
         description: Network Function compute node
         vdu_profile:
           min_number_of_instances: 1
-          max_number_of_instances: 3
+          max_number_of_instances: 1
         sw_image_data:
           name: cirros-0.5.2-x86_64-disk
           version: '0.5.2'
@@ -157,3 +157,66 @@ topology_template:
                 cidr: 10.0.0.0/24
 
   policies:
+    - scaling_aspects:
+        type: tosca.policies.nfv.ScalingAspects
+        properties:
+          aspects:
+            Prototype_scale:
+              name: Prototype_scale
+              description: Prototype scaling aspect
+              max_scale_level: 1
+              step_deltas:
+                - delta_1
+            NF_scale:
+              name: NF_scale
+              description: NF scaling aspect
+              max_scale_level: 1
+              step_deltas:
+                - delta_1
+
+    - initial_delta:
+        type: tosca.policies.nfv.VduInitialDelta
+        properties:
+          initial_delta:
+            number_of_instances: 1
+        targets: [ Prototype, NF ]
+
+    - scaling_aspect_deltas:
+        type: tosca.policies.nfv.VduScalingAspectDeltas
+        properties:
+          aspect: Prototype_scale
+          deltas:
+            delta_1:
+              number_of_instances: 1
+        targets: [ Prototype, NF ]
+
+    - instantiation_levels:
+        type: tosca.policies.nfv.InstantiationLevels
+        properties:
+          levels:
+            instantiation_level_1:
+              description: Smallest size
+              scale_info:
+                Prototype_scale:
+                  scale_level: 0
+                NF_scale:
+                  scale_level: 0
+          default_level: instantiation_level_1
+
+    - Prototype_instantiation_levels:
+        type: tosca.policies.nfv.VduInstantiationLevels
+        properties:
+          levels:
+            instantiation_level_1:
+              number_of_instances: 1
+        targets: [ Prototype, NF ]
+
+    - internalVL1_instantiation_levels:
+        type: tosca.policies.nfv.VirtualLinkInstantiationLevels
+        properties:
+          levels:
+            instantiation_level_1:
+              bitrate_requirements:
+                root: 1048576
+                leaf: 1048576
+        targets: [ internalVL1 ]
