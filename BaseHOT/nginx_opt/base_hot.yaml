@@ -59,9 +59,9 @@ resources:
     properties:
       name: proxy_vdu_int_subnet
       network: { get_resource: internal_net }
-      cidr: 192.168.0.0/24
+      cidr: 10.0.0.0/24
       enable_dhcp: true
-      gateway_ip: 192.168.0.254
+      gateway_ip: 10.0.0.254
 
   # VDUs
   # VDU for the 5G Network Function / Might need to adjust this to work with existing VNFDs for 5G Network Functions with multiple VDUs
@@ -82,7 +82,7 @@ resources:
       flavor: { get_param: [ nfv, VDU, Prototype, computeFlavourId ] }
       image: { get_param: [ nfv, VDU, Prototype, vcImageId ] }
       internal_net: { get_resource: internal_network }
-      external_net: { get_param: [ nfv, Network, externalNetworkId ] }
+#      external_net: { get_param: [ nfv, Network, externalNetworkId ] }
 #      elk_net: { get_param: [ nfv, Network, elkNetworkId ] }
 #      elk_security_group: { get_param: [ nfv, SecurityGroup, elkSecurityGroupId ] }
       security_group: { get_resource: prototype_internal_security_group }
