@@ -20,41 +20,15 @@ from tacker.sol_refactored.common import common_script_utils
 from tacker.sol_refactored.common import vnf_instance_utils as inst_utils
 from tacker.sol_refactored.infra_drivers.openstack import userdata_utils
 
-"""
-Add an index to a given name.
 
-Args:
-    name (str): The base name.
-    index (int): The index to add.
-
-Returns:
-    str: The name with the index appended.
-"""
 def add_idx(name, index):
     return f'{name}-{index}'
 
-"""
-Remove the index from a given name.
 
-Args:
-    name_idx (str): The name with the index.
-
-Returns:
-    str: The name without the index.
-"""
 def rm_idx(name_idx):
     return name_idx.rpartition('-')[0]
 
-"""
-Add an index to the third element of get_param in a VDU template.
 
-Args:
-    vdu_template (dict): The VDU template.
-    vdu_idx (int): The index to add.
-
-Returns:
-    dict: The VDU template with the index added.
-"""
 def add_idx_to_vdu_template(vdu_template, vdu_idx):
     """Add index to the third element of get_param
 
@@ -87,17 +61,6 @@ def add_idx_to_vdu_template(vdu_template, vdu_idx):
     return res
 
 
-"""
-Extract new connection points from a request and grant.
-
-Args:
-    cps (dict): The current connection points.
-    req (dict): The request.
-    grant (dict): The grant.
-
-Returns:
-    dict: The new connection points.
-"""
 def _get_new_cps_from_req(cps, req, grant):
     # used by change_ext_conn and change_vnfpkg
     new_cps = {}
@@ -129,17 +92,7 @@ def _get_new_cps_from_req(cps, req, grant):
 
     return new_cps
 
-"""
-Merge additional parameters from the request and grant into the NFV dictionary.
 
-Args:
-    nfv_dict (dict): The NFV dictionary.
-    req (dict): The request.
-    grant (dict): The grant.
-
-Returns:
-    dict: The updated NFV dictionary.
-"""
 def _merge_additional_params(nfv_dict, req, grant):
     if 'nfv' in req.get('additionalParams', {}):
         nfv_dict = inst_utils.json_merge_patch(
@@ -152,31 +105,79 @@ def _merge_additional_params(nfv_dict, req, grant):
 
 class StandardUserData(userdata_utils.AbstractUserData):
 
-    """
-    Handle the instantiation of a VNF.
-
-    Args:
-        req (dict): The instantiation request.
-        inst (dict): The VNF instance.
-        grant_req (dict): The grant request.
-        grant (dict): The grant.
-        tmp_csar_dir (str): The temporary CSAR directory.
-
-    Returns:
-        dict: The HOT template and parameters for instantiation.
-    """
     @staticmethod
     def instantiate(req, inst, grant_req, grant, tmp_csar_dir):
-        # Retrieve the VNFD and base HOT template
-        # Essentially loads .yaml files under "Definitions" into a python data structure representing the definitions and TOSCA meta data
+        print("instantiate called with:")
+        print("req:", req)
+        print("inst:", inst)
+        print("grant_req:", grant_req)
+        print("grant:", grant)
+        print("tmp_csar_dir:", tmp_csar_dir)
+
         vnfd = common_script_utils.get_vnfd(inst['vnfdId'], tmp_csar_dir)
         flavour_id = req['flavourId']
 
-        # Essentially loads .yaml files under BaseHOT/"flavour_id" into a python data structure
         hot_dict = vnfd.get_base_hot(flavour_id)
         top_hot = hot_dict['template']
 
+        # first modify VDU resources
+        popped_vdu = {}
+        vdu_idxes = {}
+        for vdu_name in vnfd.get_vdu_nodes(flavour_id).keys():
+            popped_vdu[vdu_name] = top_hot.get('resources', {}).pop(vdu_name)
+            vdu_idxes[vdu_name] = 0
+        zones = {}
+        for res in grant_req['addResources']:
+            if res['type'] != 'COMPUTE':
+                continue
+            vdu_name = res['resourceTemplateId']
+            if vdu_name not in popped_vdu:
+                continue
+            vdu_idx = vdu_idxes[vdu_name]
+            vdu_idxes[vdu_name] += 1
+            zones[add_idx(vdu_name, vdu_idx)] = (
+                common_script_utils.get_param_zone_by_vnfc(
+                    res['id'], grant))
+            res = add_idx_to_vdu_template(popped_vdu[vdu_name], vdu_idx)
+            top_hot['resources'][add_idx(vdu_name, vdu_idx)] = res
+
         nfv_dict = common_script_utils.init_nfv_dict(top_hot)
+
+        vdus = nfv_dict.get('VDU', {})
+        for vdu_name_idx, vdu_value in vdus.items():
+            vdu_name = rm_idx(vdu_name_idx)
+            if 'computeFlavourId' in vdu_value:
+                vdu_value['computeFlavourId'] = (
+                    common_script_utils.get_param_flavor(
+                        vdu_name, flavour_id, vnfd, grant))
+            if 'vcImageId' in vdu_value:
+                vdu_value['vcImageId'] = common_script_utils.get_param_image(
+                    vdu_name, flavour_id, vnfd, grant)
+            if 'locationConstraints' in vdu_value:
+                vdu_value['locationConstraints'] = zones[vdu_name_idx]
+
+        cps = nfv_dict.get('CP', {})
+        for cp_name, cp_value in cps.items():
+            cp_name = rm_idx(cp_name)
+            if 'network' in cp_value:
+                cp_value['network'] = common_script_utils.get_param_network(
+                    cp_name, grant, req)
+            if 'fixed_ips' in cp_value:
+                ext_fixed_ips = common_script_utils.get_param_fixed_ips(
+                    cp_name, grant, req)
+                fixed_ips = []
+                for i in range(len(ext_fixed_ips)):
+                    if i not in cp_value['fixed_ips']:
+                        break
+                    ips_i = cp_value['fixed_ips'][i]
+                    if 'subnet' in ips_i:
+                        ips_i['subnet'] = ext_fixed_ips[i].get('subnet')
+                    if 'ip_address' in ips_i:
+                        ips_i['ip_address'] = ext_fixed_ips[i].get(
+                            'ip_address')
+                    fixed_ips.append(ips_i)
+                cp_value['fixed_ips'] = fixed_ips
+
         common_script_utils.apply_ext_managed_vls(top_hot, req, grant)
         nfv_dict = _merge_additional_params(nfv_dict, req, grant)
 
