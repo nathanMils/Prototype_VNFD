@@ -1,5 +1,5 @@
 heat_template_version: 2013-05-23
-description: 'VDU1 HOT for Sample VNF'
+description: 'Prototype HOT for Sample VNF'
 
 parameters:
   flavor:
@@ -10,17 +10,17 @@ parameters:
     type: string
 
 resources:
-  VDU1:
+  Prototype:
     type: OS::Nova::Server
     properties:
       flavor: { get_param: flavor }
       image: { get_param: image }
-      name: VDU1
+      name: Prototype
       networks:
         - port:
-            get_resource: VDU1_CP1
+            get_resource: proxy_internal_CP
 
-  VDU1_CP1:
+  proxy_internal_CP:
     type: OS::Neutron::Port
     properties:
       network: { get_param: net }

@@ -195,7 +195,7 @@ topology_template:
         properties:
           levels:
             instantiation_level_1:
-              description: Smallest size
+              description: Only size
               scale_info:
                 Prototype_scale:
                   scale_level: 0

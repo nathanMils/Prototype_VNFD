@@ -1,5 +1,5 @@
 heat_template_version: 2013-05-23
-description: 'VDU1 HOT for Sample VNF'
+description: 'Prototype HOT for Sample VNF'
 
 parameters:
   flavor:

@@ -1,5 +1,5 @@
 heat_template_version: 2013-05-23
-description: 'imple Base HOT for Sample VNF'
+description: 'NGINX Base HOT for Sample VNF'
 
 parameters:
   nfv:
