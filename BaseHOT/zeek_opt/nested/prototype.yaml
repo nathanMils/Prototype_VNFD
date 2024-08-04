@@ -6,7 +6,11 @@ parameters:
     type: string
   image:
     type: string
-  net:
+  net1:
+    type: string
+  net2:
+    type: string
+  net3:
     type: string
 
 resources:
@@ -19,8 +23,22 @@ resources:
       networks:
         - port:
             get_resource: proxy_internal_CP
+        - port:
+            get_resource: proxy_external_CP
+        - port:
+            get_resource: proxy_elk_CP
 
   proxy_internal_CP:
     type: OS::Neutron::Port
     properties:
-      network: { get_param: net }
+      network: { get_param: net1 }
+
+  proxy_external_CP:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: net2 }
+
+  proxy_elk_CP:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: net3 }
