@@ -12,7 +12,7 @@ resources:
       flavor: { get_param: [ nfv, VDU, Prototype, computeFlavourId ] }
       image: { get_param: [ nfv, VDU, Prototype, vcImageId ] }
       net1: { get_resource: internalVL1 }
-      net2: { get_param: [ nfv, external_net ] }
+      net2: { get_param: [ nfv, external_VL_ID ] }
 
   NF:
     type: network_function.yaml
