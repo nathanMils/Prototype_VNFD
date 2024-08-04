@@ -124,6 +124,13 @@ topology_template:
       properties:
         layer_protocols: [ ipv4 ]
         order: 4
+        protocol:
+          - associated_layer_protocol: ipv4
+            address_data:
+              - address_type: ip_address
+                l3_address_data:
+                  ip_address_assignment: true
+                  floating_ip_activated: false
       requirements:
         - virtual_binding: Prototype
         - virtual_link: internalVL1

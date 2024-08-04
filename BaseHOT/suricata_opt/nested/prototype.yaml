@@ -32,6 +32,8 @@ resources:
     type: OS::Neutron::Port
     properties:
       network: { get_param: net1 }
+      fixed_ips:
+        - ip_address: 10.0.0.254
 
   external_CP:
     type: OS::Neutron::Port
