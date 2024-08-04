@@ -10,6 +10,8 @@
   "additionalParams": {
     "lcm-operation-user-data": "./UserData/lcm_user_data.py",
     "lcm-operation-user-data-class": "StandardUserData",
-    "external-network-vl": "Test_input"
+    "nfv": {
+      "external_net": "fc120b9f-78e3-4eb6-ade0-d0c79ff3cbbf"
+    }
   }
 }
