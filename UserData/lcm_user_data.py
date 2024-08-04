@@ -195,6 +195,7 @@ class StandardUserData(userdata_utils.AbstractUserData):
         for key, value in hot_dict.get('files', {}).items():
             fields['files'][key] = yaml.safe_dump(value)
 
+        logging.debug("Fields: %s", fields)
         return fields
 
     @staticmethod

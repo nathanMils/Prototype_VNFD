@@ -3,12 +3,13 @@
   "vimConnectionInfo": {
     "vim": {
       "id": "3cc2c4ff-525c-48b4-94c9-29247223322f",
-      "vimId": "4ff5cabf-558a-4fb4-87c7-741519d2d098",
+      "vimId": "1e710ec7-2ac4-4edd-bcb8-3f0df386d8f9",
       "vimType": "openstack"
     }
   },
   "additionalParams": {
     "lcm-operation-user-data": "./UserData/lcm_user_data.py",
-    "lcm-operation-user-data-class": "StandardUserData"
+    "lcm-operation-user-data-class": "StandardUserData",
+    "external-network-vl": "Test_input"
   }
 }
