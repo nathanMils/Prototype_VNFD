@@ -11,7 +11,10 @@
     "lcm-operation-user-data": "./UserData/lcm_user_data.py",
     "lcm-operation-user-data-class": "StandardUserData",
     "nfv": {
-      "external_VL_ID": "<ID_OF_NETWORK>"
+      "input": {
+        "external_VL_ID": "<ID_OF_EXTERNAL_NETWORK>",
+        "elk_VL_ID": "<ID_OF_ELK_NETWORK>"
+      }
     }
   }
 }

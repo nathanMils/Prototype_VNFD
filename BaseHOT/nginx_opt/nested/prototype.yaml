@@ -10,6 +10,8 @@ parameters:
     type: string
   net2:
     type: string
+  net3:
+    type: string
 
 resources:
   Prototype:
@@ -23,6 +25,8 @@ resources:
             get_resource: proxy_internal_CP
         - port:
             get_resource: proxy_external_CP
+        - port:
+            get_resource: proxy_elk_CP
 
   proxy_internal_CP:
     type: OS::Neutron::Port
@@ -33,3 +37,8 @@ resources:
     type: OS::Neutron::Port
     properties:
       network: { get_param: net2 }
+
+  proxy_elk_CP:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: net3 }
