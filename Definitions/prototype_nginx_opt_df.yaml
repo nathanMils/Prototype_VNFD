@@ -32,6 +32,8 @@ topology_template:
     node_type: company.provider.VNF
     properties:
       flavour_id: nginx_opt
+    requirements:
+      virtual_link_external: [ virtual_link, external ]
 
   node_templates:
     VNF:
@@ -129,6 +131,14 @@ topology_template:
         - virtual_link: internalVL1
 
     CP2:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 5
+      requirements:
+        - virtual_binding: Prototype
+
+    CP3:
       type: tosca.nodes.nfv.VduCp
       properties:
         layer_protocols: [ ipv4 ]
