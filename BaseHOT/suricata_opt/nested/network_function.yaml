@@ -20,11 +20,9 @@ resources:
         - port:
             get_resource: nf_internal_CP
       user_data_format: RAW
-      user_data:
-        str_replace:
-          template: |
-            #!/bin/bash
-            - heat-config-notify /var/lib/heat-config/heat-config.json
+      user_data: |
+        #!/bin/bash
+        - heat-config-notify /var/lib/heat-config/heat-config.json
 
   nf_internal_CP:
     type: OS::Neutron::Port
