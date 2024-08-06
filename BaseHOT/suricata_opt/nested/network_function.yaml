@@ -19,28 +19,28 @@ resources:
       networks:
         - port:
             get_resource: nf_internal_CP
-      user_data_format: SOFTWARE_CONFIG
-      user_data: |
-        #!/bin/bash
-        - heat-config-notify /var/lib/heat-config/heat-config.json
+#      user_data_format: SOFTWARE_CONFIG
+#      user_data: |
+#        #!/bin/bash
+#        - heat-config-notify /var/lib/heat-config/heat-config.json
 
   nf_internal_CP:
     type: OS::Neutron::Port
     properties:
       network: { get_param: net }
 
-  apache_install_config:
-    type: OS::Heat::SoftwareConfig
-    properties:
-      group: script
-      config: |
-        #!/bin/bash
-        yum install -y httpd
-        systemctl enable httpd
-        systemctl start httpd
-
-  apache_deployment:
-    type: OS::Heat::SoftwareDeployment
-    properties:
-      config: { get_resource: apache_install_config }
-      server: { get_resource: NF }
+#  apache_install_config:
+#    type: OS::Heat::SoftwareConfig
+#    properties:
+#      group: script
+#      config: |
+#        #!/bin/bash
+#        yum install -y httpd
+#        systemctl enable httpd
+#        systemctl start httpd
+#
+#  apache_deployment:
+#    type: OS::Heat::SoftwareDeployment
+#    properties:
+#      config: { get_resource: apache_install_config }
+#      server: { get_resource: NF }
