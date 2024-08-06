@@ -28,24 +28,9 @@ resources:
         - port:
             get_resource: elk_CP
       user_data_format: SOFTWARE_CONFIG
-      user_data:
-        str_replace:
-          template: |
-            #!/bin/bash
-            apt-get update
-            apt-get install -y iptables
-
-            sysctl -w net.ipv4.ip_forward=1
-
-            iptables -A FORWARD -i eth0 -o eth1 -j ACCEPT
-            iptables -A FORWARD -i eth1 -o eth0 -j ACCEPT
-            iptables -t nat -A POSTROUTING -o eth1 -j MASQUERADE
-            iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-
-            echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
-          params:
-            eth0: { get_attr: [Prototype, networks, 0, fixed_ips, 0, ip_address] }
-            eth1: { get_attr: [Prototype, networks, 1, fixed_ips, 0, ip_address] }
+      user_data: |
+        #!/bin/bash
+        - heat-config-notify /var/lib/heat-config/heat-config.json
 
   internal_CP:
     type: OS::Neutron::Port
@@ -63,3 +48,32 @@ resources:
     type: OS::Neutron::Port
     properties:
       network: { get_param: net3 }
+
+  set_ip_table_config:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: script
+      config: |
+        #!/bin/bash
+        apt-get update
+        apt-get install -y iptables
+
+        sysctl -w net.ipv4.ip_forward=1
+
+        iptables -A FORWARD -i eth0 -o eth1 -j ACCEPT
+        iptables -A FORWARD -i eth1 -o eth0 -j ACCEPT
+        iptables -t nat -A POSTROUTING -o eth1 -j MASQUERADE
+        iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+
+        echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
+      inputs:
+        - name: eth0
+          value: { get_attr: [Prototype, networks, 0, fixed_ips, 0, ip_address] }
+        - name: eth1
+          value: { get_attr: [Prototype, networks, 1, fixed_ips, 0, ip_address] }
+
+  apache_deployment:
+    type: OS::Heat::SoftwareDeployment
+    properties:
+      config: { get_resource: apache_install_config }
+      server: { get_resource: Prototype }
