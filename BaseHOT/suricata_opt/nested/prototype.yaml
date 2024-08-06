@@ -12,47 +12,8 @@ parameters:
     type: string
   net3:
     type: string
-  filebeat_config_file:
-    type: string
-    description: 'Filebeat configuration'
-  suricata_config_file:
-    type: string
-    description: 'Suricata configuration'
 
 resources:
-  # Will be used to install Filebeat and Suricata
-  boot_config:
-      type: OS::Heat::SoftwareConfig
-      properties:
-      group: script
-      config: |
-          #!/bin/sh
-          echo "Hello, World!" > /tmp/hello.txt
-
-  filebeat_config:
-    type: OS::Heat::CloudConfig
-    properties:
-      cloud_config:
-        write_files:
-        - path: /tmp/filebeat.yml
-          content: { get_param: filebeat_config_file }
-
-  suricata_config:
-    type: OS::Heat::CloudConfig
-    properties:
-      cloud_config:
-        write_files:
-        - path: /tmp/suricata.yaml
-          content: { get_param: suricata_config_file }
-
-  prototype_init:
-    type: OS::Heat::MultipartMime
-    properties:
-      parts:
-        - config: { get_resource: boot_config }
-        - config: { get_resource: filebeat_config }
-        - config: { get_resource: suricata_config }
-
   Prototype:
     type: OS::Nova::Server
     properties:
@@ -66,8 +27,6 @@ resources:
             get_resource: external_CP
         - port:
             get_resource: elk_CP
-      user_data_format: RAW
-      user_data: { get_resource: prototype_init }
 
   internal_CP:
     type: OS::Neutron::Port

@@ -14,8 +14,6 @@ resources:
       net1: { get_resource: internalVL1 }
       net2: { get_param: [ nfv, input, external_VL_ID ] }
       net3: { get_param: [ nfv, input, elk_VL_ID ] }
-      filebeat_config_file: { get_param: [ nfv, Filebeat, filebeatConfig ] }
-      suricata_config_file: { get_param: [ nfv, Suricata, suricataConfig ] }
 
   NF:
     type: network_function.yaml
