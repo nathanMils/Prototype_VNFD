@@ -19,7 +19,7 @@ resources:
       networks:
         - port:
             get_resource: nf_internal_CP
-      user_data_format: RAW
+      user_data_format: SOFTWARE_CONFIG
       user_data: |
         #!/bin/bash
         - heat-config-notify /var/lib/heat-config/heat-config.json
