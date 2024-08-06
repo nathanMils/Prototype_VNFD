@@ -17,6 +17,7 @@ resources:
 
   NF:
     type: network_function.yaml
+    depends_on: Prototype
     properties:
       flavor: { get_param: [ nfv, VDU, NF, computeFlavourId ] }
       image: { get_param: [ nfv, VDU, NF, vcImageId ] }
