@@ -19,7 +19,6 @@ resources:
       networks:
         - port:
             get_resource: nf_internal_CP
-      user_data_format: SOFTWARE_CONFIG
 
   nf_internal_CP:
     type: OS::Neutron::Port
