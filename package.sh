@@ -8,7 +8,7 @@ calculate_sha256() {
     sha256sum "$file_path" | awk '{ print $1 }'
 }
 
-# Function to replace placeholders in TOSCA.meta
+# Function to replace placeholders in TOSCA.template.meta
 replace_hashes_in_meta() {
     local meta_file_path=$1
     shift
@@ -46,6 +46,9 @@ script_files=(
     'configure_zeek.sh'
 )
 
+# Copy TOSCA.template.meta to TOSCA.meta
+cp 'TOSCA-Metadata/TOSCA.template.meta' "$meta_file_path"
+
 hashes=()
 for script_file in "${script_files[@]}"; do
     file_path="$scripts_dir/$script_file"
@@ -65,4 +68,4 @@ wget -P "$definitions_dir" https://forge.etsi.org/rep/nfv/SOL001/raw/${tosca_ver
 wget -P "$definitions_dir" https://forge.etsi.org/rep/nfv/SOL001/raw/${tosca_version}/etsi_nfv_sol001_vnfd_types.yaml
 
 # Zip final VNFD package
-zip -r vnfd_package.zip TOSCA-Metadata/ Definitions/ BaseHOT/ Files/ Scripts/ UserData/
+zip -r vnfd_package.zip TOSCA-Metadata/TOSCA.meta Definitions/ BaseHOT/ Files/ Scripts/ UserData/
