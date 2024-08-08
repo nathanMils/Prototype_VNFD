@@ -63,9 +63,5 @@ done
 
 replace_hashes_in_meta "$meta_file_path" "${hashes[@]}"
 
-# Download etsi nfv sol001 definitions for VNFD
-wget -P "$definitions_dir" https://forge.etsi.org/rep/nfv/SOL001/raw/${tosca_version}/etsi_nfv_sol001_common_types.yaml
-wget -P "$definitions_dir" https://forge.etsi.org/rep/nfv/SOL001/raw/${tosca_version}/etsi_nfv_sol001_vnfd_types.yaml
-
 # Zip final VNFD package
 zip -r vnfd_package.zip TOSCA-Metadata/TOSCA.meta Definitions/ BaseHOT/ Files/ Scripts/ UserData/
