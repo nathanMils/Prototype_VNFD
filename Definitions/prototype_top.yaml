@@ -9,6 +9,7 @@ imports:
   - prototype_nginx_opt_df.yaml
   - prototype_zeek_opt_df.yaml
   - prototype_suricata_opt_df.yaml
+  - prototype_example_df.yaml
 
 topology_template:
   inputs:
