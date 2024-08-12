@@ -27,7 +27,7 @@ resources:
             get_resource: external_CP
         - port:
             get_resource: elk_CP
-      user_data_format: SOFTWARE_CONFIG
+#      user_data_format: SOFTWARE_CONFIG
 #      str_replace:
 #        template: |
 #          #!/bin/bash
@@ -126,15 +126,15 @@ resources:
 #        external_ip: { get_attr: [ external_CP, fixed_ips, 0, ip_address ] }
 
 
-  apache_config:
-    type: OS::Heat::SoftwareConfig
-    properties:
-      config: |
-        #!/bin/bash
-        echo "Name"
-
-  apache_deployment:
-    type: OS::Heat::SoftwareDeployment
-    properties:
-      config: { get_resource: apache_config }
-      server: { get_resource: Prototype }
+#  apache_config:
+#    type: OS::Heat::SoftwareConfig
+#    properties:
+#      config: |
+#        #!/bin/bash
+#        echo "Name"
+#
+#  apache_deployment:
+#    type: OS::Heat::SoftwareDeployment
+#    properties:
+#      config: { get_resource: apache_config }
+#      server: { get_resource: Prototype }
