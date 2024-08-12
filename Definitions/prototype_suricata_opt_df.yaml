@@ -94,11 +94,11 @@ topology_template:
           min_number_of_instances: 1
           max_number_of_instances: 1
         sw_image_data:
-          name: simple_gateway
+          name: apache2_simple_gateway
           version: '1'
           checksum:
             algorithm: sha-256
-            hash: 223ddca4c8b6e38aae3a2034fd0ce9c3a56a90fc15842e474650da436337ac9a
+            hash: f6f6621f4b14f961da92be8435521e4841c0129c87af6bbc87269732c56af0a3
           container_format: bare
           disk_format: qcow2
           min_disk: 1 GB
