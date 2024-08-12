@@ -103,10 +103,6 @@ topology_template:
           disk_format: qcow2
           min_disk: 1 GB
           size: 1 GB
-      artifacts:
-        sw_image:
-          type: tosca.artifacts.nfv.SwImage
-          file: ../Files/images/simple_gateway.qcow2
       capabilities:
         virtual_compute:
           properties:
