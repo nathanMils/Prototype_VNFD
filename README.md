@@ -6,7 +6,6 @@ This is designed to build a prototype Virtual Network Function Descriptor (VNFD)
 
 - `BaseHOT/`: Contains base Heat Orchestration Templates (HOT).
 - `Definitions/`: Contains TOSCA definitions and downloaded YAML files.
-- `Files/`: Contains additional files required for the VNFD.
 - `Scripts/`: Contains shell scripts for configuring various components.
 - `TOSCA-Metadata/`: Contains the `TOSCA.meta` file with metadata about the VNFD package.
 - `UserData/`: Contains user data scripts and configurations.

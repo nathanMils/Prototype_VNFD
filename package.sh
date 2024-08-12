@@ -64,4 +64,4 @@ done
 replace_hashes_in_meta "$meta_file_path" "${hashes[@]}"
 
 # Zip final VNFD package
-zip -r vnfd_package.zip TOSCA-Metadata/TOSCA.meta Definitions/ BaseHOT/ Files/ Scripts/ UserData/
+zip -r vnfd_package.zip TOSCA-Metadata/TOSCA.meta Definitions/ BaseHOT/ Scripts/ UserData/
