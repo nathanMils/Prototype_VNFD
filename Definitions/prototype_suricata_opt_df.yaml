@@ -74,7 +74,7 @@ topology_template:
           properties:
             requested_additional_capabilities:
               properties:
-                requested_additional_capability_name: m1.tiny
+                requested_additional_capability_name: m1.small
                 support_mandatory: true
                 target_performance_parameters:
                   entry_schema: test
