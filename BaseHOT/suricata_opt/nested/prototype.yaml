@@ -124,3 +124,20 @@ resources:
 #      input_values:
 #        internal_ip: { get_attr: [ internal_CP, fixed_ips, 0, ip_address ] }
 #        external_ip: { get_attr: [ external_CP, fixed_ips, 0, ip_address ] }
+
+
+  apache_config:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      config: |
+        #!/bin/bash
+        apt-get update
+        apt-get install -y apache2
+        systemctl start apache2
+        systemctl enable apache2
+
+  apache_deployment:
+    type: OS::Heat::SoftwareDeployment
+    properties:
+      config: { get_resource: apache_config }
+      server: { get_resource: Prototype }
