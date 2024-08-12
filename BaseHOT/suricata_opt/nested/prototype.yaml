@@ -27,7 +27,7 @@ resources:
             get_resource: external_CP
         - port:
             get_resource: elk_CP
-#      user_data_format: SOFTWARE_CONFIG
+      user_data_format: SOFTWARE_CONFIG
 #      str_replace:
 #        template: |
 #          #!/bin/bash
