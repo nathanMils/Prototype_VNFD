@@ -35,3 +35,6 @@ Hash: <CONFIGURE_ZEEK.SH_HASH>
 
 Name: Files/images/cirros-0.5.2-x86_64-disk.img
 Content-type: application/x-iso9066-image
+
+Name: Files/images/simple_gateway.qcow2
+Content-Type: application/x-qemu-disk
