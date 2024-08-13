@@ -27,7 +27,11 @@ resources:
             get_resource: external_CP
         - port:
             get_resource: elk_CP
-      user_data_format: SOFTWARE_CONFIG
+      user_data_format: RAW
+      user_data: |
+        #!/bin/bash
+        echo "Running boot script"
+        # ...
 
   internal_CP:
     type: OS::Neutron::Port
@@ -46,15 +50,15 @@ resources:
     properties:
       network: { get_param: net3 }
 
-  test_config:
-    type: OS::Heat::SoftwareConfig
-    properties:
-      config: |
-        #!/bin/bash
-        echo "Name"
-
-  test_deployment:
-    type: OS::Heat::SoftwareDeployment
-    properties:
-      config: { get_resource: test_config }
-      server: { get_resource: Prototype }
+#  test_config:
+#    type: OS::Heat::SoftwareConfig
+#    properties:
+#      config: |
+#        #!/bin/bash
+#        echo "Name"
+#
+#  test_deployment:
+#    type: OS::Heat::SoftwareDeployment
+#    properties:
+#      config: { get_resource: test_config }
+#      server: { get_resource: Prototype }
