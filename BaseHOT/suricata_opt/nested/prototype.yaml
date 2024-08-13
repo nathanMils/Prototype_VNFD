@@ -62,25 +62,25 @@ resources:
 #          $internal_ip: { get_attr: [ internal_CP, fixed_ips, 0, ip_address ] }
 #          $external_ip: { get_attr: [ external_CP, fixed_ips, 0, ip_address ] }
 
-  external_security_group:
-    type: OS::Neutron::SecurityGroup
-    properties:
-      name: External Security Group
-      description: Security group for VNFD allowing ping and HTTP traffic
-      rules:
-        # Rule for allowing ping (ICMP) traffic
-        - direction: ingress
-          ethertype: IPv4
-          protocol: icmp
-          remote_ip_prefix: 0.0.0.0/0
-
-        # Rule for allowing HTTP (TCP on port 80) traffic
-        - direction: ingress
-          ethertype: IPv4
-          protocol: tcp
-          port_range_min: 80
-          port_range_max: 80
-          remote_ip_prefix: 0.0.0.0/0
+#  external_security_group:
+#    type: OS::Neutron::SecurityGroup
+#    properties:
+#      name: External Security Group
+#      description: Security group for VNFD allowing ping and HTTP traffic
+#      rules:
+#        # Rule for allowing ping (ICMP) traffic
+#        - direction: ingress
+#          ethertype: IPv4
+#          protocol: icmp
+#          remote_ip_prefix: 0.0.0.0/0
+#
+#        # Rule for allowing HTTP (TCP on port 80) traffic
+#        - direction: ingress
+#          ethertype: IPv4
+#          protocol: tcp
+#          port_range_min: 80
+#          port_range_max: 80
+#          remote_ip_prefix: 0.0.0.0/0
 
   internal_CP:
     type: OS::Neutron::Port
@@ -93,9 +93,9 @@ resources:
     type: OS::Neutron::Port
     properties:
       network: { get_param: net2 }
-      security_groups:
-        - default
-        - { get_resource: external_security_group }
+#      security_groups:
+#        - default
+#        - { get_resource: external_security_group }
 
   elk_CP:
     type: OS::Neutron::Port
