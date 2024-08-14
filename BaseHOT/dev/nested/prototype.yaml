@@ -25,8 +25,8 @@ resources:
             get_resource: internal_CP
         - port:
             get_resource: external_CP
-        - port:
-            get_resource: elk_CP
+#        - port:
+#            get_resource: elk_CP
       user_data_format: RAW
       user_data: |
         #!/bin/bash
@@ -49,10 +49,10 @@ resources:
     properties:
       network: { get_param: net2 }
 
-  elk_CP:
-    type: OS::Neutron::Port
-    properties:
-      network: { get_param: net3 }
+#  elk_CP:
+#    type: OS::Neutron::Port
+#    properties:
+#      network: { get_param: net3 }
 
   prototype_extCP:
     type: OS::Neutron::FloatingIP

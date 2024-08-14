@@ -1,9 +1,9 @@
 {
-  "flavourId":"suricata_opt",
+  "flavourId":"dev",
   "vimConnectionInfo": {
     "vim": {
       "id": "3cc2c4ff-525c-48b4-94c9-29247223322f",
-      "vimId": "2edc4f3b-4011-484d-9f73-a5f56e525bc5",
+      "vimId": "5ac6c9ea-7947-40c3-aea3-71496e46c3e5",
       "vimType": "openstack"
     }
   },
