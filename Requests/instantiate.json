@@ -12,8 +12,8 @@
     "lcm-operation-user-data-class": "StandardUserData",
     "nfv": {
       "input": {
-        "external_VL_ID": "3f82efa3-f050-4d06-82f6-09d0a0355ed7",
-        "elk_VL_ID": "a0576c5e-e07d-4842-9d12-bca74787dd2f"
+        "external_VL_ID": "public",
+        "elk_VL_ID": "net1"
       }
     }
   }
