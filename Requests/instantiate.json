@@ -3,7 +3,7 @@
   "vimConnectionInfo": {
     "vim": {
       "id": "3cc2c4ff-525c-48b4-94c9-29247223322f",
-      "vimId": "3b1ad6c4-32f4-4f36-81bb-9cc1cd00eda0",
+      "vimId": "2edc4f3b-4011-484d-9f73-a5f56e525bc5",
       "vimType": "openstack"
     }
   },
@@ -12,8 +12,8 @@
     "lcm-operation-user-data-class": "StandardUserData",
     "nfv": {
       "input": {
-        "external_VL_ID": "ccdcd503-7b01-485a-83c6-aa7ba7a44ec4",
-        "elk_VL_ID": "6e3c6542-f55a-4491-ad3a-0a4a8a370d70"
+        "external_VL_ID": "3f82efa3-f050-4d06-82f6-09d0a0355ed7",
+        "elk_VL_ID": "a0576c5e-e07d-4842-9d12-bca74787dd2f"
       }
     }
   }

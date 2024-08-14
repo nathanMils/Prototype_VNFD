@@ -54,15 +54,9 @@ resources:
     properties:
       network: { get_param: net3 }
 
-#  test_config:
-#    type: OS::Heat::SoftwareConfig
-#    properties:
-#      config: |
-#        #!/bin/bash
-#        echo "Name"
-#
-#  test_deployment:
-#    type: OS::Heat::SoftwareDeployment
-#    properties:
-#      config: { get_resource: test_config }
-#      server: { get_resource: Prototype }
+  prototype_extCP:
+    type: OS::Neutron::FloatingIP
+    depends_on: [external_CP]
+    properties:
+      floating_network: { get_param: net2 }
+      port_id: { get_resource: external_CP }
