@@ -119,14 +119,14 @@ topology_template:
             virtual_local_storage:
               - size_of_storage: 1 GB
 
-    CP1:
-      type: tosca.nodes.nfv.VduCp
-      properties:
-        layer_protocols: [ ipv4 ]
-        order: 4
-      requirements:
-        - virtual_binding: Prototype
-        - virtual_link: internalVL1
+#    CP1:
+#      type: tosca.nodes.nfv.VduCp
+#      properties:
+#        layer_protocols: [ ipv4 ]
+#        order: 4
+#      requirements:
+#        - virtual_binding: Prototype
+#        - virtual_link: internalVL1
 
     CP2:
       type: tosca.nodes.nfv.VduCp

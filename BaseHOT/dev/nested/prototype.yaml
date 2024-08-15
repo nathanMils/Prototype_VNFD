@@ -21,8 +21,8 @@ resources:
       image: { get_param: image }
       name: Prototype
       networks:
-        - port:
-            get_resource: internal_CP
+#        - port:
+#            get_resource: internal_CP
         - port:
             get_resource: external_CP
 #        - port:
@@ -37,12 +37,12 @@ resources:
         # Optionally, add the user to the sudoers file for administrative privileges
         echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
 
-  internal_CP:
-    type: OS::Neutron::Port
-    properties:
-      network: { get_param: net1 }
-      fixed_ips:
-        - ip_address: 10.0.0.254
+#  internal_CP:
+#    type: OS::Neutron::Port
+#    properties:
+#      network: { get_param: net1 }
+#      fixed_ips:
+#        - ip_address: 10.0.0.254
 
   external_CP:
     type: OS::Neutron::Port
