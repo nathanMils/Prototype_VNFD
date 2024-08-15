@@ -37,6 +37,10 @@ resources:
         echo "nathan:stupid" | sudo chpasswd
         # Optionally, add the user to the sudoers file for administrative privileges
         echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
+        
+        sudo iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+        sudo iptables-save | sudo tee /etc/sysconfig/iptables
+
 
   internal_CP:
     type: OS::Neutron::Port
