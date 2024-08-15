@@ -131,11 +131,11 @@ topology_template:
     CP2:
       type: tosca.nodes.nfv.VduCp
       properties:
-        layer_protocols: [ ipv4 ]
+        layer_protocols: [ ipv4, ipv6 ]
         order: 5
       requirements:
         - virtual_binding: Prototype
-        - virtual_link: public
+        - virtual_link: private
 
     CP3:
       type: tosca.nodes.nfv.VduCp

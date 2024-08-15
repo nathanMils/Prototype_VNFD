@@ -12,7 +12,7 @@
     "lcm-operation-user-data-class": "StandardUserData",
     "nfv": {
       "input": {
-        "external_VL_ID": "public",
+        "external_VL_ID": "private",
         "elk_VL_ID": "net1"
       }
     }
