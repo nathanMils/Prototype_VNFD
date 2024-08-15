@@ -119,14 +119,14 @@ topology_template:
             virtual_local_storage:
               - size_of_storage: 1 GB
 
-#    CP1:
-#      type: tosca.nodes.nfv.VduCp
-#      properties:
-#        layer_protocols: [ ipv4 ]
-#        order: 4
-#      requirements:
-#        - virtual_binding: Prototype
-#        - virtual_link: internalVL1
+    CP1:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 4
+      requirements:
+        - virtual_binding: Prototype
+        - virtual_link: internalVL1
 
     CP2:
       type: tosca.nodes.nfv.VduCp
@@ -135,8 +135,18 @@ topology_template:
         order: 5
       requirements:
         - virtual_binding: Prototype
+        - virtual_link: public
 
     CP3:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 6
+      requirements:
+        - virtual_binding: Prototype
+        - virtual_link: net1
+
+    CP4:
       type: tosca.nodes.nfv.VduCp
       properties:
         layer_protocols: [ ipv4 ]
@@ -144,11 +154,6 @@ topology_template:
       requirements:
         - virtual_binding: NF
         - virtual_link: internalVL1
-
-  Prototype_extCP:
-    type: tosca.nodes.nfv.VnfExtCp
-    properties:
-      layer_protocols: [ ipv4 ]
 
     internalVL1:
       type: tosca.nodes.nfv.VnfVirtualLink
