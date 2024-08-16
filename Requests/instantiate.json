@@ -3,7 +3,7 @@
   "vimConnectionInfo": {
     "vim": {
       "id": "3cc2c4ff-525c-48b4-94c9-29247223322f",
-      "vimId": "746e5c51-6e1c-4d40-828e-58c9ec306c35",
+      "vimId": "869b03f4-7363-4b1e-93c1-5f5b24dc99c2",
       "vimType": "openstack"
     }
   },
@@ -14,8 +14,8 @@
       "input": {
         "external_VL_ID": "private",
         "elk_VL_ID": "net1",
-        "internal_VL_CIDR": "10.0.0.0/24",
-        "internal_VL_GW": "10.0.0.254"
+        "internal_VL_CIDR": "10.10.2.0/24",
+        "internal_VL_GW": "10.10.2.254"
       }
     }
   }

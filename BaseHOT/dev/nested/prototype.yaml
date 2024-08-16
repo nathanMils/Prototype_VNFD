@@ -12,6 +12,8 @@ parameters:
     type: string
   net3:
     type: string
+  fixed_ip:
+    type: string
 
 resources:
   Prototype:
