@@ -49,7 +49,7 @@ resources:
     properties:
       network: { get_param: net1 }
       fixed_ips:
-        - ip_address: 10.0.0.254
+        - ip_address: { get_param: fixed_ip }
 
   external_CP:
     type: OS::Neutron::Port
