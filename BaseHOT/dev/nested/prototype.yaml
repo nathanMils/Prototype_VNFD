@@ -58,10 +58,3 @@ resources:
     type: OS::Neutron::Port
     properties:
       network: { get_param: net3 }
-
-#  prototype_extCP:
-#    type: OS::Neutron::FloatingIP
-#    depends_on: [external_CP]
-#    properties:
-#      floating_network: { get_param: net2 }
-#      port_id: { get_resource: external_CP }

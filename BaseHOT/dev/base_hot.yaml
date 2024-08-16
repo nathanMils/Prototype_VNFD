@@ -31,8 +31,8 @@ resources:
       ip_version: 4
       network:
         get_resource: internalVL1
-      cidr: 10.0.0.0/24
+      cidr: {get_param: [ nfv, input, internal_VL_CIDR ]}
       enable_dhcp: true
-      gateway_ip: 10.0.0.254
+      gateway_ip: {get_param: [ nfv, input, internal_VL_GW ]}
 
 outputs: {}
