@@ -49,17 +49,22 @@ resources:
       fixed_ips:
         - ip_address: { get_param: fixed_ip }
 
+  external_CP:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: net2 }
+
   ## Will make accessible from external network
   external_extCP:
     type: OS::Neutron::FloatingIP
     properties:
-      floating_network: { get_param: net2 }
+      floating_network: public
 
   association:
     type: OS::Neutron::FloatingIPAssociation
     properties:
       floatingip_id: { get_resource: external_extCP }
-      port_id: { get_resource: internal_CP }
+      port_id: { get_resource: external_CP }
 
   # Will make accessible from ELK network
   elk_CP:
