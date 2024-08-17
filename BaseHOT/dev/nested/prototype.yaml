@@ -26,6 +26,8 @@ resources:
         - port:
             get_resource: internal_CP
         - port:
+            get_resource: external_CP
+        - port:
             get_resource: elk_CP
       user_data_format: RAW
       user_data: |
@@ -48,26 +50,20 @@ resources:
       network: { get_param: net1 }
       fixed_ips:
         - ip_address: { get_param: fixed_ip }
+      security_groups:
+        - test_secgrp
 
   external_CP:
     type: OS::Neutron::Port
     properties:
       network: { get_param: net2 }
-
-  ## Will make accessible from external network
-  external_extCP:
-    type: OS::Neutron::FloatingIP
-    properties:
-      floating_network: public
-
-  association:
-    type: OS::Neutron::FloatingIPAssociation
-    properties:
-      floatingip_id: { get_resource: external_extCP }
-      port_id: { get_resource: external_CP }
+      security_groups:
+        - test_secgrp
 
   # Will make accessible from ELK network
   elk_CP:
     type: OS::Neutron::Port
     properties:
       network: { get_param: net3 }
+      security_groups:
+        - test_secgrp

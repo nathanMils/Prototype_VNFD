@@ -24,17 +24,5 @@ resources:
     type: OS::Neutron::Port
     properties:
       network: { get_param: net }
-
-#  apache_install_config:
-#    type: OS::Heat::SoftwareConfig
-#    properties:
-#      group: script
-#      config: |
-#        #!/bin/bash
-#        systemctl start httpd
-#
-#  apache_deployment:
-#    type: OS::Heat::SoftwareDeployment
-#    properties:
-#      config: { get_resource: apache_install_config }
-#      server: { get_resource: NF }
+      security_groups:
+          - test_secgrp

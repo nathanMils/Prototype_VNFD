@@ -136,11 +136,6 @@ topology_template:
       requirements:
         - virtual_binding: Prototype
 
-    extCP1:
-      type: tosca.nodes.nfv.VnfExtCp
-      requirements:
-        - internal_virtual_link: net1
-
     CP3:
       type: tosca.nodes.nfv.VduCp
       properties:
