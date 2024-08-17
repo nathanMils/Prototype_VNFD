@@ -128,25 +128,20 @@ topology_template:
         - virtual_binding: Prototype
         - virtual_link: internalVL1
 
-    CP2:
-      type: tosca.nodes.nfv.VduCp
-      properties:
-        layer_protocols: [ ipv4, ipv6 ]
-        order: 5
+    extCP1:
+      type: tosca.nodes.nfv.VnfExtCp
       requirements:
-        - virtual_binding: Prototype
-        - virtual_link: private
+        - internal_virtual_link: internalVL1
 
-    CP3:
+    CP2:
       type: tosca.nodes.nfv.VduCp
       properties:
         layer_protocols: [ ipv4 ]
         order: 6
       requirements:
         - virtual_binding: Prototype
-        - virtual_link: net1
 
-    CP4:
+    CP3:
       type: tosca.nodes.nfv.VduCp
       properties:
         layer_protocols: [ ipv4 ]
