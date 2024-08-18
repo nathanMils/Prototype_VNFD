@@ -60,11 +60,11 @@ topology_template:
           min_number_of_instances: 1
           max_number_of_instances: 1
         sw_image_data:
-          name: simple_gateway_v2
+          name: standard_node_he_docker_enabled
           version: '1'
           checksum:
             algorithm: sha-256
-            hash: f6f6621f4b14f961da92be8435521e4841c0129c87af6bbc87269732c56af0a3
+            hash: e792c34be4100f4f837a31eaa2c852721ec192ac4cbbf9ce2bac861b6f2d8583
           container_format: bare
           disk_format: qcow2
           min_disk: 4 GB

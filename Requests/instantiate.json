@@ -12,10 +12,10 @@
     "lcm-operation-user-data-class": "StandardUserData",
     "nfv": {
       "input": {
-        "external_VL_ID": "private",
+        "external_VL_ID": "custom",
         "elk_VL_ID": "net1",
-        "internal_VL_CIDR": "10.30.1.0/24",
-        "internal_VL_GW": "10.30.1.1"
+        "internal_VL_CIDR": "10.11.0.0/24",
+        "internal_VL_GW": "10.11.0.1"
       }
     }
   }
