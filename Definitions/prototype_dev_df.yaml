@@ -60,21 +60,21 @@ topology_template:
           min_number_of_instances: 1
           max_number_of_instances: 1
         sw_image_data:
-          name: standard_node_he_docker_enabled
-          version: '1'
+          name: cirros-0.5.2-x86_64-disk
+          version: '0.5.2'
           checksum:
             algorithm: sha-256
-            hash: e792c34be4100f4f837a31eaa2c852721ec192ac4cbbf9ce2bac861b6f2d8583
+            hash: 932fcae93574e242dc3d772d5235061747dfe537668443a1f0567d893614b464
           container_format: bare
           disk_format: qcow2
-          min_disk: 4 GB
-          size: 4 GB
+          min_disk: 1 GB
+          size: 1 GB
       capabilities:
         virtual_compute:
           properties:
             requested_additional_capabilities:
               properties:
-                requested_additional_capability_name: m1.small
+                requested_additional_capability_name: m1.tiny
                 support_mandatory: true
                 target_performance_parameters:
                   entry_schema: test
@@ -83,7 +83,7 @@ topology_template:
             virtual_cpu:
               num_virtual_cpu: 1
             virtual_local_storage:
-              - size_of_storage: 4 GB
+              - size_of_storage: 1 GB
 
     NF:
       type: tosca.nodes.nfv.Vdu.Compute
