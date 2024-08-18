@@ -10,8 +10,6 @@ parameters:
     type: string
   net2:
     type: string
-  net3:
-    type: string
   fixed_ip:
     type: string
 
@@ -27,8 +25,6 @@ resources:
             get_resource: internal_CP
         - port:
             get_resource: external_CP
-        - port:
-            get_resource: elk_CP
       user_data_format: RAW
       user_data: |
         #!/bin/bash
@@ -40,8 +36,24 @@ resources:
         # Optionally, add the user to the sudoers file for administrative privileges
         echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
         
-        sudo iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
-        sudo iptables-save | sudo tee /etc/sysconfig/iptables
+        # Define network interfaces based on IP ranges
+        # Replace these with your actual interface names or detection logic if needed
+        INTERNAL_IFACE="ens3"
+        EXTERNAL_IFACE="ens4"
+        
+        # Enable IP forwarding
+        echo 1 > /proc/sys/net/ipv4/ip_forward
+        echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
+        sysctl -p
+        
+        # Configure iptables
+        iptables -t nat -A POSTROUTING -o $EXTERNAL_IFACE -j MASQUERADE
+        iptables -A FORWARD -i $INTERNAL_IFACE -o $EXTERNAL_IFACE -s $INTERNAL_NET -d $EXTERNAL_NET -j ACCEPT
+        iptables -A FORWARD -i $EXTERNAL_IFACE -o $INTERNAL_IFACE -m state --state RELATED,ESTABLISHED -j ACCEPT
+        
+        # Save iptables rules (if necessary, based on your distro)
+        # On Debian/Ubuntu
+        iptables-save > /etc/iptables/rules.v4
 
 
   internal_CP:
@@ -61,9 +73,9 @@ resources:
         - test_secgrp
 
   # Will make accessible from ELK network
-  elk_CP:
-    type: OS::Neutron::Port
-    properties:
-      network: { get_param: net3 }
-      security_groups:
-        - test_secgrp
+#  elk_CP:
+#    type: OS::Neutron::Port
+#    properties:
+#      network: { get_param: net3 }
+#      security_groups:
+#        - test_secgrp

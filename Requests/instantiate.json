@@ -13,9 +13,9 @@
     "nfv": {
       "input": {
         "external_VL_ID": "custom",
-        "elk_VL_ID": "net1",
-        "internal_VL_CIDR": "10.11.0.0/24",
-        "internal_VL_GW": "10.11.0.1"
+        "external_VL_CIDR": "10.0.0.0/24",
+        "internal_VL_CIDR": "20.0.0.0/24",
+        "internal_VL_GW": "20.0.0.1"
       }
     }
   }

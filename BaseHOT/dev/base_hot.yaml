@@ -13,7 +13,6 @@ resources:
       image: { get_param: [ nfv, VDU, Prototype, vcImageId ] }
       net1: { get_resource: internalVL1 }
       net2: { get_param: [ nfv, input, external_VL_ID ] }
-      net3: { get_param: [ nfv, input, elk_VL_ID ] }
       fixed_ip: { get_param: [ nfv, input, internal_VL_GW ] }
 
   NF:
