@@ -23,7 +23,7 @@ resources:
     properties:
       flavor: { get_param: flavor }
       image: { get_param: image }
-      name: Prototype
+      name: prototype
       networks:
         - port:
             get_resource: internal_CP
@@ -41,7 +41,6 @@ resources:
             echo "nathan:stupid" | sudo chpasswd
             # Optionally, add the user to the sudoers file for administrative privileges
             echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
-            
             # Define network interfaces based on IP ranges
             # Replace these with your actual interface names or detection logic if needed
             INTERNAL_IFACE="ens3"
