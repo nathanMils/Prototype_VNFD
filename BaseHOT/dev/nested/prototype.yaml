@@ -64,15 +64,13 @@ resources:
       network: { get_param: net1 }
       fixed_ips:
         - ip_address: { get_param: fixed_ip }
-      security_groups:
-        - test_secgrp
+      port_security_enabled: false
 
   external_CP:
     type: OS::Neutron::Port
     properties:
       network: { get_param: net2 }
-      security_groups:
-        - test_secgrp
+      port_security_enabled: false
 
   # Will make accessible from ELK network
 #  elk_CP:
@@ -81,3 +79,8 @@ resources:
 #      network: { get_param: net3 }
 #      security_groups:
 #        - test_secgrp
+
+outputs:
+  ExternalIP:
+    description: "External IP address of the prototype server"
+    value: { get_attr: [ external_CP, fixed_ips, 0, ip_address ] }

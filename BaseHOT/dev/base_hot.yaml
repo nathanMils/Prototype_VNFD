@@ -38,4 +38,12 @@ resources:
       enable_dhcp: true
       gateway_ip: {get_param: [ nfv, input, internal_VL_GW ]}
 
+  router_route:
+    type: OS::Neutron::ExtraRouteSet
+    properties:
+      router: { get_param: [ nfv, input, router_id ] }
+      routes:
+        - destination: {get_param: [ nfv, input, internal_VL_CIDR ]}
+          nexthop: {get_attr: [Prototype, outputs, External_IP]}
+
 outputs: {}
