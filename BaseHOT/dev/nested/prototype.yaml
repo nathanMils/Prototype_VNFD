@@ -10,6 +10,8 @@ parameters:
     type: string
   net2:
     type: string
+  internal_cidr:
+    type: string
   fixed_ip:
     type: string
 
@@ -26,34 +28,30 @@ resources:
         - port:
             get_resource: external_CP
       user_data_format: RAW
-      user_data: |
-        #!/bin/bash
-        sleep 30
-        # Create a new user 'nathan'
-        sudo useradd -m -s /bin/bash nathan
-        # Set a password for the new user
-        echo "nathan:stupid" | sudo chpasswd
-        # Optionally, add the user to the sudoers file for administrative privileges
-        echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
-        
-        # Define network interfaces based on IP ranges
-        # Replace these with your actual interface names or detection logic if needed
-        INTERNAL_IFACE="ens3"
-        EXTERNAL_IFACE="ens4"
-        
-        # Enable IP forwarding
-        echo 1 > /proc/sys/net/ipv4/ip_forward
-        echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
-        sysctl -p
-        
-        # Configure iptables
-        iptables -t nat -A POSTROUTING -o $EXTERNAL_IFACE -j MASQUERADE
-        iptables -A FORWARD -i $INTERNAL_IFACE -o $EXTERNAL_IFACE -s $INTERNAL_NET -d $EXTERNAL_NET -j ACCEPT
-        iptables -A FORWARD -i $EXTERNAL_IFACE -o $INTERNAL_IFACE -m state --state RELATED,ESTABLISHED -j ACCEPT
-        
-        # Save iptables rules (if necessary, based on your distro)
-        # On Debian/Ubuntu
-        iptables-save > /etc/iptables/rules.v4
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+            sleep 30
+            # Create a new user 'nathan'
+            sudo useradd -m -s /bin/bash nathan
+            # Set a password for the new user
+            echo "nathan:stupid" | sudo chpasswd
+            # Optionally, add the user to the sudoers file for administrative privileges
+            echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
+            
+            # Define network interfaces based on IP ranges
+            # Replace these with your actual interface names or detection logic if needed
+            INTERNAL_IFACE="ens3"
+            EXTERNAL_IFACE="ens4"
+            
+            sudo ip route add $INTERNAL_CIDR dev $INTERNAL_IFACE
+            sudo sysctl -w net.ipv4.ip_forward=1
+            
+            sudo iptables -t nat -A POSTROUTING -o $EXTERNAL_IFACE -j MASQUERADE
+
+          params:
+            $INTERNAL_CIDR: { get_param: internal_cidr }
 
 
   internal_CP:

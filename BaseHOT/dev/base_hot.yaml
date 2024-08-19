@@ -13,6 +13,7 @@ resources:
       image: { get_param: [ nfv, VDU, Prototype, vcImageId ] }
       net1: { get_resource: internalVL1 }
       net2: { get_param: [ nfv, input, external_VL_ID ] }
+      internal_cidr: { get_param: [ nfv, input, internal_VL_CIDR ] }
       fixed_ip: { get_param: [ nfv, input, internal_VL_GW ] }
 
   NF:
@@ -21,6 +22,7 @@ resources:
       flavor: { get_param: [ nfv, VDU, NF, computeFlavourId ] }
       image: { get_param: [ nfv, VDU, NF, vcImageId ] }
       net: { get_resource: internalVL1 }
+      gateway: { get_param: [ nfv, input, internal_VL_GW ] }
 
   internalVL1:
     type: OS::Neutron::Net

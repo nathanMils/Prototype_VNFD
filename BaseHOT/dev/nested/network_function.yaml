@@ -8,6 +8,8 @@ parameters:
     type: string
   net:
     type: string
+  gateway:
+    type: string
 
 resources:
   NF:
@@ -19,6 +21,14 @@ resources:
       networks:
         - port:
             get_resource: nf_internal_CP
+      user_data_format: RAW
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+            sudo ip route add default via $GATEWAY dev eth0
+          params:
+            $GATEWAY: { get_param: gateway }
 
   nf_internal_CP:
     type: OS::Neutron::Port
