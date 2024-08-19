@@ -14,6 +14,7 @@ resources:
       net1: { get_resource: internalVL1 }
       net2: { get_param: [ nfv, input, external_VL_ID ] }
       internal_cidr: { get_param: [ nfv, input, internal_VL_CIDR ] }
+      external_cidr: { get_param: [ nfv, input, external_VL_CIDR ] }
       fixed_ip: { get_param: [ nfv, input, internal_VL_GW ] }
 
   NF:

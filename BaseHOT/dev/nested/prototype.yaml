@@ -12,6 +12,8 @@ parameters:
     type: string
   internal_cidr:
     type: string
+  external_cidr:
+    type: string
   fixed_ip:
     type: string
 
@@ -46,12 +48,15 @@ resources:
             EXTERNAL_IFACE="ens4"
             
             sudo ip route add $INTERNAL_CIDR dev $INTERNAL_IFACE
+            sudo ip route add $EXTERNAL_CIDR dev $EXTERNAL_IFACE
             sudo sysctl -w net.ipv4.ip_forward=1
             
-            sudo iptables -t nat -A POSTROUTING -o $EXTERNAL_IFACE -j MASQUERADE
+            iptables -A FORWARD -i $INTERNAL_IFACE -o $EXTERNAL_IFACE -j ACCEPT
+            iptables -A FORWARD -i $EXTERNAL_IFACE -o $INTERNAL_IFACE -j ACCEPT
 
           params:
             $INTERNAL_CIDR: { get_param: internal_cidr }
+            $EXTERNAL_CIDR: { get_param: external_cidr }
 
 
   internal_CP:
