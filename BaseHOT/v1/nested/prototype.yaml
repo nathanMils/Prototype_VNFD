@@ -20,7 +20,7 @@ resources:
         - port:
             get_resource: external_CP
       user_data_format: RAW
-      user_data:
+      user_data: |
         #!/bin/bash
         sleep 30
         # Create a new user 'nathan'
