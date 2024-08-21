@@ -23,8 +23,8 @@ from tacker.sol_refactored.infra_drivers.openstack import userdata_utils
 # Add logging
 import logging
 
-logging.basicConfig(filename='~/nathan_source/log/tacker/lcm_debug.log', level=logging.DEBUG,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+# logging.basicConfig(filename='~/nathan_source/log/tacker/lcm_debug.log', level=logging.DEBUG,
+#                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 def add_idx(name, index):
     return f'{name}-{index}'
@@ -111,12 +111,12 @@ class StandardUserData(userdata_utils.AbstractUserData):
 
     @staticmethod
     def instantiate(req, inst, grant_req, grant, tmp_csar_dir):
-        logging.debug("Instantiate called with:")
-        logging.debug("req: %s", req)
-        logging.debug("inst: %s", inst)
-        logging.debug("grant_req: %s", grant_req)
-        logging.debug("grant: %s", grant)
-        logging.debug("tmp_csar_dir: %s", tmp_csar_dir)
+        # logging.debug("Instantiate called with:")
+        # logging.debug("req: %s", req)
+        # logging.debug("inst: %s", inst)
+        # logging.debug("grant_req: %s", grant_req)
+        # logging.debug("grant: %s", grant)
+        # logging.debug("tmp_csar_dir: %s", tmp_csar_dir)
 
         vnfd = common_script_utils.get_vnfd(inst['vnfdId'], tmp_csar_dir)
         flavour_id = req['flavourId']
@@ -193,7 +193,7 @@ class StandardUserData(userdata_utils.AbstractUserData):
         for key, value in hot_dict.get('files', {}).items():
             fields['files'][key] = yaml.safe_dump(value)
 
-        logging.debug("Fields: %s", fields)
+        # logging.debug("Fields: %s", fields)
         return fields
 
     @staticmethod
