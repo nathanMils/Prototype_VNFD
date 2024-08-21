@@ -1,0 +1,19 @@
+heat_template_version: 2013-05-23
+description: 'Suricata Base HOT for Sample VNF'
+
+parameters:
+  nfv:
+    type: json
+
+resources:
+  Prototype:
+    type: prototype.yaml
+    properties:
+      flavor: { get_param: [ nfv, VDU, Prototype, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, Prototype, vcImageId ] }
+      net: { get_param: [ nfv, input, external_VL_ID ] }
+
+  internalVL1:
+    type: OS::Neutron::Net
+
+outputs: {}
