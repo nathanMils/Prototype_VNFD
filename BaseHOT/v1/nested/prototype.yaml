@@ -21,16 +21,14 @@ resources:
             get_resource: external_CP
       user_data_format: RAW
       user_data:
-        str_replace:
-          template: |
-            #!/bin/bash
-            sleep 30
-            # Create a new user 'nathan'
-            sudo useradd -m -s /bin/bash nathan
-            # Set a password for the new user
-            echo "nathan:stupid" | sudo chpasswd
-            # Optionally, add the user to the sudoers file for administrative privileges
-            echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
+        #!/bin/bash
+        sleep 30
+        # Create a new user 'nathan'
+        sudo useradd -m -s /bin/bash nathan
+        # Set a password for the new user
+        echo "nathan:stupid" | sudo chpasswd
+        # Optionally, add the user to the sudoers file for administrative privileges
+        echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
 
   external_CP:
     type: OS::Neutron::Port
