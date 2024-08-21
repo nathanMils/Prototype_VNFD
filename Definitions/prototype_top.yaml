@@ -10,6 +10,7 @@ imports:
   - prototype_zeek_opt_df.yaml
   - prototype_suricata_opt_df.yaml
   - prototype_example_df.yaml
+  - prototype_v1_df.yaml
 
 topology_template:
   inputs:
