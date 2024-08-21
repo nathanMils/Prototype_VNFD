@@ -22,10 +22,8 @@ from tacker.sol_refactored.infra_drivers.openstack import userdata_utils
 
 # Add logging
 import logging
-# Added logging.basicConfig to write logs to a file
-# NB Remember to create the directory /var/log/tacker/ if it does not exist
-# NB Remember to give the user running the tacker server write permissions to the directory /var/log/tacker/
-logging.basicConfig(filename='/var/log/tacker/lcm_debug.log', level=logging.DEBUG,
+
+logging.basicConfig(filename='~/nathan_source/log/tacker/lcm_debug.log', level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 def add_idx(name, index):
