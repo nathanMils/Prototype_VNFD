@@ -16,8 +16,9 @@ cp -r $SOURCE_DIR/images $TARGET_DIR
 # Copy the prototype_compose file to the appropriate directory in the target filesystem
 cp -r $SOURCE_DIR/prototype_compose $TARGET_DIR
 
-cp $SOURCE_DIR/vm_entry_script.sh
+cp $SOURCE_DIR/vm_entry_script.sh $TARGET_DIR
 
 chmod 644 $TARGET_DIR/images/alpine-3.20.2.tar
 chmod 644 $TARGET_DIR/images/gateway-latest.tar
 chmod 644 $TARGET_DIR/images/nf-latest.tar
+sudo chmod +x $TARGET_DIR/vm_entry_script.sh
