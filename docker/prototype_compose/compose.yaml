@@ -3,7 +3,12 @@ version: '3.8'
 services:
 
   gateway:
-    image: nathanmills/gateway:latest
+    build: 
+      context: gateway
+      args:
+        ALPINE_VERSION: ${ALPINE_VERSION}
+        INTERNAL_IF: ${INTERNAL_IF}
+        EXTERNAL_IF: ${EXTERNAL_IF}
     privileged: true
     command: sh /entrypoint.sh
     container_name: gateway
@@ -16,7 +21,11 @@ services:
       - NET_ADMIN
 
   nf:
-    image: nathanmills/nf:latest
+    build:
+      context: nf
+      # args:
+      #   UBUNTU_VERSION: ${UBUNTU_VERSION}
+      #   NETWORK_FUNCTION: ${NETWORK_FUNCTION}
     privileged: true
     command: sh /entrypoint.sh
     container_name: nf

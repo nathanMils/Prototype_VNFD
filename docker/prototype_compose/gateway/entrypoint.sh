@@ -7,9 +7,8 @@ echo 1 > /proc/sys/net/ipv4/ip_forward
 # iptables -t nat -N POSTROUTING || true
 # iptables -N FORWARD || true
 # # Configure iptables
-# iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-# iptables -A FORWARD -i eth1 -o eth0 -j ACCEPT
-# iptables -A FORWARD -i eth0 -o eth1 -j ACCEPT
-echo $EXTERNAL_IF
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+iptables -A FORWARD -i eth1 -o eth0 -j ACCEPT
+iptables -A FORWARD -i eth0 -o eth1 -j ACCEPT
 # Keep the container running (optional)
 tail -f /dev/null

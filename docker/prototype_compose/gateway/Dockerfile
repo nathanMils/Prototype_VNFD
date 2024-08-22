@@ -1,8 +1,5 @@
-ARG ALPINE_VERSION
-ARG EXTERNAL_IF
-ARG INTERNAL_IF
 # Use Alpine Linux as the base image
-FROM alpine:${ALPINE_VERSION}
+FROM alpine:3.20.2
 
 # Install iptables
 RUN apk add --no-cache iptables

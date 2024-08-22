@@ -11,9 +11,13 @@ SOURCE_DIR=$(dirname $0)/../files
 mkdir -p $TARGET_DIR
 
 # Copy the Docker image tarball to the target Docker images directory
-cp $SOURCE_DIR/alpine-3.20.2.tar $TARGET_DIR
+cp -r $SOURCE_DIR/images $TARGET_DIR
 
 # Copy the prototype_compose file to the appropriate directory in the target filesystem
 cp -r $SOURCE_DIR/prototype_compose $TARGET_DIR
 
-chmod 644 $TARGET_DIR/alpine-3.20.2.tar
+cp $SOURCE_DIR/vm_entry_script.sh
+
+chmod 644 $TARGET_DIR/images/alpine-3.20.2.tar
+chmod 644 $TARGET_DIR/images/gateway-latest.tar
+chmod 644 $TARGET_DIR/images/nf-latest.tar
