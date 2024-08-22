@@ -5,10 +5,6 @@ services:
   gateway:
     build: 
       context: gateway
-      args:
-        ALPINE_VERSION: ${ALPINE_VERSION}
-        INTERNAL_IF: ${INTERNAL_IF}
-        EXTERNAL_IF: ${EXTERNAL_IF}
     privileged: true
     command: sh /entrypoint.sh
     container_name: gateway
