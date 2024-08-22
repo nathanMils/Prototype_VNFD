@@ -1,12 +1,14 @@
 #!/bin/bash
 # running docker compose
-docker compose -f /opt/prototype/Conf_files/prototype_compose/compose.yml build --no-cache
-docker compose -f /opt/prototype/Conf_files/prototype_compose/compose.yaml up -d
+TARGET_DIR=/opt/prototype_v1
+docker load -i $TARGET_DIR/alpine-3.20.2.tar
+docker compose -f $TARGET_DIR/prototype_compose/compose.yml build --no-cache
+docker compose -f $TARGET_DIR/prototype_compose/compose.yaml up -d
 
 sleep 30
 # Variables
-VM_IP="your_vm_ip"             # Replace with your VM's external IP
-GATEWAY_IP="172.18.0.2"        # IP of the gateway container in its network
+VM_IP=$1                            # Replace with VM's external IP
+GATEWAY_IP="172.18.0.2"             # IP of the gateway container in its network
 INTERNAL_CONTAINER_IP="172.20.0.3"  # IP of the internal container
 
 # Enable IP forwarding on the gateway container (to be run inside the gateway container)
