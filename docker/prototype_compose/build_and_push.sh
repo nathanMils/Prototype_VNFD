@@ -2,7 +2,7 @@
 
 GATEWAY=nathanmills/gateway:latest
 NF=nathanmills/nf:latest
-TARGET=.../custom_elements/prototype_compose
+TARGET=../../custom_elements/prototype_compose
 
 # Login
 docker login
