@@ -1,0 +1,48 @@
+{
+  "flavourId":"v1",
+  "vimConnectionInfo": {
+    "vim": {
+      "id": "3cc2c4ff-525c-48b4-94c9-29247223322f",
+      "vimId": "0464ef46-a50c-438e-a478-aa76ec355a7d",
+      "vimType": "openstack"
+    }
+  },
+  "additionalParams": {
+    "lcm-operation-user-data": "./UserData/lcm_user_data.py",
+    "lcm-operation-user-data-class": "StandardUserData",
+    "nfv": {
+      "input": {
+        "networks": {
+          "main": {
+            "create": false,
+            "details": {
+              "name": "",
+              "id": "",
+              "subnet_ipv4": {
+                "cidr": "",
+                "gateway": ""
+              },
+              "subnet_ipv6": {
+                "cidr": "",
+                "gateway": ""
+              }
+            }
+          },
+          "elk": {
+            "details": {
+              "name":"",
+              "id":""
+            }
+          }
+        },
+        "NF": {
+          "create": false,
+          "type": "amf"
+        },
+        "elk": {
+
+        }
+      }
+    }
+  }
+}
