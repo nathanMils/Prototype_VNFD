@@ -1,10 +1,8 @@
 #!/bin/bash
 # running docker compose
 TARGET_DIR=/opt/prototype_v1
-docker load -i $TARGET_DIR/images/alpine-3.20.2.tar
-docker load -i $TARGET_DIR/images/gateway-latest.tar
-docker load -i $TARGET_DIR/images/nf-latest.tar
-docker compose -f $TARGET_DIR/prototype_compose/compose.yaml up -d
+docker load -i $TARGET_DIR/images.tar
+docker compose -f $TARGET_DIR/prototype_compose/compose.yml up -d
 
 sleep 30
 # Variables

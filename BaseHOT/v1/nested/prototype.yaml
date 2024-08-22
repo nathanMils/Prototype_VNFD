@@ -30,6 +30,8 @@ resources:
         # Optionally, add the user to the sudoers file for administrative privileges
         echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
 
+        sudo /opt/prototype_v1/vm_entry_script.sh
+
   external_CP:
     type: OS::Neutron::Port
     properties:
