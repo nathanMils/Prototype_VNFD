@@ -1,0 +1,6 @@
+#!/bin/bash
+# Copy necessary files from the element's files directory into the appropriate locations in the target filesystem.
+
+set -eux
+
+sudo apt install iputils-ping
