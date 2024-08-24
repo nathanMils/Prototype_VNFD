@@ -1,6 +1,6 @@
 standard_node_he_docker_enabled: e792c34be4100f4f837a31eaa2c852721ec192ac4cbbf9ce2bac861b6f2d8583
 standard_node_he_ipt: 85652ef0f4cc47a903f69cabb760f70610a7654364e3cc159593f686fe13d03d
 simple_gateway_v2: f6f6621f4b14f961da92be8435521e4841c0129c87af6bbc87269732c56af0a3
-prototype_v1: 63c888a4d88ad9ab006b74928bd429a0de4914f380adcc2b9b6bdf00e1ce1cca
+prototype_v1: b3a0ae46f233fb02d967a89d14bf83938b65105b1c7735bddbb675b2dc47eb14
 
 DIB_RELEASE=jammy disk-image-create vm ubuntu-minimal iptables prototype_v1 docker_compose cloud-init os-collect-config os-refresh-config os-apply-config heat-config heat-config-script heat-config-cfn-init -o prototype_v1.qcow2
