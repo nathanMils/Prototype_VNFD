@@ -8,15 +8,9 @@ filebeat.inputs:
 - type: log
   enabled: true
   paths:
-    - /var/log/gateway/gateway.log
+    - /usr/local/zeek/logs
   fields:
     source: gateway
-- type: log
-  enabled: true
-  paths:
-    - /var/log/nf/nf.log
-  fields:
-    source: nf
 
 # processors:
 #   - grok:

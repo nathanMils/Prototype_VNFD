@@ -1,8 +1,11 @@
 # Use Alpine Linux as the base image
 FROM zeek/zeek:6.0.5
 
-# Install iptables
-RUN apk add --no-cache iptables
+# Install iptables and clean up cache
+RUN apt-get update && \
+    apt-get install -y iptables && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Copy the entrypoint script into the container
 COPY entrypoint.sh /entrypoint.sh

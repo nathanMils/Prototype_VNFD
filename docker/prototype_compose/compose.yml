@@ -45,8 +45,7 @@ services:
   #     - --strict.perms=false
   #   volumes:
   #     - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro,Z
-  #     - ./gateway/logs:/var/log/gateway
-  #     - ./nf/logs:/var/log/nf
+  #     - ./zeek_logs:/usr/local/zeek/logs
   #     - type: bind
   #       source: /var/lib/docker/containers
   #       target: /var/lib/docker/containers

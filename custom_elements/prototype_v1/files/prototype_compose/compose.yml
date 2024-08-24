@@ -12,6 +12,8 @@ services:
         ipv4_address: 172.18.0.2
       internal:
         ipv4_address: 172.20.0.2
+    volumes:
+      - ./zeek_logs:/usr/local/zeek/logs
     cap_add:
       - NET_ADMIN
 
@@ -26,33 +28,32 @@ services:
       internal:
         ipv4_address: 172.20.0.3
 
-  # filebeat:
-  #   build:
-  #     context: filebeat/
-  #     args:
-  #       ELASTIC_VERSION: ${ELASTIC_VERSION}
-  #   container_name: filebeat
-  #   user: root
-  #   command:
-  #     - -e
-  #     - --strict.perms=false
-  #   volumes:
-  #     - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro,Z
-  #     - ./gateway/logs:/var/log/gateway
-  #     - ./nf/logs:/var/log/nf
-  #     - type: bind
-  #       source: /var/lib/docker/containers
-  #       target: /var/lib/docker/containers
-  #       read_only: true
-  #     - type: bind
-  #       source: /var/run/docker.sock
-  #       target: /var/run/docker.sock
-  #       read_only: true
-  #   environment:
-  #     FILEBEAT_INTERNAL_PASSWORD: ${FILEBEAT_INTERNAL_PASSWORD:-}
-  #     BEATS_SYSTEM_PASSWORD: ${BEATS_SYSTEM_PASSWORD:-}
-  #   networks:
-  #     - elk
+  filebeat:
+    build:
+      context: filebeat/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    container_name: filebeat
+    user: root
+    command:
+      - -e
+      - --strict.perms=false
+    volumes:
+      - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro,Z
+      - ./zeek_logs:/usr/local/zeek/logs
+      - type: bind
+        source: /var/lib/docker/containers
+        target: /var/lib/docker/containers
+        read_only: true
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        read_only: true
+    environment:
+      FILEBEAT_INTERNAL_PASSWORD: ${FILEBEAT_INTERNAL_PASSWORD:-}
+      BEATS_SYSTEM_PASSWORD: ${BEATS_SYSTEM_PASSWORD:-}
+    networks:
+      - elk
 
 networks:
   external:
