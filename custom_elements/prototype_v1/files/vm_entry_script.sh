@@ -4,7 +4,6 @@ TARGET_DIR=/opt/prototype_v1
 docker load -i $TARGET_DIR/images.tar
 docker compose -f $TARGET_DIR/prototype_compose/compose.yml up -d
 
-sleep 30
 # Variables
 VM_IP=$1                            # Replace with VM's external IP
 GATEWAY_IP="172.18.0.2"             # IP of the gateway container in its network
@@ -17,6 +16,9 @@ echo 1 > /proc/sys/net/ipv4/ip_forward
 # On the VM (external host) - DNAT to forward all traffic to the internal container via the gateway container
 echo "Setting up DNAT to forward traffic to the internal container"
 sudo iptables -t nat -A PREROUTING -d $VM_IP -j DNAT --to-destination $INTERNAL_CONTAINER_IP
+
+# This bugger took me  forever to fix
+sudo iptables -A FORWARD -d $INTERNAL_CONTAINER_IP -j ACCEPT
 
 # On the VM (external host) - Add a route to forward traffic for the internal container via the gateway container
 echo "Adding route to forward traffic to the internal container via the gateway container"
