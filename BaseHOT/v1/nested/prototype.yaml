@@ -20,17 +20,22 @@ resources:
         - port:
             get_resource: external_CP
       user_data_format: RAW
-      user_data: |
-        #!/bin/bash
-        sleep 30
-        # Create a new user 'nathan'
-        sudo useradd -m -s /bin/bash nathan
-        # Set a password for the new user
-        echo "nathan:stupid" | sudo chpasswd
-        # Optionally, add the user to the sudoers file for administrative privileges
-        echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+            sleep 30
+            # Create a new user 'nathan'
+            sudo useradd -m -s /bin/bash nathan
+            # Set a password for the new user
+            echo "nathan:stupid" | sudo chpasswd
+            # Optionally, add the user to the sudoers file for administrative privileges
+            echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
 
-        sudo /opt/prototype_v1/vm_entry_script.sh
+            sudo /opt/prototype_v1/vm_entry_script.sh $VM_IP
+
+          params:
+            $VM_IP: {get_attr: [external_CP, fixed_ips, 0, ip_address] }
 
   external_CP:
     type: OS::Neutron::Port
