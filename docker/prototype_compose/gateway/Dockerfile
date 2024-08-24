@@ -1,5 +1,5 @@
 # Use Alpine Linux as the base image
-FROM alpine:3.20.2
+FROM zeek/zeek:6.0.5
 
 # Install iptables
 RUN apk add --no-cache iptables
