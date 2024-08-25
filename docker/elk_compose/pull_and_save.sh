@@ -12,8 +12,8 @@ LOGSTASH="docker.elastic.co/logstash/logstash:$ELASTIC_VERSION"
 docker login
 
 # Build and push nf image
-docker pull docker.elastic.co/elasticsearch/elasticsearch:$ELASTIC_VERSION
-docker pull docker.elastic.co/kibana/kibana:$ELASTIC_VERSION
-docker pull docker.elastic.co/logstash/logstash:$ELASTIC_VERSION
+docker pull $ELASTICSEARCH
+docker pull $KIBANA
+docker pull $LOGSTASH
 
-docker save -o $TARGET/images.tar docker.elastic.co/elasticsearch/elasticsearch:$ELASTIC_VERSION docker.elastic.co/kibana/kibana:$ELASTIC_VERSION docker.elastic.co/logstash/logstash:$ELASTIC_VERSION
+docker save -o $TARGET/images.tar $ELASTICSEARCH $KIBANA $LOGSTASH
