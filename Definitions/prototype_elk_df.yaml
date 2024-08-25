@@ -31,7 +31,7 @@ topology_template:
   substitution_mappings:
     node_type: company.provider.VNF
     properties:
-      flavour_id: v1
+      flavour_id: elk
 
   node_templates:
     VNF:
@@ -51,16 +51,16 @@ topology_template:
           scale_start: []
           scale_end: []
 
-    Prototype:
+    ELK:
       type: tosca.nodes.nfv.Vdu.Compute
       properties:
-        name: Prototype
-        description: Prototype compute node
+        name: ELK
+        description: ELK compute node
         vdu_profile:
           min_number_of_instances: 1
           max_number_of_instances: 1
         sw_image_data:
-          name: prototype_v1
+          name: elk_image
           version: '1'
           checksum:
             algorithm: sha-256
@@ -79,7 +79,7 @@ topology_template:
                 target_performance_parameters:
                   entry_schema: test
             virtual_memory:
-              virtual_mem_size: 512 MB
+              virtual_mem_size: 1 GB
             virtual_cpu:
               num_virtual_cpu: 1
             virtual_local_storage:
@@ -91,24 +91,43 @@ topology_template:
         layer_protocols: [ ipv4 ]
         order: 4
       requirements:
-        - virtual_binding: Prototype
+        - virtual_binding: ELK
+        - virtual_link: elkVL1
 
-    #    CP3:
-    #      type: tosca.nodes.nfv.VduCp
-    #      properties:
-    #        layer_protocols: [ ipv4 ]
-    #        order: 6
-    #      requirements:
-    #        - virtual_binding: Prototype
+    extCP1:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: elkVL1
+
+    elkVL1:
+      type: tosca.nodes.nfv.VnfVirtualLink
+      properties:
+        connectivity_type:
+          layer_protocols: [ ipv4 ]
+        description: elk network
+        vl_profile:
+          max_bitrate_requirements:
+            root: 1048576
+            leaf: 1048576
+          min_bitrate_requirements:
+            root: 1048576
+            leaf: 1048576
+          virtual_link_protocol_data:
+            - associated_layer_protocol: ipv4
+              l3_protocol_data:
+                ip_version: ipv4
+                cidr: 10.5.0.0/24
 
   policies:
     - scaling_aspects:
         type: tosca.policies.nfv.ScalingAspects
         properties:
           aspects:
-            Prototype_scale:
-              name: Prototype_scale
-              description: Prototype scaling aspect
+            ELK_scale:
+              name: ELK_scale
+              description: ELK scaling aspect
               max_scale_level: 1
               step_deltas:
                 - delta_1
@@ -118,16 +137,16 @@ topology_template:
         properties:
           initial_delta:
             number_of_instances: 1
-        targets: [ Prototype ]
+        targets: [ ELK ]
 
     - scaling_aspect_deltas:
         type: tosca.policies.nfv.VduScalingAspectDeltas
         properties:
-          aspect: Prototype_scale
+          aspect: ELK_scale
           deltas:
             delta_1:
               number_of_instances: 1
-        targets: [ Prototype ]
+        targets: [ ELK ]
 
     - instantiation_levels:
         type: tosca.policies.nfv.InstantiationLevels
@@ -136,14 +155,24 @@ topology_template:
             instantiation_level_1:
               description: Only size
               scale_info:
-                Prototype_scale:
+                ELK_scale:
                   scale_level: 0
           default_level: instantiation_level_1
 
-    - Prototype_instantiation_levels:
+    - ELK_instantiation_levels:
         type: tosca.policies.nfv.VduInstantiationLevels
         properties:
           levels:
             instantiation_level_1:
               number_of_instances: 1
-        targets: [ Prototype ]
+        targets: [ ELK ]
+
+    - elkVL1_instantiation_levels:
+        type: tosca.policies.nfv.VirtualLinkInstantiationLevels
+        properties:
+          levels:
+            instantiation_level_1:
+              bitrate_requirements:
+                root: 1048576
+                leaf: 1048576
+        targets: [ elkVL1 ]

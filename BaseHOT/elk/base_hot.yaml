@@ -1,0 +1,28 @@
+heat_template_version: 2013-05-23
+description: 'ELK Base HOT for Sample VNF'
+
+parameters:
+  nfv:
+    type: json
+
+resources:
+  ELK:
+    type: elk.yaml
+    properties:
+      flavor: { get_param: [ nfv, VDU, ELK, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, ELK, vcImageId ] }
+      net1: { get_resource: elkVL1 }
+      net2: { get_param: [ nfv, input, external_VL_ID ]}
+
+  elkVL1:
+    type: OS::Neutron::Net
+
+  elkVL1_subnet:
+    type: OS::Neutron::Subnet
+    properties:
+      ip_version: 4
+      network:
+        get_resource: elkVL1
+      cidr: 10.5.0.0/24
+
+outputs: {}

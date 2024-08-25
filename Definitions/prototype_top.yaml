@@ -9,6 +9,7 @@ imports:
   - prototype_example_df.yaml
   - prototype_v1_df.yaml
   - prototype_dev_df.yaml
+  - prototype_elk_df.yaml
 
 topology_template:
   inputs:
