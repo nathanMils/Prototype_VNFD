@@ -128,3 +128,4 @@ cython_debug/
 vnfd_package.zip
 TOSCA-Metadata/TOSCA.meta
 Files/images/simple_gateway.qcow2
+custom_elements/elk/files/images.tar
