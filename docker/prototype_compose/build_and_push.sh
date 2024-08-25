@@ -2,7 +2,7 @@
 
 GATEWAY=nathanmills/gateway:latest
 NF=nathanmills/nf:latest
-TARGET=../../custom_elements/prototype_v1
+TARGET=../../custom_elements/prototype_v1/files
 
 # Login
 docker login
