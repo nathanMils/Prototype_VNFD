@@ -27,12 +27,11 @@ services:
     networks:
       internal:
         ipv4_address: 172.20.0.3
+    volumes:
+      - ./nf_logs:/home
 
   filebeat:
-    build:
-      context: filebeat/
-      args:
-        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    image: docker.elastic.co/beats/filebeat:8.13.1
     container_name: filebeat
     user: root
     command:
@@ -41,6 +40,7 @@ services:
     volumes:
       - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro,Z
       - ./zeek_logs:/usr/local/zeek/logs
+      - ./nf_logs:/usr/local/nf/logs
       - type: bind
         source: /var/lib/docker/containers
         target: /var/lib/docker/containers
