@@ -30,7 +30,7 @@ resources:
     depends_on:
       - elkVL1
     properties:
-      internal_net: { get_resource: elkVL1 }
+      internal_subnet: { get_resource: elkVL1_subnet }
       external_net: { get_param: [ nfv, input, external_VL_ID ]}
 
 outputs: {}

@@ -2,7 +2,7 @@ heat_template_version: 2013-05-23
 description: 'ELK Router HOT for Sample VNF'
 
 parameters:
-  internal_net:
+  internal_subnet:
     type: string
   external_net:
     type: string
@@ -22,4 +22,4 @@ resources:
       - router
     properties:
       router: { get_resource: router }
-      subnet: { get_param: internal_net }
+      subnet: { get_param: internal_subnet }
