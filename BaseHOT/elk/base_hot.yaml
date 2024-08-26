@@ -25,6 +25,9 @@ resources:
       network:
         get_resource: elkVL1
       cidr: 10.5.0.0/24
+      dns_nameservers:
+        - 8.8.8.8   # Primary Google Public DNS
+        - 8.8.4.4   # Secondary Google Public DNS
 
   elkVL1_subnet_ipv6:
     type: OS::Neutron::Subnet
@@ -33,6 +36,9 @@ resources:
       network:
         get_resource: elkVL1
       cidr: 2001:0db8:85a3::/64
+      dns_nameservers:
+        - 2001:4860:4860::8888  # Google Public DNS IPv6 Primary
+        - 2001:4860:4860::8844  # Google Public DNS IPv6 Secondary
 
   router:
     type: router.yaml
