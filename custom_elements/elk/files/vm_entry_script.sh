@@ -37,7 +37,7 @@ export FILEBEAT_INTERNAL_PASSWORD='filebeatNathan'
 export BEATS_SYSTEM_PASSWORD='beatsNathan'
 
 # Starting containers and networks
-TARGET_DIR=/opt/elk_v1
+TARGET_DIR=/opt/elk
 docker load -i $TARGET_DIR/images.tar
 docker compose -f $TARGET_DIR/elk_compose/compose.yml up -d
 
