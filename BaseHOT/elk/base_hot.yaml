@@ -8,6 +8,7 @@ parameters:
 resources:
   ELK:
     type: elk.yaml
+    depends_on: router
     properties:
       flavor: { get_param: [ nfv, VDU, ELK, computeFlavourId ] }
       image: { get_param: [ nfv, VDU, ELK, vcImageId ] }
