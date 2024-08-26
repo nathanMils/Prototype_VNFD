@@ -1,0 +1,25 @@
+heat_template_version: 2013-05-23
+description: 'ELK Router HOT for Sample VNF'
+
+parameters:
+  internal_net:
+    type: string
+  external_net:
+    type: string
+
+resources:
+  router:
+    type: OS::Neutron::Router
+    properties:
+      name: elk_router
+      admin_state_up: true
+      external_gateway_info:
+        network: { get_param: external_net }
+
+  router_interface:
+    type: OS::Neutron::RouterInterface
+    depends_on:
+      - router
+    properties:
+      router: { get_resource: router }
+      subnet: { get_param: internal_net }

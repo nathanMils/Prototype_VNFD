@@ -25,4 +25,12 @@ resources:
         get_resource: elkVL1
       cidr: 10.5.0.0/24
 
+  router:
+    type: router.yaml
+    depends_on:
+      - elkVL1
+    properties:
+      internal_net: { get_resource: elkVL1 }
+      external_net: { get_param: [ nfv, input, external_VL_ID ]}
+
 outputs: {}
