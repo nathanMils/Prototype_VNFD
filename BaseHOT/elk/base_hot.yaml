@@ -18,7 +18,7 @@ resources:
   elkVL1:
     type: OS::Neutron::Net
 
-  elkVL1_subnet:
+  elkVL1_subnet_ipv4:
     type: OS::Neutron::Subnet
     properties:
       ip_version: 4
@@ -26,12 +26,21 @@ resources:
         get_resource: elkVL1
       cidr: 10.5.0.0/24
 
+  elkVL1_subnet_ipv6:
+    type: OS::Neutron::Subnet
+    properties:
+      ip_version: 6
+      network:
+        get_resource: elkVL1
+      cidr: 2001:0db8:85a3::/64
+
   router:
     type: router.yaml
     depends_on:
       - elkVL1
     properties:
-      internal_subnet: { get_resource: elkVL1_subnet }
+      internal_subnet_ipv4: { get_resource: elkVL1_subnet_ipv4 }
+      internal_subnet_ipv6: { get_resource: elkVL1_subnet_ipv6 }
       external_net: { get_param: [ nfv, input, external_VL_ID ]}
 
 outputs: {}

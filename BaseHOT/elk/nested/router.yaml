@@ -2,7 +2,9 @@ heat_template_version: 2013-05-23
 description: 'ELK Router HOT for Sample VNF'
 
 parameters:
-  internal_subnet:
+  internal_subnet_ipv4:
+    type: string
+  internal_subnet_ipv6:
     type: string
   external_net:
     type: string
@@ -16,10 +18,20 @@ resources:
       external_gateway_info:
         network: { get_param: external_net }
 
-  router_interface:
+  router_interface_ipv4:
     type: OS::Neutron::RouterInterface
     depends_on:
       - router
     properties:
       router: { get_resource: router }
-      subnet: { get_param: internal_subnet }
+      subnet: { get_param: internal_subnet_ipv4 }
+  
+  router_interface_ipv6:
+    type: OS::Neutron::RouterInterface
+    depends_on:
+      - router
+    properties:
+      router: { get_resource: router }
+      subnet: { get_param: internal_subnet_ipv6 }
+
+
