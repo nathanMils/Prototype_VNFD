@@ -32,6 +32,8 @@ resources:
         # Optionally, add the user to the sudoers file for administrative privileges
         echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
 
+        # sudo /opt/elk/vm_entry_script.sh
+
   elk_CP:
     type: OS::Neutron::Port
     properties:

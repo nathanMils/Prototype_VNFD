@@ -11,7 +11,7 @@ SOURCE_DIR=$(dirname $0)/../files
 mkdir -p $TARGET_DIR
 
 # Copy the Docker image tarball to the target Docker images directory
-cp $SOURCE_DIR/images.tar $TARGET_DIR
+# cp $SOURCE_DIR/images.tar $TARGET_DIR
 
 # Copy the prototype_compose file to the appropriate directory in the target filesystem
 cp -r $SOURCE_DIR/elk_compose $TARGET_DIR
