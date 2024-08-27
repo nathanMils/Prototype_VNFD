@@ -32,7 +32,8 @@ resources:
             # Optionally, add the user to the sudoers file for administrative privileges
             echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
 
-            sudo /opt/prototype_v1/vm_entry_script.sh $VM_IP
+            # sudo /opt/prototype_v1/vm_entry_script.sh $VM_IP $LOGSTASH_IP $ELASTIC_IP
+            # sudo ip route add 
 
           params:
             $VM_IP: {get_attr: [external_CP, fixed_ips, 0, ip_address] }
