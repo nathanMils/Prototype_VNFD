@@ -12,11 +12,12 @@ INTERNAL_CONTAINER_IP="172.20.0.3"  # IP of the internal container
 EXTERNAL_INTERFACE="ens3"           # Interface assigned to the external network
 
 # ELK DNS Name resolution
-ELK_IP=$2
+LOGSTASH_IP=$2
+ELASTIC_IP=$3
 
 # Update hosts for DNS Name resolution for logstash and elasticsearch
-echo "$ELK_IP elasticsearch" >> /etc/hosts
-echo "$ELK_IP logstash" >> /etc/hosts
+echo "$LOGSTASH_IP elasticsearch" >> /etc/hosts
+echo "$ELASTIC_IP logstash" >> /etc/hosts
 
 # Enable IP forwarding
 echo "Enabling IP forwarding"
