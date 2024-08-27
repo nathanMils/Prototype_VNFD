@@ -6,7 +6,9 @@ parameters:
     type: string
   image:
     type: string
-  net:
+  net1:
+    type: string
+  net2:
     type: string
 
 resources:
@@ -19,6 +21,8 @@ resources:
       networks:
         - port:
             get_resource: external_CP
+        - port:
+            get_resource: elk_CP
       user_data_format: RAW
       user_data:
         str_replace:
@@ -33,7 +37,6 @@ resources:
             echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
 
             # sudo /opt/prototype_v1/vm_entry_script.sh $VM_IP $LOGSTASH_IP $ELASTIC_IP
-            # sudo ip route add 
 
           params:
             $VM_IP: {get_attr: [external_CP, fixed_ips, 0, ip_address] }
@@ -41,5 +44,11 @@ resources:
   external_CP:
     type: OS::Neutron::Port
     properties:
-      network: { get_param: net }
+      network: { get_param: net1 }
+      port_security_enabled: false
+
+  elk_CP:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: net2 }
       port_security_enabled: false

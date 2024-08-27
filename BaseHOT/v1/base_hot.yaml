@@ -11,6 +11,7 @@ resources:
     properties:
       flavor: { get_param: [ nfv, VDU, Prototype, computeFlavourId ] }
       image: { get_param: [ nfv, VDU, Prototype, vcImageId ] }
-      net: { get_param: [ nfv, input, external_VL_ID ] }
+      net1: { get_param: [ nfv, input, external_VL_ID ] }
+      net2: { get_param: [ nfv, input, elk_VL_ID ] }
 
 outputs: {}

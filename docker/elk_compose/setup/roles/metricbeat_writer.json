@@ -2,14 +2,13 @@
   "cluster": [
     "manage_ilm",
     "manage_index_templates",
-    "manage_ingest_pipelines",
-    "monitor",
-    "read_pipeline"
+    "monitor"
   ],
   "indices": [
     {
       "names": [
-        "filebeat-*"
+        ".monitoring-*-mb",
+        "metricbeat-*"
       ],
       "privileges": [
         "create_doc",
