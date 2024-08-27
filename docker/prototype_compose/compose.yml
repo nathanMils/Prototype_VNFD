@@ -22,9 +22,6 @@ services:
   nf:
     build:
       context: nf
-      # args:
-      #   UBUNTU_VERSION: ${UBUNTU_VERSION}
-      #   NETWORK_FUNCTION: ${NETWORK_FUNCTION}
     privileged: true
     command: sh /entrypoint.sh
     container_name: nf
@@ -34,32 +31,32 @@ services:
       internal:
         ipv4_address: 172.20.0.3
 
-  # filebeat:
-  #   build:
-  #     context: filebeat/
-  #     args:
-  #       ELASTIC_VERSION: ${ELASTIC_VERSION}
-  #   container_name: filebeat
-  #   user: root
-  #   command:
-  #     - -e
-  #     - --strict.perms=false
-  #   volumes:
-  #     - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro,Z
-  #     - ./zeek_logs:/usr/local/zeek/logs
-  #     - type: bind
-  #       source: /var/lib/docker/containers
-  #       target: /var/lib/docker/containers
-  #       read_only: true
-  #     - type: bind
-  #       source: /var/run/docker.sock
-  #       target: /var/run/docker.sock
-  #       read_only: true
-  #   environment:
-  #     FILEBEAT_INTERNAL_PASSWORD: ${FILEBEAT_INTERNAL_PASSWORD:-}
-  #     BEATS_SYSTEM_PASSWORD: ${BEATS_SYSTEM_PASSWORD:-}
-  #   networks:
-  #     - elk
+  filebeat:
+    build:
+      context: filebeat/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    container_name: filebeat
+    user: root
+    command:
+      - -e
+      - --strict.perms=false
+    volumes:
+      - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro,Z
+      - ./zeek_logs:/usr/local/zeek/logs
+      - type: bind
+        source: /var/lib/docker/containers
+        target: /var/lib/docker/containers
+        read_only: true
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        read_only: true
+    environment:
+      FILEBEAT_INTERNAL_PASSWORD: ${FILEBEAT_INTERNAL_PASSWORD:-}
+      BEATS_SYSTEM_PASSWORD: ${BEATS_SYSTEM_PASSWORD:-}
+    networks:
+      - elk
 
 networks:
   external:
@@ -73,3 +70,6 @@ networks:
     ipam:
       config:
         - subnet: 172.20.0.0/16
+
+  elk:
+    driver: bridge
