@@ -15,7 +15,6 @@ services:
         ipv4_address: 172.20.0.2
     volumes:
       - ./zeek_logs:/usr/local/zeek/logs
-      - ./zeek-configs:/usr/local/zeek/etc
     cap_add:
       - NET_ADMIN
 
