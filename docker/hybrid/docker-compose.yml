@@ -94,17 +94,31 @@ services:
 
   # This is essentially a simulated version of the host, almost a stop gap
   # Essentially address this container as if it were the host VM hosting [ gateway, nf, filebeat ]
-  fake:
+  instance:
     build:
-      context: fake
+      context: instance
     privileged: true
     command: sh /entrypoint.sh
-    container_name: fake
+    container_name: instance
+    networks:
+      fake:
+        ipv4_address: 172.19.0.3
+    cap_add:
+      - NET_ADMIN
+
+  target_instance:
+    build:
+      context: target_instance
+    privileged: true
+    command: sh /entrypoint.sh
+    container_name: target_instance
     networks:
       fake:
         ipv4_address: 172.19.0.2
       external:
         ipv4_address: 172.20.0.3
+    ports:
+      - 8090:8090
     cap_add:
       - NET_ADMIN
 
