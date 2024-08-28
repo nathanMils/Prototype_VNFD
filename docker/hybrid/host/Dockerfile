@@ -1,11 +1,11 @@
 # Use Alpine Linux as the base image
 FROM alpine:3.20.2
 
-# Add Iptables
-RUN apk add --no-cache iptables
-
 # Copy the entrypoint script into the container
 COPY entrypoint.sh /entrypoint.sh
+
+# Add Iptables
+RUN apk add --no-cache iptables
 
 # Make the entrypoint script executable
 RUN chmod +x /entrypoint.sh

@@ -94,7 +94,7 @@ services:
 
   # This is essentially a simulated version of the host, almost a stop gap
   # Essentially address this container as if it were the host VM hosting [ gateway, nf, filebeat ]
-  host:
+  sim_host:
     build:
       context: host
     privileged: true
@@ -102,9 +102,9 @@ services:
     container_name: sim_host
     networks:
       sim_host:
-        ipv4_address: 172.17.0.2
+        ipv4_address: 172.19.0.2
       external:
-        ipv4_address: 172.18.0.3
+        ipv4_address: 172.20.0.3
     cap_add:
       - NET_ADMIN
 
@@ -116,9 +116,9 @@ services:
     container_name: gateway
     networks:
       external:
-        ipv4_address: 172.18.0.2
-      internal:
         ipv4_address: 172.20.0.2
+      internal:
+        ipv4_address: 172.21.0.2
     volumes:
       - ./zeek_logs:/usr/local/zeek/logs
     cap_add:
@@ -134,7 +134,7 @@ services:
       - gateway
     networks:
       internal:
-        ipv4_address: 172.20.0.3
+        ipv4_address: 172.21.0.3
 
   filebeat:
     build:
@@ -172,19 +172,19 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.17.0.0/16
+        - subnet: 172.19.0.0/16
 
   external:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.18.0.0/16
+        - subnet: 172.20.0.0/16
 
   internal:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.20.0.0/16
+        - subnet: 172.21.0.0/16
 
   elk:
     driver: bridge

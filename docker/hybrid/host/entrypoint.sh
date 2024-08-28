@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 
 # # NF Variables
 # VM_EXTERNAL_IP="172.17.0.2"         # VM's external IP
-# GATEWAY_IP="172.18.0.2"             # IP of the gateway container in its network
+# GATEWAY_IP="172.19.0.2"             # IP of the gateway container in its network
 # INTERNAL_CONTAINER_IP="172.20.0.3"  # IP of the internal container
 # EXTERNAL_INTERFACE="eth0"           # Interface assigned to the external network
 
