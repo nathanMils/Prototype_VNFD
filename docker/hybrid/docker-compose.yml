@@ -94,14 +94,14 @@ services:
 
   # This is essentially a simulated version of the host, almost a stop gap
   # Essentially address this container as if it were the host VM hosting [ gateway, nf, filebeat ]
-  sim_host:
+  fake:
     build:
-      context: host
+      context: fake
     privileged: true
     command: sh /entrypoint.sh
-    container_name: sim_host
+    container_name: fake
     networks:
-      sim_host:
+      fake:
         ipv4_address: 172.19.0.2
       external:
         ipv4_address: 172.20.0.3
@@ -168,7 +168,7 @@ services:
 # Networking
 #########################################################################################
 networks:
-  sim_host:
+  fake:
     driver: bridge
     ipam:
       config:
