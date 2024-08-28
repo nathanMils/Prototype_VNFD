@@ -54,8 +54,6 @@ services:
     environment:
       FILEBEAT_INTERNAL_PASSWORD: ${FILEBEAT_INTERNAL_PASSWORD:-}
       BEATS_SYSTEM_PASSWORD: ${BEATS_SYSTEM_PASSWORD:-}
-    networks:
-      - elk
 
 networks:
   external:
@@ -69,6 +67,3 @@ networks:
     ipam:
       config:
         - subnet: 172.20.0.0/16
-
-  elk:
-    driver: bridge

@@ -1,9 +1,9 @@
 {
-  "flavourId":"elk",
+  "flavourId":"v1",
   "vimConnectionInfo": {
     "vim": {
       "id": "3cc2c4ff-525c-48b4-94c9-29247223322f",
-      "vimId": "f6ba19e3-df21-4a39-9d58-7504a1183dbe",
+      "vimId": "8ddd316c-fac1-403a-8088-e9ab0bb7bb76",
       "vimType": "openstack"
     }
   },
@@ -12,7 +12,8 @@
     "lcm-operation-user-data-class": "StandardUserData",
     "nfv": {
       "input": {
-        "external_VL_ID": "public"
+        "external_VL_ID": "private",
+        "elk_VL_ID": "elk"
       }
     }
   }

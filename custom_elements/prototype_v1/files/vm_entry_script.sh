@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Exporting required vars
+export FILEBEAT_INTERNAL_PASSWORD='filebeatNathan'
+export BEATS_SYSTEM_PASSWORD='beatsNathan'
+
 # Starting containers and networks
 TARGET_DIR=/opt/prototype_v1
 docker load -i $TARGET_DIR/images.tar
@@ -12,12 +16,16 @@ INTERNAL_CONTAINER_IP="172.20.0.3"  # IP of the internal container
 EXTERNAL_INTERFACE="ens3"           # Interface assigned to the external network
 
 # ELK DNS Name resolution
-LOGSTASH_IP=$2
-ELASTIC_IP=$3
+ELK_IP=$2
 
 # Update hosts for DNS Name resolution for logstash and elasticsearch
-echo "$LOGSTASH_IP elasticsearch" >> /etc/hosts
-echo "$ELASTIC_IP logstash" >> /etc/hosts
+echo "$ELK_IP elasticsearch" >> /etc/hosts
+echo "$ELK_IP logstash" >> /etc/hosts
+
+ELK_GATEWAY=$3
+
+# Add routing via elk network to not disturb NF
+sudo ip route add $ELK_IP via $ELK_GATEWAY
 
 # Enable IP forwarding
 echo "Enabling IP forwarding"
