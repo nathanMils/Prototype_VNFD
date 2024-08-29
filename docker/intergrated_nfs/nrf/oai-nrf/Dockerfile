@@ -1,5 +1,5 @@
 # Use Alpine Linux as the base image
-FROM oaisoftwarealliance/oai-upf:2024-june
+FROM oaisoftwarealliance/oai-nrf:v2.0.1
 
 # Copy the entrypoint script into the container
 COPY entrypoint.sh /entrypoint.sh
@@ -13,4 +13,4 @@ RUN chmod +x /entrypoint.sh && \
 # Set the entrypoint script
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD ["/openair-upf/bin/oai_upf", "-c", "/openair-upf/etc/config.yaml", "-o"]
+CMD ["/openair-amf/bin/oai_amf", "-c", "/openair-amf/etc/config.yaml", "-o"]

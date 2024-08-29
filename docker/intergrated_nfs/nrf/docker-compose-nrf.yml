@@ -18,16 +18,15 @@ services:
     cap_add:
       - NET_ADMIN
 
-  oai-amf:
-    container_name: "oai-amf"
+  oai-nrf:
+    container_name: "oai-nrf"
     build:
       context: oai-amf
     expose:
         - 80/tcp
         - 8080/tcp
-        - 38412/sctp
     volumes:
-        - ./oai-amf/conf/basic_nrf_config.yaml:/openair-upf/etc/config.yaml
+        - ./conf/basic_nrf_config.yaml:/openair-nrf/etc/config.yaml
     environment:
         - TZ=Europe/Paris
     depends_on:
