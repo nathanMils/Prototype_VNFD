@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+
+  gateway:
+    image: prototype-gateway:latest
+    privileged: true
+    command: sh /entrypoint.sh
+    container_name: gateway
+    networks:
+      external:
+        ipv4_address: 172.18.0.2
+      internal:
+        ipv4_address: 172.20.0.2
+    volumes:
+      - ./zeek_logs:/usr/local/zeek/logs
+    cap_add:
+      - NET_ADMIN
+
+  oai-smf:
+    container_name: "oai-smf"
+    image: prototype-smf:latest
+    expose:
+        - 80/tcp
+        - 8080/tcp
+        - 8805/udp
+    volumes:
+        - ./oai-smf/conf/basic_nrf_config.yaml:/openair-smf/etc/config.yaml
+    environment:
+        - TZ=Europe/Paris
+    depends_on:
+        - gateway
+    privileged: true
+    networks:
+      internal:
+        ipv4_address: 172.20.0.3
+
+  filebeat:
+    image: prototype-filebeat:latest
+    container_name: filebeat
+    user: root
+    command:
+      - -e
+      - --strict.perms=false
+    volumes:
+      - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro,Z
+      - ./zeek_logs:/usr/local/zeek/logs
+      - type: bind
+        source: /var/lib/docker/containers
+        target: /var/lib/docker/containers
+        read_only: true
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        read_only: true
+    environment:
+      FILEBEAT_INTERNAL_PASSWORD: ${FILEBEAT_INTERNAL_PASSWORD:-}
+      BEATS_SYSTEM_PASSWORD: ${BEATS_SYSTEM_PASSWORD:-}
+
+networks:
+  external:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+
+  internal:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
