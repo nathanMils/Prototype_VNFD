@@ -21,12 +21,12 @@ services:
   oai-nrf:
     container_name: "oai-nrf"
     build:
-      context: oai-amf
+      context: oai-nrf
     expose:
         - 80/tcp
         - 8080/tcp
     volumes:
-        - ./conf/basic_nrf_config.yaml:/openair-nrf/etc/config.yaml
+        - ./oai-amf/conf/basic_nrf_config.yaml:/openair-nrf/etc/config.yaml
     environment:
         - TZ=Europe/Paris
     depends_on:

@@ -18,16 +18,15 @@ services:
     cap_add:
       - NET_ADMIN
 
-  oai-smf:
-    container_name: "oai-smf"
+  oai-udm:
+    container_name: "oai-udm"
     build:
-      context: oai-smf
+      context: oai-udm
     expose:
         - 80/tcp
         - 8080/tcp
-        - 8805/udp
     volumes:
-        - ./oai-smf/conf/basic_nrf_config.yaml:/openair-smf/etc/config.yaml
+        - ./oai-udm/conf/basic_nrf_config.yaml:/openair-udm/etc/config.yaml
     environment:
         - TZ=Europe/Paris
     depends_on:
