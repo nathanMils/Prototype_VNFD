@@ -1,4 +1,3 @@
-# Use Alpine Linux as the base image
 FROM oaisoftwarealliance/oai-smf:v2.0.1
 
 # Copy the entrypoint script into the container

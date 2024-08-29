@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  oai-ext-dn:
+    privileged: true
+    init: true
+    container_name: oai-ext-dn
+    image: oaisoftwarealliance/trf-gen-cn5g:latest
+    environment:
+      - NEXT_HOP=${NEXT_HOP:-}
+    entrypoint: /bin/bash -c "/entrypoint.sh"
+    command: ["/bin/bash", "-c", "trap : SIGTERM SIGINT; sleep infinity & wait"]
+    healthcheck:
+        test: /bin/bash -c "ip r | grep 12.1.1"
+        interval: 10s
+        timeout: 5s
+        retries: 5
