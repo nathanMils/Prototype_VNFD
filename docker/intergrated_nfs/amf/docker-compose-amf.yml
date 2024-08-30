@@ -24,7 +24,6 @@ services:
         - ./oai-amf/conf/basic_nrf_config.yaml:/openair-amf/etc/config.yaml
     environment:
         - TZ=Europe/Paris
-        - INTERFACE=${INTERFACE}
     depends_on:
         - zeek
     privileged: true
