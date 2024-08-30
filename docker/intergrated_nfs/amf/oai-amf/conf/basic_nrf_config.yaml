@@ -49,9 +49,9 @@ nfs:
     sbi:
       port: 8080
       api_version: v1
-      interface_name: eth0
+      ipv4_address: 188.0.1.3
     n2:
-      interface_name: eth0
+      ipv4_address: 188.0.1.3
       port: 38412
   smf:
     host: oai-smf

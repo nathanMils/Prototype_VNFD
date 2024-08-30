@@ -13,13 +13,13 @@ docker compose -f "$compose_file" build --no-cache
 
 # Image names
 images=(
-    "$NF-gateway" 
+    "$NF-zeek" 
     "$NF-filebeat" 
     "$NF-oai-$NF"
 )
 # tag names
 tags=(
-    "prototype-gateway:latest" 
+    "prototype-zeek:latest" 
     "prototype-filebeat:latest" 
     "prototype-$NF:latest"
 )
