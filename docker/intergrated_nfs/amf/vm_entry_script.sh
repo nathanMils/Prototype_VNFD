@@ -22,6 +22,7 @@ sudo ip route add $ELK_IP via $ELK_GATEWAY
 # Exporting required vars
 export FILEBEAT_INTERNAL_PASSWORD=$6
 export BEATS_SYSTEM_PASSWORD=$7
+export INTERFACE="ens3"
 
 # Starting containers and networks
 TARGET_DIR=/opt/amf
