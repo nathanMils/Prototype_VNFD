@@ -22,6 +22,6 @@ export BEATS_SYSTEM_PASSWORD=$6
 export INTERFACE="ens3"
 
 # Starting containers and networks
-TARGET_DIR=/opt/smf
-docker load -i $TARGET_DIR/smf-images.tar
-docker compose -f $TARGET_DIR/docker-compose-smf-built.yml up -d
+TARGET_DIR=/opt/udm
+docker load -i $TARGET_DIR/udm-images.tar
+docker compose -f $TARGET_DIR/docker-compose-udm-built.yml up -d
