@@ -283,3 +283,9 @@ udm:
     port: 8080
     api_version: v1
     interface_name: enp0s3
+
+udr:
+  sbi:
+    port: 8080
+    api_version: v1
+    interface_name: enp0s3

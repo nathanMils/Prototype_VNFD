@@ -2,42 +2,35 @@ version: '3.8'
 
 services:
 
-  gateway:
-    image: prototype-gateway:latest
+  zeek:
+    image: prototype-zeek:latest
     privileged: true
     command: sh /entrypoint.sh
-    container_name: gateway
-    networks:
-      external:
-        ipv4_address: 172.18.0.2
-      internal:
-        ipv4_address: 172.20.0.2
+    container_name: zeek
     volumes:
       - ./zeek_logs:/usr/local/zeek/logs
+    environment:
+        - INTERFACE=${INTERFACE}
     cap_add:
       - NET_ADMIN
+    network_mode: "host"
 
   oai-upf:
     container_name: "oai-upf"
     image: prototype-upf:latest
-    expose:
-        - 2152/udp
-        - 8805/udp
     volumes:
         - ./oai-upf/conf/basic_nrf_config.yaml:/openair-upf/etc/config.yaml
     environment:
         - TZ=Europe/Paris
     depends_on:
-        - gateway
+        - zeek
     cap_add:
         - NET_ADMIN
         - SYS_ADMIN
     cap_drop:
         - ALL
     privileged: true
-    networks:
-      internal:
-        ipv4_address: 172.20.0.3
+    network_mode: "host"
 
   filebeat:
     image: prototype-filebeat:latest
@@ -60,16 +53,3 @@ services:
     environment:
       FILEBEAT_INTERNAL_PASSWORD: ${FILEBEAT_INTERNAL_PASSWORD:-}
       BEATS_SYSTEM_PASSWORD: ${BEATS_SYSTEM_PASSWORD:-}
-
-networks:
-  external:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.18.0.0/16
-
-  internal:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.20.0.0/16
