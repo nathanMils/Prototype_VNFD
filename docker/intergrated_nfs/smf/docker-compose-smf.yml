@@ -2,40 +2,32 @@ version: '3.8'
 
 services:
 
-  gateway:
+  zeek:
     build: 
-      context: gateway
+      context: zeek
     privileged: true
     command: sh /entrypoint.sh
-    container_name: gateway
-    networks:
-      external:
-        ipv4_address: 172.18.0.2
-      internal:
-        ipv4_address: 172.20.0.2
+    container_name: zeek
     volumes:
       - ./zeek_logs:/usr/local/zeek/logs
+    environment:
+        - INTERFACE=${INTERFACE}
     cap_add:
       - NET_ADMIN
+    network_mode: "host"
 
   oai-smf:
     container_name: "oai-smf"
     build:
       context: oai-smf
-    expose:
-        - 80/tcp
-        - 8080/tcp
-        - 8805/udp
     volumes:
         - ./oai-smf/conf/basic_nrf_config.yaml:/openair-smf/etc/config.yaml
     environment:
         - TZ=Europe/Paris
     depends_on:
-        - gateway
+        - zeek
     privileged: true
-    networks:
-      internal:
-        ipv4_address: 172.20.0.3
+    network_mode: "host"
 
   filebeat:
     build:
@@ -61,16 +53,3 @@ services:
     environment:
       FILEBEAT_INTERNAL_PASSWORD: ${FILEBEAT_INTERNAL_PASSWORD:-}
       BEATS_SYSTEM_PASSWORD: ${BEATS_SYSTEM_PASSWORD:-}
-
-networks:
-  external:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.18.0.0/16
-
-  internal:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.20.0.0/16

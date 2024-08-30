@@ -128,6 +128,13 @@ snssais:
 
 ############## NF-specific configuration
 amf:
+  sbi:
+    port: 8080
+    api_version: v1
+    interface_name: ens3
+  n2:
+    interface_name: ens3
+    port: 38412
   amf_name: "OAI-AMF"
   # This really depends on if we want to keep the "mini" version or not
   support_features_options:
@@ -168,6 +175,13 @@ amf:
     - "NEA2"
 
 smf:
+  sbi:
+    port: 8080
+    api_version: v1
+    interface_name: enp0s3
+  n4:
+    interface_name: enp0s3
+    port: 8805
   ue_mtu: 1500
   support_features:
     use_local_subscription_info: yes # Use infos from local_subscription_info or from UDM
@@ -251,3 +265,15 @@ dnns:
   - dnn: "ims"
     pdu_session_type: "IPV4V6"
     ipv4_subnet: "14.1.1.2/24"
+
+ausf:
+  sbi:
+    port: 8080
+    api_version: v1
+    interface_name: ens3
+
+nrf:
+  sbi:
+    port: 8080
+    api_version: v1
+    interface_name: ens3
