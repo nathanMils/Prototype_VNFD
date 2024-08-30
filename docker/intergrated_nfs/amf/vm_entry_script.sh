@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# NF Variables
-EXTERNAL_INTERFACE="ens3"           # Interface assigned to the external network
-
 # DNS Name resolution
 ELK_IP=$2
 NRF_IP=$3

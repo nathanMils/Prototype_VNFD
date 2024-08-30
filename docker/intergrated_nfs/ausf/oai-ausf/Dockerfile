@@ -1,15 +1,3 @@
 FROM oaisoftwarealliance/oai-ausf:v2.0.1
 
-# Copy the entrypoint script into the container
-COPY entrypoint.sh /entrypoint.sh
-
-# Make the entrypoint script executable, update package list, and install iproute2
-RUN chmod +x /entrypoint.sh && \
-	apt-get update && \
-	apt-get install -y iproute2 && \
-	apt-get clean
-
-# Set the entrypoint script
-ENTRYPOINT ["/entrypoint.sh"]
-
 CMD ["/openair-ausf/bin/oai_ausf", "-c" , "/openair-ausf/etc/config.yaml", "-o"]
