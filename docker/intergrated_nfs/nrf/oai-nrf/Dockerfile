@@ -13,4 +13,4 @@ RUN chmod +x /entrypoint.sh && \
 # Set the entrypoint script
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD ["/openair-amf/bin/oai_amf", "-c", "/openair-amf/etc/config.yaml", "-o"]
+CMD ["/openair-nrf/bin/oai_nrf", "-c", "/openair-nrf/etc/config.yaml", "-o"]

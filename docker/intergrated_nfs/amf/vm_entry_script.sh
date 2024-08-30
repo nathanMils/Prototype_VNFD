@@ -23,7 +23,6 @@ ELK_GATEWAY=$5
 sudo ip route add $ELK_IP via $ELK_GATEWAY
 
 # Exporting required vars
-export ELASTIC_VERSION=8.15.0
 export FILEBEAT_INTERNAL_PASSWORD=$6
 export BEATS_SYSTEM_PASSWORD=$7
 
