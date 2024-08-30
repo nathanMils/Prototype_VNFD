@@ -28,8 +28,8 @@ export BEATS_SYSTEM_PASSWORD=$7
 
 # Starting containers and networks
 TARGET_DIR=/opt/amf
-docker load -i $TARGET_DIR/images.tar
-docker compose -f $TARGET_DIR/prototype_compose/compose.yml up -d
+docker load -i $TARGET_DIR/amf-images.tar
+docker compose -f $TARGET_DIR/docker-compose-amf-built.yml up -d
 
 # Enable IP forwarding
 echo "Enabling IP forwarding"

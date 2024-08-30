@@ -28,8 +28,8 @@ export BEATS_SYSTEM_PASSWORD=$7
 
 # Starting containers and networks
 TARGET_DIR=/opt/upf
-docker load -i $TARGET_DIR/images.tar
-docker compose -f $TARGET_DIR/prototype_compose/compose.yml up -d
+docker load -i $TARGET_DIR/upf-images.tar
+docker compose -f $TARGET_DIR/docker-compose-upf-built.yml up -d
 
 # Enable IP forwarding
 echo "Enabling IP forwarding"
