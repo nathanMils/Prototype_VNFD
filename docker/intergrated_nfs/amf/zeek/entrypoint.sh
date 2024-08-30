@@ -1,6 +1,6 @@
 #!/bin/sh
 
-zeek -i eth0
+zeek -i $INTERFACE
 
 # Keep the container running (optional)
 tail -f /dev/null

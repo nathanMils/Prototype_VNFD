@@ -131,9 +131,9 @@ amf:
   sbi:
     port: 8080
     api_version: v1
-    interface_name: ${INTERFACE}
+    interface_name: ens3
   n2:
-    interface_name: ${INTERFACE}
+    interface_name: ens3
     port: 38412
   amf_name: "OAI-AMF"
   # This really depends on if we want to keep the "mini" version or not
