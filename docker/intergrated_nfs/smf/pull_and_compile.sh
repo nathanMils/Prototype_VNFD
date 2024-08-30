@@ -5,6 +5,9 @@ NF="smf"
 # Docker Compose file
 compose_file="docker-compose-$NF.yml"
 
+#Export elastic version
+export ELASTIC_VERSION=8.15.0
+
 # Build the Docker images
 docker compose -f "$compose_file" build --no-cache
 
