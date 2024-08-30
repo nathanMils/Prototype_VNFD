@@ -49,9 +49,9 @@ nfs:
     sbi:
       port: 8080
       api_version: v1
-      ipv4_address: 188.0.1.3
+      interface_name: eth0
     n2:
-      ipv4_address: 188.0.1.3
+      interface_name: eth0
       port: 38412
   smf:
     host: oai-smf
@@ -128,6 +128,13 @@ snssais:
 
 ############## NF-specific configuration
 amf:
+  sbi:
+    port: 8080
+    api_version: v1
+    interface_name: enp0s3
+  n2:
+    interface_name: enp0s3
+    port: 38412
   amf_name: "OAI-AMF"
   # This really depends on if we want to keep the "mini" version or not
   support_features_options:
