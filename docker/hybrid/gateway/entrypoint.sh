@@ -13,5 +13,5 @@ iptables -A FORWARD -i eth0 -o eth1 -j ACCEPT
 
 
 cd /opt/zeek/log
-zeek -i eth0 local.zeek
+zeek -i $INTERFACE local.zeek
 tail -f /dev/null
