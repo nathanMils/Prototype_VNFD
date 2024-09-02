@@ -2,20 +2,20 @@ version: '3.7'
 
 services:
 
-  zeek:
-    build:
-      context: ./zeek-monitor  # Path to the directory containing the Dockerfile
-      dockerfile: Dockerfile
-    networks:
-      external:
-        ipv4_address: 172.20.0.2  # Assign an IP in the external network
-    privileged: true
-    volumes:
-      - ./zeek-monitor/logs:/usr/local/zeek/logs  # Mount logs directory
-    environment:
-      - GATEWAY_IP=172.20.0.2  # Hardcoded gateway IP
-      - EXTERNAL_INTERFACE=eth0  # Hardcoded external interface
-    restart: unless-stopped  # Restart policy
+  # zeek:
+  #   build:
+  #     context: ./zeek-monitor  # Path to the directory containing the Dockerfile
+  #     dockerfile: Dockerfile
+  #   networks:
+  #     external:
+  #       ipv4_address: 172.20.0.2  # Assign an IP in the external network
+  #   privileged: true
+  #   volumes:
+  #     - ./zeek-monitor/logs:/usr/local/zeek/logs  # Mount logs directory
+  #   environment:
+  #     - GATEWAY_IP=172.20.0.2  # Hardcoded gateway IP
+  #     - EXTERNAL_INTERFACE=eth0  # Hardcoded external interface
+  #   restart: unless-stopped  # Restart policy
 # ELK STACK
 #########################################################################################
   setup:
@@ -141,7 +141,6 @@ services:
     build: 
       context: gateway
     privileged: true
-    command: sh /entrypoint.sh
     container_name: gateway
     networks:
       external:
@@ -149,9 +148,12 @@ services:
       internal:
         ipv4_address: 172.21.0.2
     volumes:
-      - ./zeek_logs:/usr/local/zeek/logs
+      - ./gateway/zeek_logs:/opt/zeek/log
+      - ./gateway/zeek_conf/local.zeek:/usr/local/zeek/share/zeek/site/local.zeek
     cap_add:
       - NET_ADMIN
+    environment:
+      - INTERFACE=eth0
 
   nf:
     build:

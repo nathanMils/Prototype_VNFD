@@ -11,7 +11,7 @@ iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 iptables -A FORWARD -i eth1 -o eth0 -j ACCEPT
 iptables -A FORWARD -i eth0 -o eth1 -j ACCEPT
 
-zeek -i eth0
 
-# Keep the container running (optional)
+cd /opt/zeek/log
+zeek -i eth0 local.zeek
 tail -f /dev/null
