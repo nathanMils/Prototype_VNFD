@@ -4,7 +4,7 @@
 # HOST A IPv4 info
 5G_NET_A_CIDR_V4="10.5.0.0/26"
 ELK_NET_A_CIDR_V4="10.6.0.0/26"
-VIR_ROUTER_A_EXT_IP_V4="fill in"             # IPv4 address of the external router
+VIR_ROUTER_A_EXT_IP_V4="172.24.4.10"             # IPv4 address of the external router
 HOST_A_IP_V4="fill in"                       # IPv4 address of Host A
 
 # # HOST A IPv6 info
