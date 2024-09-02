@@ -21,6 +21,8 @@ resources:
       admin_state_up: true
       external_gateway_info:
         network: { get_param: external_net }
+        external_fixed_ips:
+          - ip_address: 172.24.4.10
 
   elk_router_interface_ipv4:
     type: OS::Neutron::RouterInterface
