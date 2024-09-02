@@ -103,161 +103,161 @@ topology_template:
         - virtual_binding: MySQL
         - virtual_link: 5gVL1
 
-    NRF:
-      type: tosca.nodes.nfv.Vdu.Compute
-      properties:
-        name: NRF
-        description: NRF compute node
-        vdu_profile:
-          min_number_of_instances: 1
-          max_number_of_instances: 1
-        sw_image_data:
-          name: base
-          version: '1'
-          checksum:
-            algorithm: sha-256
-            hash: b62d4f2b0b76ab2bfff7b2a528ee0e527ab38f172f56d6ba6fb7e5d84400cf99
-          container_format: bare
-          disk_format: qcow2
-          min_disk: 4 GB
-          size: 4 GB
-      capabilities:
-        virtual_compute:
-          properties:
-            requested_additional_capabilities:
-              properties:
-                requested_additional_capability_name: m1.small
-                support_mandatory: true
-                target_performance_parameters:
-                  entry_schema: test
-            virtual_memory:
-              virtual_mem_size: 512 MB
-            virtual_cpu:
-              num_virtual_cpu: 1
-            virtual_local_storage:
-              - size_of_storage: 4 GB
+    # NRF:
+    #   type: tosca.nodes.nfv.Vdu.Compute
+    #   properties:
+    #     name: NRF
+    #     description: NRF compute node
+    #     vdu_profile:
+    #       min_number_of_instances: 1
+    #       max_number_of_instances: 1
+    #     sw_image_data:
+    #       name: base
+    #       version: '1'
+    #       checksum:
+    #         algorithm: sha-256
+    #         hash: b62d4f2b0b76ab2bfff7b2a528ee0e527ab38f172f56d6ba6fb7e5d84400cf99
+    #       container_format: bare
+    #       disk_format: qcow2
+    #       min_disk: 4 GB
+    #       size: 4 GB
+    #   capabilities:
+    #     virtual_compute:
+    #       properties:
+    #         requested_additional_capabilities:
+    #           properties:
+    #             requested_additional_capability_name: m1.small
+    #             support_mandatory: true
+    #             target_performance_parameters:
+    #               entry_schema: test
+    #         virtual_memory:
+    #           virtual_mem_size: 512 MB
+    #         virtual_cpu:
+    #           num_virtual_cpu: 1
+    #         virtual_local_storage:
+    #           - size_of_storage: 4 GB
     
-    CP3:
-      type: tosca.nodes.nfv.VduCp
-      properties:
-        layer_protocols: [ ipv4 ]
-        order: 4
-      requirements:
-        - virtual_binding: NRF
-        - virtual_link: elkVL1
+    # CP3:
+    #   type: tosca.nodes.nfv.VduCp
+    #   properties:
+    #     layer_protocols: [ ipv4 ]
+    #     order: 4
+    #   requirements:
+    #     - virtual_binding: NRF
+    #     - virtual_link: elkVL1
 
-    CP4:
-      type: tosca.nodes.nfv.VduCp
-      properties:
-        layer_protocols: [ ipv4 ]
-        order: 4
-      requirements:
-        - virtual_binding: NRF
-        - virtual_link: 5gVL1
+    # CP4:
+    #   type: tosca.nodes.nfv.VduCp
+    #   properties:
+    #     layer_protocols: [ ipv4 ]
+    #     order: 4
+    #   requirements:
+    #     - virtual_binding: NRF
+    #     - virtual_link: 5gVL1
 
-    UDR:
-      type: tosca.nodes.nfv.Vdu.Compute
-      properties:
-        name: UDR
-        description: UDR compute node
-        vdu_profile:
-          min_number_of_instances: 1
-          max_number_of_instances: 1
-        sw_image_data:
-          name: base
-          version: '1'
-          checksum:
-            algorithm: sha-256
-            hash: b62d4f2b0b76ab2bfff7b2a528ee0e527ab38f172f56d6ba6fb7e5d84400cf99
-          container_format: bare
-          disk_format: qcow2
-          min_disk: 4 GB
-          size: 4 GB
-      capabilities:
-        virtual_compute:
-          properties:
-            requested_additional_capabilities:
-              properties:
-                requested_additional_capability_name: m1.small
-                support_mandatory: true
-                target_performance_parameters:
-                  entry_schema: test
-            virtual_memory:
-              virtual_mem_size: 512 MB
-            virtual_cpu:
-              num_virtual_cpu: 1
-            virtual_local_storage:
-              - size_of_storage: 4 GB
+    # UDR:
+    #   type: tosca.nodes.nfv.Vdu.Compute
+    #   properties:
+    #     name: UDR
+    #     description: UDR compute node
+    #     vdu_profile:
+    #       min_number_of_instances: 1
+    #       max_number_of_instances: 1
+    #     sw_image_data:
+    #       name: base
+    #       version: '1'
+    #       checksum:
+    #         algorithm: sha-256
+    #         hash: b62d4f2b0b76ab2bfff7b2a528ee0e527ab38f172f56d6ba6fb7e5d84400cf99
+    #       container_format: bare
+    #       disk_format: qcow2
+    #       min_disk: 4 GB
+    #       size: 4 GB
+    #   capabilities:
+    #     virtual_compute:
+    #       properties:
+    #         requested_additional_capabilities:
+    #           properties:
+    #             requested_additional_capability_name: m1.small
+    #             support_mandatory: true
+    #             target_performance_parameters:
+    #               entry_schema: test
+    #         virtual_memory:
+    #           virtual_mem_size: 512 MB
+    #         virtual_cpu:
+    #           num_virtual_cpu: 1
+    #         virtual_local_storage:
+    #           - size_of_storage: 4 GB
 
-    CP5:
-      type: tosca.nodes.nfv.VduCp
-      properties:
-        layer_protocols: [ ipv4 ]
-        order: 4
-      requirements:
-        - virtual_binding: UDR
-        - virtual_link: elkVL1
+    # CP5:
+    #   type: tosca.nodes.nfv.VduCp
+    #   properties:
+    #     layer_protocols: [ ipv4 ]
+    #     order: 4
+    #   requirements:
+    #     - virtual_binding: UDR
+    #     - virtual_link: elkVL1
 
-    CP6:
-      type: tosca.nodes.nfv.VduCp
-      properties:
-        layer_protocols: [ ipv4 ]
-        order: 4
-      requirements:
-        - virtual_binding: UDR
-        - virtual_link: 5gVL1
+    # CP6:
+    #   type: tosca.nodes.nfv.VduCp
+    #   properties:
+    #     layer_protocols: [ ipv4 ]
+    #     order: 4
+    #   requirements:
+    #     - virtual_binding: UDR
+    #     - virtual_link: 5gVL1
 
-    UDM:
-      type: tosca.nodes.nfv.Vdu.Compute
-      properties:
-        name: UDM
-        description: UDM compute node
-        vdu_profile:
-          min_number_of_instances: 1
-          max_number_of_instances: 1
-        sw_image_data:
-          name: base
-          version: '1'
-          checksum:
-            algorithm: sha-256
-            hash: b62d4f2b0b76ab2bfff7b2a528ee0e527ab38f172f56d6ba6fb7e5d84400cf99
-          container_format: bare
-          disk_format: qcow2
-          min_disk: 4 GB
-          size: 4 GB
-      capabilities:
-        virtual_compute:
-          properties:
-            requested_additional_capabilities:
-              properties:
-                requested_additional_capability_name: m1.small
-                support_mandatory: true
-                target_performance_parameters:
-                  entry_schema: test
-            virtual_memory:
-              virtual_mem_size: 512 MB
-            virtual_cpu:
-              num_virtual_cpu: 1
-            virtual_local_storage:
-              - size_of_storage: 4 GB
+    # UDM:
+    #   type: tosca.nodes.nfv.Vdu.Compute
+    #   properties:
+    #     name: UDM
+    #     description: UDM compute node
+    #     vdu_profile:
+    #       min_number_of_instances: 1
+    #       max_number_of_instances: 1
+    #     sw_image_data:
+    #       name: base
+    #       version: '1'
+    #       checksum:
+    #         algorithm: sha-256
+    #         hash: b62d4f2b0b76ab2bfff7b2a528ee0e527ab38f172f56d6ba6fb7e5d84400cf99
+    #       container_format: bare
+    #       disk_format: qcow2
+    #       min_disk: 4 GB
+    #       size: 4 GB
+    #   capabilities:
+    #     virtual_compute:
+    #       properties:
+    #         requested_additional_capabilities:
+    #           properties:
+    #             requested_additional_capability_name: m1.small
+    #             support_mandatory: true
+    #             target_performance_parameters:
+    #               entry_schema: test
+    #         virtual_memory:
+    #           virtual_mem_size: 512 MB
+    #         virtual_cpu:
+    #           num_virtual_cpu: 1
+    #         virtual_local_storage:
+    #           - size_of_storage: 4 GB
 
-    CP7:
-      type: tosca.nodes.nfv.VduCp
-      properties:
-        layer_protocols: [ ipv4 ]
-        order: 4
-      requirements:
-        - virtual_binding: UDM
-        - virtual_link: elkVL1
+    # CP7:
+    #   type: tosca.nodes.nfv.VduCp
+    #   properties:
+    #     layer_protocols: [ ipv4 ]
+    #     order: 4
+    #   requirements:
+    #     - virtual_binding: UDM
+    #     - virtual_link: elkVL1
 
-    CP8:
-      type: tosca.nodes.nfv.VduCp
-      properties:
-        layer_protocols: [ ipv4 ]
-        order: 4
-      requirements:
-        - virtual_binding: UDM
-        - virtual_link: 5gVL1
+    # CP8:
+    #   type: tosca.nodes.nfv.VduCp
+    #   properties:
+    #     layer_protocols: [ ipv4 ]
+    #     order: 4
+    #   requirements:
+    #     - virtual_binding: UDM
+    #     - virtual_link: 5gVL1
 
     elkVL1:
       type: tosca.nodes.nfv.VnfVirtualLink
