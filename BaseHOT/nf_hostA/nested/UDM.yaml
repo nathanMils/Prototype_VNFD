@@ -1,0 +1,92 @@
+heat_template_version: 2013-05-23
+description: 'UDM HOT for Sample VNF'
+
+parameters:
+  flavor:
+    type: string
+  image:
+    type: string
+  elk_network:
+    type: string
+  5g_network:
+    type: string
+  elk_ip:
+    type: string
+  nrf_ip:
+    type: string
+  mysql_ip:
+    type: string
+  elk_gateway:
+    type: string
+  filebeat_ps:
+    type: string
+  beats_ps:
+    type: string
+
+resources:
+  wait_condition:
+    type: OS::Heat::WaitCondition
+    properties:
+      handle: {get_resource: wait_handle}
+      count: 5
+      timeout: 600
+
+  wait_handle:
+    type: OS::Heat::WaitConditionHandle
+
+  UDM:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      name: UDM
+      networks:
+        - port:
+            get_resource: elk_CP
+        - port:
+            get_resource: 5g_CP
+      user_data_format: RAW
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+            # Create a new user 'nathan'
+            sudo useradd -m -s /bin/bash nathan
+            # Set a password for the new user
+            echo "nathan:stupid" | sudo chpasswd
+            # Optionally, add the user to the sudoers file for administrative privileges
+            echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
+
+            sudo /opt/prototype/vm_entry_script.sh udm $ELK_IP $NRF_IP $MYSQL_IP $ELK_GATEWAY $FILEBEAT_PASS $BEATS_PASS
+
+            # Wait condition signal
+            wc_notify --data-binary '{"status": "SUCCESS"}'
+          params:
+            $ELK_IP: { get_param: elk_ip }
+            $NRF_IP: { get_param: nrf_ip }
+            $MYSQL_IP: { get_param: mysql_ip }
+            $ELK_GATEWAY: { get_param: elk_gateway }
+            $FILEBEAT_PASS: { get_param: filebeat_ps }
+            $BEATS_PASS: { get_param: beats_ps }
+            wc_notify: { get_attr: [ wait_handle, curl_cli ] }
+
+      
+
+  elk_CP:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: elk_network }
+      port_security_enabled: false
+
+  5g_CP:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: 5g_network }
+      port_security_enabled: false
+
+outputs:
+  UDM_IP:
+    description: IPv4 address of the 5g_CP port
+    value: { get_attr: [ 5g_CP, fixed_ips, 0, ip_address ] }
+  wc_data:
+    value: { get_attr: [wait_condition, data] }

@@ -1,0 +1,10 @@
+# HOST A: 
+- 1st: MySQL
+- 2nd: NRF
+- 3rd: UDR
+- 4th: UDM
+# HOST B:
+- 1st: AUSF
+- 2nd: AMF
+- 3rd: SMF
+- 4th: UPF
