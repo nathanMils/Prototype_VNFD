@@ -314,7 +314,7 @@ topology_template:
         properties:
           initial_delta:
             number_of_instances: 1
-        targets: [ MySQL, NRF, UDR, UDM ]
+        targets: [ MySQL ]
 
     - scaling_aspect_deltas:
         type: tosca.policies.nfv.VduScalingAspectDeltas
@@ -323,7 +323,7 @@ topology_template:
           deltas:
             delta_1:
               number_of_instances: 1
-        targets: [ MySQL, NRF, UDR, UDM ]
+        targets: [ MySQL ]
 
     - instantiation_levels:
         type: tosca.policies.nfv.InstantiationLevels
@@ -342,7 +342,7 @@ topology_template:
           levels:
             instantiation_level_1:
               number_of_instances: 1
-        targets: [ MySQL, NRF, UDR, UDM ]
+        targets: [ MySQL ]
 
     - net_instantiation_levels:
         type: tosca.policies.nfv.VirtualLinkInstantiationLevels
