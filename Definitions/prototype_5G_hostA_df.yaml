@@ -64,7 +64,7 @@ topology_template:
           version: '1'
           checksum:
             algorithm: sha-256
-            hash: 0aa33f11fc9ccf52c7bc88500c4d386f0cb7260290a287cba9f3ce4d8c3e53b8
+            hash: b62d4f2b0b76ab2bfff7b2a528ee0e527ab38f172f56d6ba6fb7e5d84400cf99
           container_format: bare
           disk_format: qcow2
           min_disk: 4 GB
@@ -116,7 +116,7 @@ topology_template:
           version: '1'
           checksum:
             algorithm: sha-256
-            hash: 0aa33f11fc9ccf52c7bc88500c4d386f0cb7260290a287cba9f3ce4d8c3e53b8
+            hash: b62d4f2b0b76ab2bfff7b2a528ee0e527ab38f172f56d6ba6fb7e5d84400cf99
           container_format: bare
           disk_format: qcow2
           min_disk: 4 GB
@@ -168,7 +168,7 @@ topology_template:
           version: '1'
           checksum:
             algorithm: sha-256
-            hash: 0aa33f11fc9ccf52c7bc88500c4d386f0cb7260290a287cba9f3ce4d8c3e53b8
+            hash: b62d4f2b0b76ab2bfff7b2a528ee0e527ab38f172f56d6ba6fb7e5d84400cf99
           container_format: bare
           disk_format: qcow2
           min_disk: 4 GB
@@ -220,7 +220,7 @@ topology_template:
           version: '1'
           checksum:
             algorithm: sha-256
-            hash: 0aa33f11fc9ccf52c7bc88500c4d386f0cb7260290a287cba9f3ce4d8c3e53b8
+            hash: b62d4f2b0b76ab2bfff7b2a528ee0e527ab38f172f56d6ba6fb7e5d84400cf99
           container_format: bare
           disk_format: qcow2
           min_disk: 4 GB
