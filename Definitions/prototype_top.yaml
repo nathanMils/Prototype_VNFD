@@ -10,6 +10,7 @@ imports:
   - prototype_v1_df.yaml
   - prototype_dev_df.yaml
   - prototype_elk_df.yaml
+  - prototype_5G_hostA_df.yaml
 
 topology_template:
   inputs:
