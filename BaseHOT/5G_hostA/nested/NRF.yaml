@@ -81,6 +81,28 @@ resources:
       network: { get_param: 5g_network }
       port_security_enabled: false
 
+  5g_extvCP:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: { get_param: external_network }
+
+  5g_association:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: { get_resource: 5g_extvCP }
+      port_id: { get_resource: 5g_CP }
+  
+  elk_extvCP:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: { get_param: external_network }
+
+  elk_association:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: { get_resource: elk_extvCP }
+      port_id: { get_resource: elk_CP }
+
 outputs:
   NRF_IP:
     description: IPv4 address of the 5g_CP port
