@@ -3,7 +3,7 @@
     "vimConnectionInfo": {
       "vim": {
         "id": "3cc2c4ff-525c-48b4-94c9-29247223322f",
-        "vimId": "8ddd316c-fac1-403a-8088-e9ab0bb7bb76",
+        "vimId": "841ffd12-c65d-4c85-b04f-37ac310ff038",
         "vimType": "openstack"
       }
     },
@@ -13,7 +13,7 @@
       "nfv": {
         "input": {
           "elk": {
-            "ip": "",
+            "ip": "192.168.1.79",
             "filebeat_ps": "filebeatNathan",
             "beats_ps": "beatsNathan"
           },

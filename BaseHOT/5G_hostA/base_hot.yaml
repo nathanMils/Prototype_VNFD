@@ -37,8 +37,8 @@ resources:
     type: UDR.yaml
     depends_on: NRF
     properties:
-      flavor: { get_param: [ nfv, VDU, NRF, computeFlavourId ] }
-      image: { get_param: [ nfv, VDU, NRF, vcImageId ] }
+      flavor: { get_param: [ nfv, VDU, UDR, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, UDR, vcImageId ] }
       elk_network: { get_attr: [ elk_net, elk_net ]}
       5g_network: { get_attr: [ 5g_net, 5g_net ] }
       elk_ip: { get_param: [ nfv, input, elk, ip ] }
@@ -52,8 +52,8 @@ resources:
     type: UDM.yaml
     depends_on: UDR
     properties:
-      flavor: { get_param: [ nfv, VDU, NRF, computeFlavourId ] }
-      image: { get_param: [ nfv, VDU, NRF, vcImageId ] }
+      flavor: { get_param: [ nfv, VDU, UDM, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, UDM, vcImageId ] }
       elk_network: { get_attr: [ elk_net, elk_net ]}
       5g_network: { get_attr: [ 5g_net, 5g_net ] }
       elk_ip: { get_param: [ nfv, input, elk, ip ] }
