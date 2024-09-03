@@ -60,15 +60,15 @@ topology_template:
           min_number_of_instances: 1
           max_number_of_instances: 1
         sw_image_data:
-          name: base
+          name: prototype_v2
           version: '1'
           checksum:
             algorithm: sha-256
-            hash: b62d4f2b0b76ab2bfff7b2a528ee0e527ab38f172f56d6ba6fb7e5d84400cf99
+            hash: 4012464e2ba538af1918c7e4aab16729635ad4071158b5815a03bd89de180695
           container_format: bare
           disk_format: qcow2
-          min_disk: 4 GB
-          size: 4 GB
+          min_disk: 6 GB
+          size: 6 GB
       capabilities:
         virtual_compute:
           properties:
@@ -79,11 +79,11 @@ topology_template:
                 target_performance_parameters:
                   entry_schema: test
             virtual_memory:
-              virtual_mem_size: 512 MB
+              virtual_mem_size: 2 GB
             virtual_cpu:
               num_virtual_cpu: 1
             virtual_local_storage:
-              - size_of_storage: 4 GB
+              - size_of_storage: 6 GB
     
     CP1:
       type: tosca.nodes.nfv.VduCp
