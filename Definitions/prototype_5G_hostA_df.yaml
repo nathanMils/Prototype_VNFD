@@ -103,6 +103,20 @@ topology_template:
         - virtual_binding: MySQL
         - virtual_link: 5gVL1
 
+    extCP1:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: 5gVL1
+
+    extCP2:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: elkVL1
+
     # NRF:
     #   type: tosca.nodes.nfv.Vdu.Compute
     #   properties:
