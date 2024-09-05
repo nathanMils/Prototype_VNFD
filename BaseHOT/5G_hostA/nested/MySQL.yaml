@@ -55,7 +55,20 @@ resources:
             # Optionally, add the user to the sudoers file for administrative privileges
             echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
 
-            sudo /opt/prototype/vm_entry_script.sh mysql $ELK_IP 127.0.0.1 127.0.0.1 $ELK_GATEWAY $FILEBEAT_PASS $BEATS_PASS
+            TYPE=mysql
+
+            # Add routing via elk network to not disturb NF
+            sudo ip route add $ELK_IP via $ELK_GATEWAY
+
+            # Exporting required vars
+            export FILEBEAT_INTERNAL_PASSWORD=$FILEBEAT_PASS
+            export BEATS_SYSTEM_PASSWORD=$BEATS_PASS
+            export INTERFACE="ens3"
+
+            # Starting containers and networks
+            TARGET_DIR=/opt/prototype_v2
+            docker load -i $TARGET_DIR/images.tar
+            docker compose -f $TARGET_DIR/prototype/docker-compose-base.yml -f $TARGET_DIR/prototype/docker-compose-mysql.yml up -d
 
             # Wait condition signal
             wc_notify --data-binary '{"status": "SUCCESS"}'
