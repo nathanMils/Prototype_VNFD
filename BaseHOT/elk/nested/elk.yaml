@@ -29,6 +29,16 @@ resources:
         echo "nathan:stupid" | sudo chpasswd
         # Optionally, add the user to the sudoers file for administrative privileges
         echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
+        export ELASTIC_VERSION=8.15.0
+        export ELASTIC_PASSWORD='elasticness'
+        export LOGSTASH_INTERNAL_PASSWORD='in_the_logging_days'
+        export KIBANA_SYSTEM_PASSWORD='kibanaNana'
+        export FILEBEAT_INTERNAL_PASSWORD='filebeatNathan'
+        export BEATS_SYSTEM_PASSWORD='beatsNathan'
+
+        $TARGET_DIR=/opt/prototype_master/elk_compose
+        sudo docker compose -f $TARGET_DIR/docker-compose.yml up setup
+        sudo docker compose -f $TARGET_DIR/docker-compose.yml up -d
 
   elk_CP:
     type: OS::Neutron::Port

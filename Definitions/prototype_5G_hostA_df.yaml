@@ -60,11 +60,11 @@ topology_template:
           min_number_of_instances: 1
           max_number_of_instances: 1
         sw_image_data:
-          name: prototype_v2
+          name: prototype_master
           version: '1'
           checksum:
             algorithm: sha-256
-            hash: 4012464e2ba538af1918c7e4aab16729635ad4071158b5815a03bd89de180695
+            hash: 6e9e2a0a9eebb3d99e714515a1f380ecd9b64a132e341d8cc189202e76c7f672
           container_format: bare
           disk_format: qcow2
           min_disk: 6 GB
