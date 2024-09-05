@@ -273,44 +273,6 @@ topology_template:
     #     - virtual_binding: UDM
     #     - virtual_link: 5gVL1
 
-    elkVL1:
-      type: tosca.nodes.nfv.VnfVirtualLink
-      properties:
-        connectivity_type:
-          layer_protocols: [ ipv4 ]
-        description: elk network
-        vl_profile:
-          max_bitrate_requirements:
-            root: 1048576
-            leaf: 1048576
-          min_bitrate_requirements:
-            root: 1048576
-            leaf: 1048576
-          virtual_link_protocol_data:
-            - associated_layer_protocol: ipv4
-              l3_protocol_data:
-                ip_version: ipv4
-                cidr: 10.6.0.0/24
-
-    5gVL1:
-      type: tosca.nodes.nfv.VnfVirtualLink
-      properties:
-        connectivity_type:
-          layer_protocols: [ ipv4 ]
-        description: 5G network
-        vl_profile:
-          max_bitrate_requirements:
-            root: 1048576
-            leaf: 1048576
-          min_bitrate_requirements:
-            root: 1048576
-            leaf: 1048576
-          virtual_link_protocol_data:
-            - associated_layer_protocol: ipv4
-              l3_protocol_data:
-                ip_version: ipv4
-                cidr: 10.5.0.0/24
-
   policies:
     - scaling_aspects:
         type: tosca.policies.nfv.ScalingAspects
@@ -357,13 +319,3 @@ topology_template:
             instantiation_level_1:
               number_of_instances: 1
         targets: [ MySQL ]
-
-    - net_instantiation_levels:
-        type: tosca.policies.nfv.VirtualLinkInstantiationLevels
-        properties:
-          levels:
-            instantiation_level_1:
-              bitrate_requirements:
-                root: 1048576
-                leaf: 1048576
-        targets: [ elkVL1, 5gVL1 ]
