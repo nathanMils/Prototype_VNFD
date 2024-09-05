@@ -13,7 +13,7 @@
       "nfv": {
         "input": {
           "elk": {
-            "ip": "10.6.0.34",
+            "ip": "10.6.0.10",
             "filebeat_ps": "filebeatNathan",
             "beats_ps": "beatsNathan"
           },
