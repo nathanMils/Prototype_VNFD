@@ -1,0 +1,67 @@
+heat_template_version: 2013-05-23
+description: '5G Basic Deployment Part1 Base HOT VNF'
+
+parameters:
+  nfv:
+    type: json
+
+resources:
+  MySQL:
+    type: MySQL.yaml
+    depends_on: router
+    properties:
+      flavor: { get_param: [ nfv, VDU, MySQL, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, MySQL, vcImageId ] }
+      elk_network: { get_param: [ nfv, input, networks, elk_net, id ]}
+      5g_network: { get_param: [ nfv, input, networks, 5g_net, id ] }
+      external_network: { get_param: [ nfv, input, networks, external, id ]}
+      elk_ip: { get_param: [ nfv, input, elk, ip ] }
+      elk_gateway: { get_param: [ nfv, input, networks, elk_net, gateway ] }
+      filebeat_ps: { get_param: [ nfv, input, elk, filebeat_ps ] }
+      beats_ps: { get_param: [ nfv, input, elk, beats_ps ] }
+
+  # NRF:
+  #   type: NRF.yaml
+  #   depends_on: MySQL
+  #   properties:
+  #     flavor: { get_param: [ nfv, VDU, NRF, computeFlavourId ] }
+  #     image: { get_param: [ nfv, VDU, NRF, vcImageId ] }
+  #     elk_network: { get_attr: [ elk_net, elk_net ]}
+  #     5g_network: { get_attr: [ 5g_net, 5g_net ] }
+  #     elk_ip: { get_param: [ nfv, input, elk, ip ] }
+  #     mysql_ip: { get_attr: [ MySQL, MySQL_IP ]}
+  #     elk_gateway: { get_param: [ nfv, input, networks, elk_net, gateway ] }
+  #     filebeat_ps: { get_param: [ nfv, input, elk, filebeat_ps ] }
+  #     beats_ps: { get_param: [ nfv, input, elk, beats_ps ] }
+
+  # UDR:
+  #   type: UDR.yaml
+  #   depends_on: NRF
+  #   properties:
+  #     flavor: { get_param: [ nfv, VDU, UDR, computeFlavourId ] }
+  #     image: { get_param: [ nfv, VDU, UDR, vcImageId ] }
+  #     elk_network: { get_attr: [ elk_net, elk_net ]}
+  #     5g_network: { get_attr: [ 5g_net, 5g_net ] }
+  #     elk_ip: { get_param: [ nfv, input, elk, ip ] }
+  #     nrf_ip: { get_attr: [ NRF, NRF_IP ]}
+  #     mysql_ip: { get_attr: [ MySQL, MySQL_IP ]}
+  #     elk_gateway: { get_param: [ nfv, input, networks, elk_net, gateway ] }
+  #     filebeat_ps: { get_param: [ nfv, input, elk, filebeat_ps ] }
+  #     beats_ps: { get_param: [ nfv, input, elk, beats_ps ] }
+
+  # UDM:
+  #   type: UDM.yaml
+  #   depends_on: UDR
+  #   properties:
+  #     flavor: { get_param: [ nfv, VDU, UDM, computeFlavourId ] }
+  #     image: { get_param: [ nfv, VDU, UDM, vcImageId ] }
+  #     elk_network: { get_attr: [ elk_net, elk_net ]}
+  #     5g_network: { get_attr: [ 5g_net, 5g_net ] }
+  #     elk_ip: { get_param: [ nfv, input, elk, ip ] }
+  #     nrf_ip: { get_attr: [ NRF, NRF_IP ]}
+  #     mysql_ip: { get_attr: [ MySQL, MySQL_IP ]}
+  #     elk_gateway: { get_param: [ nfv, input, networks, elk_net, gateway ] }
+  #     filebeat_ps: { get_param: [ nfv, input, elk, filebeat_ps ] }
+  #     beats_ps: { get_param: [ nfv, input, elk, beats_ps ] }
+
+outputs: {}

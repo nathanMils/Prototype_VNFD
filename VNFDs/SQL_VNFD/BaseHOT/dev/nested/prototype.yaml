@@ -1,0 +1,86 @@
+heat_template_version: 2013-05-23
+description: 'Prototype HOT for Sample VNF'
+
+parameters:
+  flavor:
+    type: string
+  image:
+    type: string
+  net1:
+    type: string
+  net2:
+    type: string
+  internal_cidr:
+    type: string
+  external_cidr:
+    type: string
+  fixed_ip:
+    type: string
+
+resources:
+  Prototype:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      name: prototype
+      networks:
+        - port:
+            get_resource: internal_CP
+        - port:
+            get_resource: external_CP
+      user_data_format: RAW
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+            sleep 30
+            # Create a new user 'nathan'
+            sudo useradd -m -s /bin/bash nathan
+            # Set a password for the new user
+            echo "nathan:stupid" | sudo chpasswd
+            # Optionally, add the user to the sudoers file for administrative privileges
+            echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
+            # Define network interfaces based on IP ranges
+            # Replace these with your actual interface names or detection logic if needed
+            INTERNAL_IFACE="ens3"
+            EXTERNAL_IFACE="ens4"
+            
+            sudo ip route add $INTERNAL_CIDR dev $INTERNAL_IFACE
+            sudo ip route add $EXTERNAL_CIDR dev $EXTERNAL_IFACE
+            sudo sysctl -w net.ipv4.ip_forward=1
+            
+            iptables -A FORWARD -i $INTERNAL_IFACE -o $EXTERNAL_IFACE -j ACCEPT
+            iptables -A FORWARD -i $EXTERNAL_IFACE -o $INTERNAL_IFACE -j ACCEPT
+
+          params:
+            $INTERNAL_CIDR: { get_param: internal_cidr }
+            $EXTERNAL_CIDR: { get_param: external_cidr }
+
+
+  internal_CP:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: net1 }
+      fixed_ips:
+        - ip_address: { get_param: fixed_ip }
+      port_security_enabled: false
+
+  external_CP:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: net2 }
+      port_security_enabled: false
+
+  # Will make accessible from ELK network
+#  elk_CP:
+#    type: OS::Neutron::Port
+#    properties:
+#      network: { get_param: net3 }
+#      security_groups:
+#        - test_secgrp
+
+outputs:
+  ExternalIP:
+    description: "External IP address of the prototype server"
+    value: { get_attr: [ external_CP, fixed_ips, 0, ip_address ] }

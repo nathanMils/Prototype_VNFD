@@ -1,0 +1,54 @@
+heat_template_version: 2013-05-23
+description: 'Prototype HOT for Sample VNF'
+
+parameters:
+  flavor:
+    type: string
+  image:
+    type: string
+  net1:
+    type: string
+  net2:
+    type: string
+
+resources:
+  Prototype:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      name: prototype
+      networks:
+        - port:
+            get_resource: external_CP
+        - port:
+            get_resource: elk_CP
+      user_data_format: RAW
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+            sleep 30
+            # Create a new user 'nathan'
+            sudo useradd -m -s /bin/bash nathan
+            # Set a password for the new user
+            echo "nathan:stupid" | sudo chpasswd
+            # Optionally, add the user to the sudoers file for administrative privileges
+            echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
+
+            # sudo /opt/prototype_v1/vm_entry_script.sh $VM_IP $LOGSTASH_IP $ELASTIC_IP
+
+          params:
+            $VM_IP: {get_attr: [external_CP, fixed_ips, 0, ip_address] }
+
+  external_CP:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: net1 }
+      port_security_enabled: false
+
+  elk_CP:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: net2 }
+      port_security_enabled: false
