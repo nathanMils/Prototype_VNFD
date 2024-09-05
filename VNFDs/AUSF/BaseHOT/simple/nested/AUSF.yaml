@@ -1,5 +1,5 @@
 heat_template_version: 2013-05-23
-description: 'UDM HOT for Sample VNF'
+description: 'AUSF HOT for Sample VNF'
 
 parameters:
   flavor:
@@ -34,12 +34,12 @@ resources:
   wait_handle:
     type: OS::Heat::WaitConditionHandle
 
-  UDM:
+  AUSF:
     type: OS::Nova::Server
     properties:
       flavor: { get_param: flavor }
       image: { get_param: image }
-      name: UDM
+      name: AUSF
       networks:
         - port:
             get_resource: elk_CP
@@ -68,7 +68,7 @@ resources:
             # Starting containers and networks
             TARGET_DIR=/opt/prototype_master
             docker load -i $TARGET_DIR/images.tar
-            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-base.yml -f $TARGET_DIR/prototype/docker-compose-udm.yml up -d
+            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-base.yml -f $TARGET_DIR/prototype/docker-compose-ausf.yml up -d
 
             # Wait condition signal
             wc_notify --data-binary '{"status": "SUCCESS"}'
