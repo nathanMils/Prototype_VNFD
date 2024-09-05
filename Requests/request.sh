@@ -13,6 +13,11 @@ FILE_IDS=(
     ["mysql_instantiate.json"]="00000000-0000-0000-0000-000000000001"
     ["nrf_instantiate.json"]="00000000-0000-0000-0000-000000000002"
     ["udr_instantiate.json"]="00000000-0000-0000-0000-000000000003"
+    ["udm_instantiate.json"]="00000000-0000-0000-0000-000000000004"
+    ["ausf_instantiate.json"]="00000000-0000-0000-0000-000000000005"
+    ["amf_instantiate.json"]="00000000-0000-0000-0000-000000000006"
+    ["smf_instantiate.json"]="00000000-0000-0000-0000-000000000007"
+    ["upf_instantiate.json"]="00000000-0000-0000-0000-000000000008"
 )
 
 ID="${FILE_IDS[${VNF}_instantiate.json]}"
