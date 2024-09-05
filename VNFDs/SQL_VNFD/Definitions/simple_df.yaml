@@ -5,7 +5,7 @@ description: Simple deployment flavour for Sample VNF
 imports:
   - etsi_nfv_sol001_common_types.yaml
   - etsi_nfv_sol001_vnfd_types.yaml
-  - prototype_types.yaml
+  - vnfd_types.yaml
 
 topology_template:
   inputs:
@@ -31,7 +31,7 @@ topology_template:
   substitution_mappings:
     node_type: company.provider.VNF
     properties:
-      flavour_id: elk
+      flavour_id: simple
 
   node_templates:
     VNF:
@@ -51,11 +51,11 @@ topology_template:
           scale_start: []
           scale_end: []
 
-    ELK:
+    MySQL:
       type: tosca.nodes.nfv.Vdu.Compute
       properties:
-        name: ELK
-        description: ELK compute node
+        name: MySQL
+        description: MySQL compute node
         vdu_profile:
           min_number_of_instances: 1
           max_number_of_instances: 1
@@ -74,79 +74,47 @@ topology_template:
           properties:
             requested_additional_capabilities:
               properties:
-                requested_additional_capability_name: elk_spec
+                requested_additional_capability_name: m1.small
                 support_mandatory: true
                 target_performance_parameters:
                   entry_schema: test
             virtual_memory:
-              virtual_mem_size: 4 GB
+              virtual_mem_size: 2 GB
             virtual_cpu:
-              num_virtual_cpu: 4
+              num_virtual_cpu: 1
             virtual_local_storage:
-              - size_of_storage: 60 GB
-
+              - size_of_storage: 10 GB
+    
     CP1:
       type: tosca.nodes.nfv.VduCp
       properties:
         layer_protocols: [ ipv4 ]
         order: 4
-      requirements:
-        - virtual_binding: ELK
-        - virtual_link: elkVL1
+
+    CP2:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 4
 
     extCP1:
       type: tosca.nodes.nfv.VnfExtCp
       properties:
         layer_protocols: [ ipv4 ]
-      requirements:
-        - internal_virtual_link: elkVL1
 
-    elkVL1:
-      type: tosca.nodes.nfv.VnfVirtualLink
+    extCP2:
+      type: tosca.nodes.nfv.VnfExtCp
       properties:
-        connectivity_type:
-          layer_protocols: [ ipv4 ]
-        description: elk network
-        vl_profile:
-          max_bitrate_requirements:
-            root: 1048576
-            leaf: 1048576
-          min_bitrate_requirements:
-            root: 1048576
-            leaf: 1048576
-          virtual_link_protocol_data:
-            - associated_layer_protocol: ipv4
-              l3_protocol_data:
-                ip_version: ipv4
-                cidr: 10.6.0.0/24
-
-    5gVL1:
-      type: tosca.nodes.nfv.VnfVirtualLink
-      properties:
-        connectivity_type:
-          layer_protocols: [ ipv4 ]
-        description: 5G network
-        vl_profile:
-          max_bitrate_requirements:
-            root: 1048576
-            leaf: 1048576
-          min_bitrate_requirements:
-            root: 1048576
-            leaf: 1048576
-          virtual_link_protocol_data:
-            - associated_layer_protocol: ipv4
-              l3_protocol_data:
-                ip_version: ipv4
-                cidr: 10.5.0.0/24
+        layer_protocols: [ ipv4 ]
 
   policies:
     - scaling_aspects:
         type: tosca.policies.nfv.ScalingAspects
         properties:
           aspects:
-            ELK_scale:
-              name: ELK_scale
-              description: ELK scaling aspect
+            main_scale:
+              name: main_scale
+              description: main scaling aspect
               max_scale_level: 1
               step_deltas:
                 - delta_1
@@ -156,16 +124,16 @@ topology_template:
         properties:
           initial_delta:
             number_of_instances: 1
-        targets: [ ELK ]
+        targets: [ MySQL ]
 
     - scaling_aspect_deltas:
         type: tosca.policies.nfv.VduScalingAspectDeltas
         properties:
-          aspect: ELK_scale
+          aspect: main_scale
           deltas:
             delta_1:
               number_of_instances: 1
-        targets: [ ELK ]
+        targets: [ MySQL ]
 
     - instantiation_levels:
         type: tosca.policies.nfv.InstantiationLevels
@@ -174,24 +142,14 @@ topology_template:
             instantiation_level_1:
               description: Only size
               scale_info:
-                ELK_scale:
+                main_scale:
                   scale_level: 0
           default_level: instantiation_level_1
 
-    - ELK_instantiation_levels:
+    - main_instantiation_levels:
         type: tosca.policies.nfv.VduInstantiationLevels
         properties:
           levels:
             instantiation_level_1:
               number_of_instances: 1
-        targets: [ ELK ]
-
-    - elkVL1_instantiation_levels:
-        type: tosca.policies.nfv.VirtualLinkInstantiationLevels
-        properties:
-          levels:
-            instantiation_level_1:
-              bitrate_requirements:
-                root: 1048576
-                leaf: 1048576
-        targets: [ elkVL1, 5gVL1 ]
+        targets: [ MySQL ]

@@ -5,12 +5,9 @@ description: Prototype VNF
 imports:
   - etsi_nfv_sol001_common_types.yaml
   - etsi_nfv_sol001_vnfd_types.yaml
-  - prototype_types.yaml
-  - prototype_example_df.yaml
-  - prototype_v1_df.yaml
-  - prototype_dev_df.yaml
-  - prototype_elk_df.yaml
-  - prototype_5G_hostA_df.yaml
+  - vnfd_types.yaml
+  - example_df.yaml
+  - simple_df.yaml
 
 topology_template:
   inputs:

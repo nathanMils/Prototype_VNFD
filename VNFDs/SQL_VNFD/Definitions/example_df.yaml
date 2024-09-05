@@ -5,7 +5,7 @@ description: Simple deployment flavour for Sample VNF
 imports:
   - etsi_nfv_sol001_common_types.yaml
   - etsi_nfv_sol001_vnfd_types.yaml
-  - prototype_types.yaml
+  - vnfd_types.yaml
 
 topology_template:
   inputs:
@@ -31,13 +31,13 @@ topology_template:
   substitution_mappings:
     node_type: company.provider.VNF
     properties:
-      flavour_id: dev
+      flavour_id: example
 
   node_templates:
     VNF:
       type: company.provider.VNF
       properties:
-        flavour_description: Development configuration
+        flavour_description: A example flavour
       interfaces:
         Vnflcm:
           instantiate_start: []
@@ -51,54 +51,20 @@ topology_template:
           scale_start: []
           scale_end: []
 
-    Prototype:
+    VDU1:
       type: tosca.nodes.nfv.Vdu.Compute
       properties:
-        name: Prototype
-        description: Prototype compute node
+        name: VDU1
+        description: VDU1 compute node
         vdu_profile:
           min_number_of_instances: 1
-          max_number_of_instances: 1
-        sw_image_data:
-          name: standard_node_he_docker_enabled
-          version: '1'
-          checksum:
-            algorithm: sha-256
-            hash: e792c34be4100f4f837a31eaa2c852721ec192ac4cbbf9ce2bac861b6f2d8583
-          container_format: bare
-          disk_format: qcow2
-          min_disk: 4 GB
-          size: 4 GB
-      capabilities:
-        virtual_compute:
-          properties:
-            requested_additional_capabilities:
-              properties:
-                requested_additional_capability_name: m1.small
-                support_mandatory: true
-                target_performance_parameters:
-                  entry_schema: test
-            virtual_memory:
-              virtual_mem_size: 512 MB
-            virtual_cpu:
-              num_virtual_cpu: 1
-            virtual_local_storage:
-              - size_of_storage: 4 GB
-
-    NF:
-      type: tosca.nodes.nfv.Vdu.Compute
-      properties:
-        name: Prototype
-        description: Prototype compute node
-        vdu_profile:
-          min_number_of_instances: 1
-          max_number_of_instances: 1
+          max_number_of_instances: 3
         sw_image_data:
           name: cirros-0.5.2-x86_64-disk
           version: '0.5.2'
           checksum:
             algorithm: sha-256
-            hash: cea59040c8c8d02d07524c18346831d828cad8b6284e36ab3ca3bcdf15d15360
+            hash: 932fcae93574e242dc3d772d5235061747dfe537668443a1f0567d893614b464
           container_format: bare
           disk_format: qcow2
           min_disk: 1 GB
@@ -125,32 +91,7 @@ topology_template:
         layer_protocols: [ ipv4 ]
         order: 4
       requirements:
-        - virtual_binding: Prototype
-        - virtual_link: internalVL1
-
-    CP2:
-      type: tosca.nodes.nfv.VduCp
-      properties:
-        layer_protocols: [ ipv4 ]
-        order: 5
-      requirements:
-        - virtual_binding: Prototype
-
-#    CP3:
-#      type: tosca.nodes.nfv.VduCp
-#      properties:
-#        layer_protocols: [ ipv4 ]
-#        order: 6
-#      requirements:
-#        - virtual_binding: Prototype
-
-    CP4:
-      type: tosca.nodes.nfv.VduCp
-      properties:
-        layer_protocols: [ ipv4 ]
-        order: 4
-      requirements:
-        - virtual_binding: NF
+        - virtual_binding: VDU1
         - virtual_link: internalVL1
 
     internalVL1:
@@ -177,61 +118,64 @@ topology_template:
         type: tosca.policies.nfv.ScalingAspects
         properties:
           aspects:
-            Prototype_scale:
-              name: Prototype_scale
-              description: Prototype scaling aspect
-              max_scale_level: 1
-              step_deltas:
-                - delta_1
-            NF_scale:
-              name: NF_scale
-              description: NF scaling aspect
-              max_scale_level: 1
+            VDU1_scale:
+              name: VDU1_scale
+              description: VDU1 scaling aspect
+              max_scale_level: 2
               step_deltas:
                 - delta_1
 
-    - initial_delta:
+    - VDU1_initial_delta:
         type: tosca.policies.nfv.VduInitialDelta
         properties:
           initial_delta:
             number_of_instances: 1
-        targets: [ Prototype, NF ]
+        targets: [ VDU1 ]
 
-    - scaling_aspect_deltas:
+    - VDU1_scaling_aspect_deltas:
         type: tosca.policies.nfv.VduScalingAspectDeltas
         properties:
-          aspect: Prototype_scale
+          aspect: VDU1_scale
           deltas:
             delta_1:
               number_of_instances: 1
-        targets: [ Prototype, NF ]
+        targets: [ VDU1 ]
 
     - instantiation_levels:
         type: tosca.policies.nfv.InstantiationLevels
         properties:
           levels:
             instantiation_level_1:
-              description: Only size
+              description: Smallest size
               scale_info:
-                Prototype_scale:
+                VDU1_scale:
                   scale_level: 0
-                NF_scale:
-                  scale_level: 0
+            instantiation_level_2:
+              description: Largest size
+              scale_info:
+                VDU1_scale:
+                  scale_level: 2
           default_level: instantiation_level_1
 
-    - Prototype_instantiation_levels:
+    - VDU1_instantiation_levels:
         type: tosca.policies.nfv.VduInstantiationLevels
         properties:
           levels:
             instantiation_level_1:
               number_of_instances: 1
-        targets: [ Prototype, NF ]
+            instantiation_level_2:
+              number_of_instances: 3
+        targets: [ VDU1 ]
 
     - internalVL1_instantiation_levels:
         type: tosca.policies.nfv.VirtualLinkInstantiationLevels
         properties:
           levels:
             instantiation_level_1:
+              bitrate_requirements:
+                root: 1048576
+                leaf: 1048576
+            instantiation_level_2:
               bitrate_requirements:
                 root: 1048576
                 leaf: 1048576
