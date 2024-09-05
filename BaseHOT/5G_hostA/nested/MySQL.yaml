@@ -83,7 +83,7 @@ resources:
   5g_extvCP:
     type: OS::Neutron::FloatingIP
     properties:
-      floating_network: { get_param: external_network }
+      floating_network: public
 
   5g_association:
     type: OS::Neutron::FloatingIPAssociation
@@ -94,7 +94,7 @@ resources:
   elk_extvCP:
     type: OS::Neutron::FloatingIP
     properties:
-      floating_network: { get_param: external_network }
+      floating_network: public
 
   elk_association:
     type: OS::Neutron::FloatingIPAssociation
