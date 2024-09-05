@@ -9,9 +9,9 @@ VNF="$1"
 
 declare -A FILE_IDS
 FILE_IDS=(
-    ["vnf1_instantiate.json"]="id1"
-    ["vnf2_instantiate.json"]="id2"
-    ["vnf3_instantiate.json"]="id3"
+    ["elk_instantiate.json"]="00000000-0000-0000-0000-000000000000"
+    ["mysql_instantiate.json"]="00000000-0000-0000-0000-000000000001"
+    ["nrf_instantiate.json"]="00000000-0000-0000-0000-000000000002"
 )
 
 ID="${FILE_IDS[${VNF}_instantiate.json]}"
