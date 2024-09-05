@@ -14,6 +14,7 @@ resources:
       image: { get_param: [ nfv, VDU, MySQL, vcImageId ] }
       elk_network: { get_attr: [ elk_net, elk_net ]}
       5g_network: { get_attr: [ 5g_net, 5g_net ] }
+      external_network: { get_param: [ nfv, input, networks, external, id ]}
       elk_ip: { get_param: [ nfv, input, elk, ip ] }
       elk_gateway: { get_param: [ nfv, input, networks, elk_net, gateway ] }
       filebeat_ps: { get_param: [ nfv, input, elk, filebeat_ps ] }

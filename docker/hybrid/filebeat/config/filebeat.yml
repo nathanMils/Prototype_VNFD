@@ -8,7 +8,7 @@ filebeat.inputs:
 - type: log
   enabled: true
   paths:
-    - /usr/local/zeek/logs
+    - /usr/local/zeek/logs/loaded_scripts.log
   fields:
     source: gateway
 
