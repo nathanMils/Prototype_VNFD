@@ -8,7 +8,6 @@ parameters:
 resources:
   MySQL:
     type: MySQL.yaml
-    depends_on: router
     properties:
       flavor: { get_param: [ nfv, VDU, MySQL, computeFlavourId ] }
       image: { get_param: [ nfv, VDU, MySQL, vcImageId ] }

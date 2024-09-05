@@ -55,11 +55,6 @@ resources:
             # Optionally, add the user to the sudoers file for administrative privileges
             echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
 
-            TYPE=mysql
-
-            # Add routing via elk network to not disturb NF
-            sudo ip route add $ELK_IP via $ELK_GATEWAY
-
             # Exporting required vars
             export FILEBEAT_INTERNAL_PASSWORD=$FILEBEAT_PASS
             export BEATS_SYSTEM_PASSWORD=$BEATS_PASS

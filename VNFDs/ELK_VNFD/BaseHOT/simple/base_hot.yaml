@@ -12,6 +12,11 @@ resources:
     properties:
       flavor: { get_param: [ nfv, VDU, ELK, computeFlavourId ] }
       image: { get_param: [ nfv, VDU, ELK, vcImageId ] }
+      elastic_password: { get_param: [ nfv, input, elk, elastic_password ]}
+      logstash_password: { get_param: [ nfv, input, elk, logstash_password ]}
+      kibana_password: { get_param: [ nfv, input, elk, kibana_password ]}
+      filebeat_password: { get_param: [ nfv, input, elk, filebeat_password ]}
+      beats_password: { get_param: [ nfv, input, elk, beats_password ]}
       net: { get_attr: [ elk_net, elk_net ]}
 
   5g_net:
