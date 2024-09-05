@@ -15,4 +15,5 @@ cp -r $SOURCE_DIR/elk_compose $TARGET_DIR
 
 cp $SOURCE_DIR/vm_entry_script.sh $TARGET_DIR
 
-sudo chmod +x $TARGET_DIR/vm_entry_script.sh
+chmod +x $TARGET_DIR/vm_entry_script.sh
+chmod +x $TARGET_DIR/elk_compose/setup/entrypoint.sh
