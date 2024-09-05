@@ -36,7 +36,7 @@ resources:
         export FILEBEAT_INTERNAL_PASSWORD='filebeatNathan'
         export BEATS_SYSTEM_PASSWORD='beatsNathan'
 
-        $TARGET_DIR=/opt/prototype_master/elk_compose
+        TARGET_DIR=/opt/prototype_master/elk_compose
         sudo docker compose -f $TARGET_DIR/docker-compose.yml up setup
         sudo docker compose -f $TARGET_DIR/docker-compose.yml up -d
 

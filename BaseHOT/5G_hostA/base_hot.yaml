@@ -12,8 +12,8 @@ resources:
     properties:
       flavor: { get_param: [ nfv, VDU, MySQL, computeFlavourId ] }
       image: { get_param: [ nfv, VDU, MySQL, vcImageId ] }
-      elk_network: { get_attr: [ elk_net, elk_net ]}
-      5g_network: { get_attr: [ 5g_net, 5g_net ] }
+      elk_network: { get_param: [ nfv, input, networks, elk_net, id ]}
+      5g_network: { get_param: [ nfv, input, networks, 5g_net, id ] }
       external_network: { get_param: [ nfv, input, networks, external, id ]}
       elk_ip: { get_param: [ nfv, input, elk, ip ] }
       elk_gateway: { get_param: [ nfv, input, networks, elk_net, gateway ] }
