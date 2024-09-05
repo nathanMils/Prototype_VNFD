@@ -67,8 +67,8 @@ topology_template:
             hash: 6e9e2a0a9eebb3d99e714515a1f380ecd9b64a132e341d8cc189202e76c7f672
           container_format: bare
           disk_format: qcow2
-          min_disk: 6 GB
-          size: 6 GB
+          min_disk: 10 GB
+          size: 10 GB
       capabilities:
         virtual_compute:
           properties:
@@ -83,7 +83,7 @@ topology_template:
             virtual_cpu:
               num_virtual_cpu: 1
             virtual_local_storage:
-              - size_of_storage: 6 GB
+              - size_of_storage: 10 GB
     
     CP1:
       type: tosca.nodes.nfv.VduCp
