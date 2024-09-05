@@ -9,15 +9,15 @@ resources:
 
   NRF:
     type: NRF.yaml
-    depends_on: MySQL
     properties:
       flavor: { get_param: [ nfv, VDU, NRF, computeFlavourId ] }
       image: { get_param: [ nfv, VDU, NRF, vcImageId ] }
-      elk_network: { get_attr: [ elk_net, elk_net ]}
-      5g_network: { get_attr: [ 5g_net, 5g_net ] }
+      ip: { get_param: [ nfv, input, nfs, mysql, ip ]}
+      elk_network: { get_param: [ nfv, input, networks, elk_net, id ]}
+      5g_network: { get_param: [ nfv, input, networks, 5g_net, id ] }
       elk_ip: { get_param: [ nfv, input, elk, ip ] }
-      mysql_ip: { get_attr: [ MySQL, MySQL_IP ]}
-      filebeat_password: { get_param: [ nfv, input, elk, filebeat_ps ] }
-      beats_password: { get_param: [ nfv, input, elk, beats_ps ] }
+      mysql_ip: { get_param: [ nfv, input, nfs, mysql, ip ]}
+      filebeat_password: { get_param: [ nfv, input, elk, filebeat_password ] }
+      beats_password: { get_param: [ nfv, input, elk, beats_password ] }
 
 outputs: {}

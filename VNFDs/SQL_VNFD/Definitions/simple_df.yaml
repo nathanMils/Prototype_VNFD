@@ -74,14 +74,14 @@ topology_template:
           properties:
             requested_additional_capabilities:
               properties:
-                requested_additional_capability_name: m1.small
+                requested_additional_capability_name: nf_basic
                 support_mandatory: true
                 target_performance_parameters:
                   entry_schema: test
             virtual_memory:
               virtual_mem_size: 2 GB
             virtual_cpu:
-              num_virtual_cpu: 1
+              num_virtual_cpu: 2
             virtual_local_storage:
               - size_of_storage: 10 GB
     
@@ -95,7 +95,7 @@ topology_template:
       type: tosca.nodes.nfv.VduCp
       properties:
         layer_protocols: [ ipv4 ]
-        order: 4
+        order: 5
 
     extCP1:
       type: tosca.nodes.nfv.VnfExtCp

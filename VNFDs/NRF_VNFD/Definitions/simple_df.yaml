@@ -95,7 +95,7 @@ topology_template:
       type: tosca.nodes.nfv.VduCp
       properties:
         layer_protocols: [ ipv4 ]
-        order: 4
+        order: 5
 
     extCP1:
       type: tosca.nodes.nfv.VnfExtCp

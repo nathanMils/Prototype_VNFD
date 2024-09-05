@@ -6,6 +6,8 @@ parameters:
     type: string
   image:
     type: string
+  ip:
+    type: string
   elk_network:
     type: string
   5g_network:
@@ -14,11 +16,9 @@ parameters:
     type: string
   mysql_ip:
     type: string
-  elk_gateway:
+  filebeat_password:
     type: string
-  filebeat_ps:
-    type: string
-  beats_ps:
+  beats_password:
     type: string
 
 resources:
@@ -48,23 +48,31 @@ resources:
         str_replace:
           template: |
             #!/bin/bash
-            # Create a new user 'nathan'
-            sudo useradd -m -s /bin/bash nathan
-            # Set a password for the new user
-            echo "nathan:stupid" | sudo chpasswd
-            # Optionally, add the user to the sudoers file for administrative privileges
-            echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
+            
+            $ELK_IP=$PARAM_0
+            $MYSQL_IP=$PARAM_1
 
-            sudo /opt/prototype/vm_entry_script.sh nrf $ELK_IP 127.0.0.1 $MYSQL_IP $ELK_GATEWAY $FILEBEAT_PASS $BEATS_PASS
+            echo "$ELK_IP elasticsearch" >> /etc/hosts
+            echo "$ELK_IP logstash" >> /etc/hosts
+            echo "$MYSQL_IP mysql" >> /etc/hosts
+
+            # Exporting required vars
+            export FILEBEAT_INTERNAL_PASSWORD=$PARAM_2
+            export BEATS_SYSTEM_PASSWORD=$PARAM_3
+            export INTERFACE="ens3"
+
+            # Starting containers and networks
+            TARGET_DIR=/opt/prototype_master
+            docker load -i $TARGET_DIR/images.tar
+            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-base.yml -f $TARGET_DIR/prototype/docker-compose-nrf.yml up -d
 
             # Wait condition signal
             wc_notify --data-binary '{"status": "SUCCESS"}'
           params:
-            $ELK_IP: { get_param: elk_ip }
-            $MYSQL_IP: { get_param: mysql_ip }
-            $ELK_GATEWAY: { get_param: elk_gateway }
-            $FILEBEAT_PASS: { get_param: filebeat_ps }
-            $BEATS_PASS: { get_param: beats_ps }
+            $PARAM_0: { get_param: elk_ip }
+            $PARAM_1: { get_param: mysql_ip }
+            $PARAM_2: { get_param: filebeat_password }
+            $PARAM_3: { get_param: beats_password }
             wc_notify: { get_attr: [ wait_handle, curl_cli ] }
 
       
@@ -80,6 +88,8 @@ resources:
     properties:
       network: { get_param: 5g_network }
       port_security_enabled: false
+      fixed_ips:
+        - ip_address: { get_param: ip }
 
   5g_extvCP:
     type: OS::Neutron::FloatingIP

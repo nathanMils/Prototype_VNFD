@@ -12,6 +12,7 @@ FILE_IDS=(
     ["elk_instantiate.json"]="00000000-0000-0000-0000-000000000000"
     ["mysql_instantiate.json"]="00000000-0000-0000-0000-000000000001"
     ["nrf_instantiate.json"]="00000000-0000-0000-0000-000000000002"
+    ["udr_instantiate.json"]="00000000-0000-0000-0000-000000000003"
 )
 
 ID="${FILE_IDS[${VNF}_instantiate.json]}"
