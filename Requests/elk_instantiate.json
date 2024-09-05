@@ -13,19 +13,22 @@
       "nfv": {
         "input": {
           "elk": {
+            "ip": "10.6.0.2",
             "elastic_password": "elasticness",
             "logstash_password": "in_the_logging_days",
             "kibana_password": "kibanaNana",
             "filebeat_password": "filebeatNathan",
             "beats_password": "beatsNathan"
           },
+          "nfs": {},
           "networks": {
             "elk_net": {
+                "id": "ELK_net",
                 "cidr_ipv4": "10.6.0.0/26",
-                "cidr_ipv6": "2001:db8:abcd:002::/64",
-                "gateway": "10.6.0.1"
+                "cidr_ipv6": "2001:db8:abcd:002::/64"
             },
             "5g_net": {
+                "id": "5G_net",
                 "cidr_ipv4": "10.5.0.0/26",
                 "cidr_ipv6": "2001:db8:abcd:001::/64"
             },

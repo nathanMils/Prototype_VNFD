@@ -5,7 +5,7 @@ description: Simple deployment flavour for Sample VNF
 imports:
   - etsi_nfv_sol001_common_types.yaml
   - etsi_nfv_sol001_vnfd_types.yaml
-  - prototype_types.yaml
+  - vnfd_types.yaml
 
 topology_template:
   inputs:

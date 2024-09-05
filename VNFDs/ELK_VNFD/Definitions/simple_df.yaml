@@ -74,7 +74,7 @@ topology_template:
           properties:
             requested_additional_capabilities:
               properties:
-                requested_additional_capability_name: elk_spec
+                requested_additional_capability_name: elk_basic
                 support_mandatory: true
                 target_performance_parameters:
                   entry_schema: test

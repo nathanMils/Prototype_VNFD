@@ -6,6 +6,8 @@ parameters:
     type: string
   image:
     type: string
+  ip:
+    type: string
   elastic_password:
     type: string
   logstash_password:
@@ -58,6 +60,8 @@ resources:
     properties:
       network: { get_param: net }
       port_security_enabled: false
+      fixed_ips:
+        - ip_address: { get_param: ip }
 
   extvCP:
     type: OS::Neutron::FloatingIP
