@@ -6,9 +6,7 @@ parameters:
     type: string
   image:
     type: string
-  net1:
-    type: string
-  net2:
+  net:
     type: string
 
 resources:
@@ -32,18 +30,16 @@ resources:
         # Optionally, add the user to the sudoers file for administrative privileges
         echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
 
-        # sudo /opt/elk/vm_entry_script.sh
-
   elk_CP:
     type: OS::Neutron::Port
     properties:
-      network: { get_param: net1 }
+      network: { get_param: net }
       port_security_enabled: false
 
   extvCP:
     type: OS::Neutron::FloatingIP
     properties:
-      floating_network: { get_param: net2 }
+      floating_network: public
 
   association:
     type: OS::Neutron::FloatingIPAssociation

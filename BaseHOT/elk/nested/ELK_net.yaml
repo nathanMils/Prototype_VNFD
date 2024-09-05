@@ -10,6 +10,8 @@ parameters:
 resources:
   elkVL1:
     type: OS::Neutron::Net
+    properties:
+      name: ELK_net
 
   elkVL1_subnet_ipv4:
     type: OS::Neutron::Subnet

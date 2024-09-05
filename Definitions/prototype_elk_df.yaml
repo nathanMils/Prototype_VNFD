@@ -60,11 +60,11 @@ topology_template:
           min_number_of_instances: 1
           max_number_of_instances: 1
         sw_image_data:
-          name: elk_image
+          name: prototype_v2
           version: '1'
           checksum:
             algorithm: sha-256
-            hash: 0aa33f11fc9ccf52c7bc88500c4d386f0cb7260290a287cba9f3ce4d8c3e53b8
+            hash: 4012464e2ba538af1918c7e4aab16729635ad4071158b5815a03bd89de180695
           container_format: bare
           disk_format: qcow2
           min_disk: 8 GB
@@ -107,6 +107,25 @@ topology_template:
         connectivity_type:
           layer_protocols: [ ipv4 ]
         description: elk network
+        vl_profile:
+          max_bitrate_requirements:
+            root: 1048576
+            leaf: 1048576
+          min_bitrate_requirements:
+            root: 1048576
+            leaf: 1048576
+          virtual_link_protocol_data:
+            - associated_layer_protocol: ipv4
+              l3_protocol_data:
+                ip_version: ipv4
+                cidr: 10.6.0.0/24
+
+    5gVL1:
+      type: tosca.nodes.nfv.VnfVirtualLink
+      properties:
+        connectivity_type:
+          layer_protocols: [ ipv4 ]
+        description: 5G network
         vl_profile:
           max_bitrate_requirements:
             root: 1048576
@@ -175,4 +194,4 @@ topology_template:
               bitrate_requirements:
                 root: 1048576
                 leaf: 1048576
-        targets: [ elkVL1 ]
+        targets: [ elkVL1, 5gVL1 ]

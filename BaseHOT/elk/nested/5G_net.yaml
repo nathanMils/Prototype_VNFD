@@ -10,6 +10,8 @@ parameters:
 resources:
   5gVL1:
     type: OS::Neutron::Net
+    properties:
+      name: 5G_net
 
   5gVL1_subnet_ipv4:
     type: OS::Neutron::Subnet
