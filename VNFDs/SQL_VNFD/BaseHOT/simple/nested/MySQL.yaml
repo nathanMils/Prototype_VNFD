@@ -77,13 +77,13 @@ resources:
   elk_CP:
     type: OS::Neutron::Port
     properties:
-      network: { get_param: elk_network }
+      network: ELK_net
       port_security_enabled: false
 
   5g_CP:
     type: OS::Neutron::Port
     properties:
-      network: { get_param: 5g_network }
+      network: 5G_net
       port_security_enabled: false
       fixed_ips:
         - ip_address: 10.5.0.3
