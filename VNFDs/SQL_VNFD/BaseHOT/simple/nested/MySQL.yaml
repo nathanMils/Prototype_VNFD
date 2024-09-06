@@ -61,18 +61,10 @@ resources:
             # Starting containers and networks
             TARGET_DIR=/opt/prototype_master
             docker load -i $TARGET_DIR/images.tar
-            docker compose \
-              -f $TARGET_DIR/prototype_compose/docker-compose-base.yml \
-              -f $TARGET_DIR/prototype_compose/docker-compose-mysql.yml \
-              up -d \
-              --env FILEBEAT_INTERNAL_PASSWORD=$PARAM_1 \
-              --env BEATS_SYSTEM_PASSWORD=$PARAM_2 \
-              --env INTERFACE="ens3"
+            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-base.yml -f $TARGET_DIR/prototype_compose/docker-compose-mysql.yml up -d --env FILEBEAT_INTERNAL_PASSWORD=$PARAM_1 --env BEATS_SYSTEM_PASSWORD=$PARAM_2 --env INTERFACE="ens3"
 
             # Wait condition signal
-            curl -i -X POST -H 'Content-Type: application/json' \
-              --data-binary '{"status": "SUCCESS"}' \
-              "$WC_NOTIFY_URL"
+            curl -i -X POST -H 'Content-Type: application/json' --data-binary '{"status": "SUCCESS"}' "$WC_NOTIFY_URL"
 
           params:
             $PARAM_0: { get_param: elk_ip }
