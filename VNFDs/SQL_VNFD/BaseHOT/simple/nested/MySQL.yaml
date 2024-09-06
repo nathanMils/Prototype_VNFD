@@ -62,7 +62,7 @@ resources:
             export FILEBEAT_INTERNAL_PASSWORD=$PARAM_1
             export BEATS_SYSTEM_PASSWORD=$PARAM_2
             export INTERFACE="ens3"
-            
+
             # Starting containers and networks
             TARGET_DIR=/opt/prototype_master
             docker load -i $TARGET_DIR/images.tar
@@ -78,13 +78,13 @@ resources:
   elk_CP:
     type: OS::Neutron::Port
     properties:
-      network: ELK_net
+      network: { get_param: elk_network }
       port_security_enabled: false
 
   5g_CP:
     type: OS::Neutron::Port
     properties:
-      network: 5G_net
+      network: { get_param: 5g_network }
       port_security_enabled: false
       fixed_ips:
         - ip_address: { get_param: ip }
