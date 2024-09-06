@@ -41,5 +41,8 @@ fi
 cp "$JSON_FILE" "$TEMPLATE_FILE"
 sed -i "s/<VIM_ID>/$VIM_ID/g" "$TEMPLATE_FILE"
 
+# Use the ID in the openstack vnflcm create command
+openstack vnflcm create "$ID" --os-tacker-api-version 2
+
 # Use the ID in the openstack vnflcm instantiate command
 openstack vnflcm instantiate "$ID" ./template.json --os-tacker-api-version 2
