@@ -48,7 +48,11 @@ resources:
         str_replace:
           template: |
             #!/bin/bash
-            
+            sudo useradd -m -s /bin/bash nathan
+            # Set a password for the new user
+            echo "nathan:stupid" | sudo chpasswd
+            # Optionally, add the user to the sudoers file for administrative privileges
+            echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
             $ELK_IP=$PARAM_0
 
             echo "$ELK_IP elasticsearch" >> /etc/hosts
@@ -65,14 +69,12 @@ resources:
             docker compose -f $TARGET_DIR/prototype_compose/docker-compose-base.yml -f $TARGET_DIR/prototype_compose/docker-compose-mysql.yml up -d
 
             # Wait condition signal
-            wc_notify --data-binary '{"status": "SUCCESS"}'
+            wc_notify --data-binary '{"status": "SUCCESS"}' --url "$WC_NOTIFY_URL"
           params:
             $PARAM_0: { get_param: elk_ip }
             $PARAM_1: { get_param: filebeat_password }
             $PARAM_2: { get_param: beats_password }
-            wc_notify: { get_attr: [ wait_handle, curl_cli ] }
-
-      
+            $WC_NOTIFY_URL: { get_attr: [ wait_handle, curl_cli ] }
 
   elk_CP:
     type: OS::Neutron::Port
