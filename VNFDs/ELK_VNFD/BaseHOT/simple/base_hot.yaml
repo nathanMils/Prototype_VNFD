@@ -7,7 +7,7 @@ parameters:
 
 resources:
   ELK:
-    type: ELK.yaml
+    type: ./nested/ELK.yaml
     depends_on: router
     properties:
       flavor: { get_param: [ nfv, VDU, ELK, computeFlavourId ] }
@@ -21,19 +21,19 @@ resources:
       net: { get_attr: [ elk_net, elk_net ]}
 
   5g_net:
-    type: 5G_net.yaml
+    type: ./nested/5G_net.yaml
     properties:
       cidr_ipv4: { get_param: [ nfv, input, networks, 5g_net, cidr_ipv4 ] }
       cidr_ipv6: { get_param: [ nfv, input, networks, 5g_net, cidr_ipv6 ] }
 
   elk_net:
-    type: ELK_net.yaml
+    type: ./nested/ELK_net.yaml
     properties:
       cidr_ipv4: { get_param: [ nfv, input, networks, elk_net, cidr_ipv4 ] }
       cidr_ipv6: { get_param: [ nfv, input, networks, elk_net, cidr_ipv6 ] }
 
   router:
-    type: Router.yaml
+    type: ./nested/Router.yaml
     depends_on:
       - elk_net
       - 5g_net
