@@ -86,7 +86,7 @@ resources:
       network: { get_param: 5g_network }
       port_security_enabled: false
       fixed_ips:
-        - ip_address: 10.5.0.2
+        - ip_address: 10.5.0.3
 
   5g_extvCP:
     type: OS::Neutron::FloatingIP

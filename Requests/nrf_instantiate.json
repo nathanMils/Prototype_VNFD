@@ -13,16 +13,16 @@
       "nfv": {
         "input": {
           "elk": {
-            "ip": "10.6.0.2",
+            "ip": "10.6.0.3",
             "filebeat_password": "filebeatNathan",
             "beats_password": "beatsNathan"
           },
           "nfs": {
             "mysql": {
-                "ip": "10.5.0.2"
+                "ip": "10.5.0.3"
             },
             "nrf": {
-                "ip": "10.5.0.3"
+                "ip": "10.5.0.4"
             }
           },
           "networks": {
