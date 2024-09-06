@@ -123,6 +123,7 @@ cython_debug/
 # Project Files
 **/vnfd_package.zip
 **/TOSCA.meta
+**/template.json
 Files/images/simple_gateway.qcow2
 custom_elements/elk/files/images.tar
 
