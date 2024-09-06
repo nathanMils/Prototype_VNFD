@@ -15,19 +15,15 @@ node_types:
         default: b1bb0ce7-ebca-4fa7-95ed-4840d70a1177
       descriptor_version:
         type: string
-        constraints: [ valid_values: [ '1.0' ] ]
         default: '1.0'
       provider:
         type: string
-        constraints: [ valid_values: [ 'Company' ] ]
         default: 'Company'
       product_name:
         type: string
-        constraints: [ valid_values: [ 'Sample VNF' ] ]
         default: 'Sample VNF'
       software_version:
         type: string
-        constraints: [ valid_values: [ '1.0' ] ]
         default: '1.0'
       vnfm_info:
         type: list

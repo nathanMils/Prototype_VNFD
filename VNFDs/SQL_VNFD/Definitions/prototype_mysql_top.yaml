@@ -21,8 +21,8 @@ topology_template:
       properties:
         flavour_id: { get_input: selected_flavour }
         descriptor_id: 00000000-0000-0000-0000-000000000001
-        provider: Company
-        product_name: Sample VNF
+        provider: Nathan
+        product_name: MySQL VNF
         software_version: '1.0'
         descriptor_version: '1.0'
         vnfm_info:
