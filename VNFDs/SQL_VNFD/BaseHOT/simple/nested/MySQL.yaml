@@ -62,7 +62,7 @@ resources:
             # Starting containers and networks
             TARGET_DIR=/opt/prototype_master
             docker load -i $TARGET_DIR/images.tar
-            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-base.yml -f $TARGET_DIR/prototype/docker-compose-mysql.yml up -d
+            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-base.yml -f $TARGET_DIR/prototype_compose/docker-compose-mysql.yml up -d
 
             # Wait condition signal
             wc_notify --data-binary '{"status": "SUCCESS"}'
