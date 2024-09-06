@@ -61,7 +61,7 @@ resources:
       network: { get_param: net }
       port_security_enabled: false
       fixed_ips:
-        - ip_address: 10.6.0.3
+        - ip_address: { get_param: ip }
 
   extvCP:
     type: OS::Neutron::FloatingIP

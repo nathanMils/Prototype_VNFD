@@ -12,7 +12,7 @@
       "lcm-operation-user-data-class": "StandardUserData",
       "nfv": {
         "input": {
-          "elk": {
+          "elk-0": {
             "ip": "10.6.0.2",
             "elastic_password": "elasticness",
             "logstash_password": "in_the_logging_days",
@@ -20,8 +20,8 @@
             "filebeat_password": "filebeatNathan",
             "beats_password": "beatsNathan"
           },
-          "nfs": {},
-          "networks": {
+          "nfs-0": {},
+          "networks-0": {
             "elk_net": {
                 "id": "ELK_net",
                 "cidr_ipv4": "10.6.0.0/26",

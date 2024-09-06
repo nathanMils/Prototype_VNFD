@@ -183,9 +183,9 @@ class StandardUserData(userdata_utils.AbstractUserData):
                 cp_value['fixed_ips'] = fixed_ips
 
         common_script_utils.apply_ext_managed_vls(top_hot, req, grant)
-        print("NFV_dict before\n",nfv_dict,"\nReq\n",req)
+        logging.debug("NFV_dict before\n",nfv_dict,"\nReq\n",req)
         nfv_dict = _merge_additional_params(nfv_dict, req, grant)
-        print("NFV_dict after\n",nfv_dict)
+        logging.debug("NFV_dict after\n",nfv_dict)
         fields = {
             'template': yaml.safe_dump(top_hot),
             'parameters': {'nfv': nfv_dict},

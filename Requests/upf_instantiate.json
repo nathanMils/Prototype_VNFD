@@ -1,42 +1,42 @@
 {
-    "flavourId":"simple",
-    "vimConnectionInfo": {
-      "vim": {
-        "id": "3cc2c4ff-525c-48b4-94c9-29247223322f",
-        "vimId": "<VIM_ID>",
-        "vimType": "openstack"
-      }
-    },
-    "additionalParams": {
-      "lcm-operation-user-data": "./UserData/lcm_user_data.py",
-      "lcm-operation-user-data-class": "StandardUserData",
-      "nfv": {
-        "input": {
-          "elk": {
-            "ip": "10.6.0.2",
-            "filebeat_password": "filebeatNathan",
-            "beats_password": "beatsNathan"
+  "flavourId":"simple",
+  "vimConnectionInfo": {
+    "vim": {
+      "id": "3cc2c4ff-525c-48b4-94c9-29247223322f",
+      "vimId": "<VIM_ID>",
+      "vimType": "openstack"
+    }
+  },
+  "additionalParams": {
+    "lcm-operation-user-data": "./UserData/lcm_user_data.py",
+    "lcm-operation-user-data-class": "StandardUserData",
+    "nfv": {
+      "input": {
+        "elk-0": {
+          "ip": "10.6.0.3",
+          "filebeat_password": "filebeatNathan",
+          "beats_password": "beatsNathan"
+        },
+        "nfs-0": {
+          "mysql": {
+              "ip": "10.5.0.3"
           },
-          "nfs": {
-            "mysql": {
-                "ip": "10.5.0.2"
-            },
-            "nrf": {
-                "ip": "10.5.0.3"
-            }
+          "nrf": {
+              "ip": "10.5.0.4"
+          }
+        },
+        "networks-0": {
+          "elk_net": {
+              "id": "ELK_net"
           },
-          "networks": {
-            "elk_net": {
-                "id": "ELK_net"
-            },
-            "5g_net": {
-                "id": "5G_net"
-            },
-            "external": {
-                "id": "public"
-            }
+          "5g_net": {
+              "id": "5G_net"
+          },
+          "external": {
+              "id": "public"
           }
         }
       }
     }
   }
+}

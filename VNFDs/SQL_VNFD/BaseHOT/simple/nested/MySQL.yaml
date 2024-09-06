@@ -59,11 +59,10 @@ resources:
             echo "$ELK_IP logstash" >> /etc/hosts
 
             # Exporting required vars
-            cd /opt/prototype_master/prototype_compose
             export FILEBEAT_INTERNAL_PASSWORD=$PARAM_1
             export BEATS_SYSTEM_PASSWORD=$PARAM_2
             export INTERFACE="ens3"
-            echo $BEATS_SYSTEM_PASSWORD
+            
             # Starting containers and networks
             TARGET_DIR=/opt/prototype_master
             docker load -i $TARGET_DIR/images.tar
@@ -88,7 +87,7 @@ resources:
       network: 5G_net
       port_security_enabled: false
       fixed_ips:
-        - ip_address: 10.5.0.3
+        - ip_address: { get_param: ip }
 
   5g_extvCP:
     type: OS::Neutron::FloatingIP
