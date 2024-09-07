@@ -49,8 +49,8 @@ resources:
           template: |
             #!/bin/bash
             
-            $ELK_IP=$PARAM_0
-            $MYSQL_IP=$PARAM_1
+            ELK_IP=$PARAM_0
+            MYSQL_IP=$PARAM_1
 
             echo "$ELK_IP elasticsearch" >> /etc/hosts
             echo "$ELK_IP logstash" >> /etc/hosts
@@ -64,7 +64,7 @@ resources:
             # Starting containers and networks
             TARGET_DIR=/opt/prototype_master
             docker load -i $TARGET_DIR/images.tar
-            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-base.yml -f $TARGET_DIR/prototype/docker-compose-nrf.yml up -d
+            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-base.yml -f $TARGET_DIR/prototype_compose/docker-compose-nrf.yml up -d
 
             # Wait condition signal
             wc_notify --data-binary '{"status": "SUCCESS"}'
