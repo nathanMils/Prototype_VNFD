@@ -51,9 +51,9 @@ resources:
           template: |
             #!/bin/bash
             
-            $ELK_IP=$PARAM_0
-            $MYSQL_IP=$PARAM_1
-            $NRF_IP=$PARAM_2
+            ELK_IP=$PARAM_0
+            MYSQL_IP=$PARAM_1
+            NRF_IP=$PARAM_2
 
             echo "$ELK_IP elasticsearch" >> /etc/hosts
             echo "$ELK_IP logstash" >> /etc/hosts
@@ -68,7 +68,7 @@ resources:
             # Starting containers and networks
             TARGET_DIR=/opt/prototype_master
             docker load -i $TARGET_DIR/images.tar
-            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-base.yml -f $TARGET_DIR/prototype/docker-compose-ausf.yml up -d
+            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-base.yml -f $TARGET_DIR/prototype_compose/docker-compose-ausf.yml up -d
 
             # Wait condition signal
             wc_notify --data-binary '{"status": "SUCCESS"}'
@@ -78,7 +78,7 @@ resources:
             $PARAM_2: { get_param: nrf_ip }
             $PARAM_3: { get_param: filebeat_password }
             $PARAM_4: { get_param: beats_password }
-            wc_notify: { get_attr: [ wait_handle, curl_cli ] }
+            wc_notify: { get_attr: ['wait_handle', 'curl_cli'] }
 
       
 

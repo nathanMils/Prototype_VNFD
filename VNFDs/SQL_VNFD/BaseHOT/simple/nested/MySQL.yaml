@@ -62,7 +62,6 @@ resources:
             TARGET_DIR=/opt/prototype_master
             docker load -i $TARGET_DIR/images.tar
             docker compose -f $TARGET_DIR/prototype_compose/docker-compose-base.yml -f $TARGET_DIR/prototype_compose/docker-compose-mysql.yml up -d
-            echo $WC_NOTIFY_URL
             
             wc_notify --data-binary '{"status": "SUCCESS"}'
           params:

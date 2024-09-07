@@ -5,7 +5,7 @@ description: Simple deployment flavour for Sample VNF
 imports:
   - etsi_nfv_sol001_common_types.yaml
   - etsi_nfv_sol001_vnfd_types.yaml
-  - vnfd_types.yaml
+  - prototype_types.yaml
 
 topology_template:
   inputs:
@@ -51,11 +51,11 @@ topology_template:
           scale_start: []
           scale_end: []
 
-    AMF:
+    SMF:
       type: tosca.nodes.nfv.Vdu.Compute
       properties:
-        name: AMF
-        description: AMF compute node
+        name: SMF
+        description: SMF compute node
         vdu_profile:
           min_number_of_instances: 1
           max_number_of_instances: 1
@@ -64,7 +64,7 @@ topology_template:
           version: '1'
           checksum:
             algorithm: sha-256
-            hash: 6e9e2a0a9eebb3d99e714515a1f380ecd9b64a132e341d8cc189202e76c7f672
+            hash: 87a86b77b030a0b4559cd4af2f8a67379443cc2488d7b359a36b6672ff2fec52
           container_format: bare
           disk_format: qcow2
           min_disk: 10 GB
@@ -124,7 +124,7 @@ topology_template:
         properties:
           initial_delta:
             number_of_instances: 1
-        targets: [ AMF ]
+        targets: [ SMF ]
 
     - scaling_aspect_deltas:
         type: tosca.policies.nfv.VduScalingAspectDeltas
@@ -133,7 +133,7 @@ topology_template:
           deltas:
             delta_1:
               number_of_instances: 1
-        targets: [ AMF ]
+        targets: [ SMF ]
 
     - instantiation_levels:
         type: tosca.policies.nfv.InstantiationLevels
@@ -152,4 +152,4 @@ topology_template:
           levels:
             instantiation_level_1:
               number_of_instances: 1
-        targets: [ AMF ]
+        targets: [ SMF ]
