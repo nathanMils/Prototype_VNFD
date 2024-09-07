@@ -73,7 +73,7 @@ resources:
             $PARAM_1: { get_param: mysql_ip }
             $PARAM_2: { get_param: filebeat_password }
             $PARAM_3: { get_param: beats_password }
-            wc_notify: { get_attr: [ wait_handle, curl_cli ] }
+            wc_notify: { get_attr: ['wait_handle', 'curl_cli'] }
 
       
 

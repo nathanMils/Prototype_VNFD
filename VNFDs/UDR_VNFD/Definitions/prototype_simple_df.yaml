@@ -5,7 +5,7 @@ description: Simple deployment flavour for Sample VNF
 imports:
   - etsi_nfv_sol001_common_types.yaml
   - etsi_nfv_sol001_vnfd_types.yaml
-  - vnfd_types.yaml
+  - prototype_types.yaml
 
 topology_template:
   inputs:
@@ -64,7 +64,7 @@ topology_template:
           version: '1'
           checksum:
             algorithm: sha-256
-            hash: 6e9e2a0a9eebb3d99e714515a1f380ecd9b64a132e341d8cc189202e76c7f672
+            hash: 87a86b77b030a0b4559cd4af2f8a67379443cc2488d7b359a36b6672ff2fec52
           container_format: bare
           disk_format: qcow2
           min_disk: 10 GB

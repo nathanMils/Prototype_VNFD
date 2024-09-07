@@ -13,11 +13,6 @@ echo "$ELK_IP logstash" >> /etc/hosts
 echo "$NRF_IP oai-nrf" >> /etc/hosts
 echo "$MYSQL_IP mysql" >> /etc/hosts
 
-ELK_GATEWAY=$5
-
-# Add routing via elk network to not disturb NF
-sudo ip route add $ELK_IP via $ELK_GATEWAY
-
 # Exporting required vars
 export FILEBEAT_INTERNAL_PASSWORD=$6
 export BEATS_SYSTEM_PASSWORD=$7
