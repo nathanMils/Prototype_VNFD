@@ -6,7 +6,6 @@ parameters:
     type: json
 
 resources:
-
   NRF:
     type: NRF.yaml
     properties:

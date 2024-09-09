@@ -65,8 +65,6 @@ resources:
             $PARAM_2: { get_param: filebeat_password }
             $PARAM_3: { get_param: beats_password }
 
-      
-
   elk_CP:
     type: OS::Neutron::Port
     properties:
