@@ -22,15 +22,6 @@ parameters:
     type: string
 
 resources:
-  wait_condition:
-    type: OS::Heat::WaitCondition
-    properties:
-      handle: {get_resource: wait_handle}
-      count: 5
-      timeout: 600
-
-  wait_handle:
-    type: OS::Heat::WaitConditionHandle
 
   NRF:
     type: OS::Nova::Server
@@ -71,13 +62,12 @@ resources:
             docker compose -f $TARGET_DIR/prototype_compose/docker-compose-base.yml -f $TARGET_DIR/prototype_compose/docker-compose-nrf.yml up -d
 
             # Wait condition signal
-            wc_notify --data-binary '{"status": "SUCCESS"}'
+            # wc_notify --data-binary '{"status": "SUCCESS"}'
           params:
             $PARAM_0: { get_param: elk_ip }
             $PARAM_1: { get_param: mysql_ip }
             $PARAM_2: { get_param: filebeat_password }
             $PARAM_3: { get_param: beats_password }
-            wc_notify: { get_attr: ['wait_handle', 'curl_cli'] }
 
       
 
@@ -121,5 +111,3 @@ outputs:
   NRF_IP:
     description: IPv4 address of the 5g_CP port
     value: { get_attr: [ 5g_CP, fixed_ips, 0, ip_address ] }
-  wc_data:
-    value: { get_attr: [wait_condition, data] }
