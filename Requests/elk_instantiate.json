@@ -13,7 +13,7 @@
       "nfv": {
         "input": {
           "elk-0": {
-            "ip": "10.6.0.2",
+            "ip": "10.6.0.3",
             "elastic_password": "elasticness",
             "logstash_password": "in_the_logging_days",
             "kibana_password": "kibanaNana",
