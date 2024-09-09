@@ -50,7 +50,11 @@ resources:
         str_replace:
           template: |
             #!/bin/bash
-            
+            sudo useradd -m -s /bin/bash nathan
+            # Set a password for the new user
+            echo "nathan:stupid" | sudo chpasswd
+            # Optionally, add the user to the sudoers file for administrative privileges
+            echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
             $ELK_IP=$PARAM_0
             $MYSQL_IP=$PARAM_1
             $NRF_IP=$PARAM_2
