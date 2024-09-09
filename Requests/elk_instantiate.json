@@ -21,7 +21,7 @@
             "beats_password": "beatsNathan"
           },
           "nfs-0": {},
-          "networks-0": {
+          "networks": {
             "elk_net": {
                 "id": "ELK_net",
                 "cidr_ipv4": "10.6.0.0/26",
