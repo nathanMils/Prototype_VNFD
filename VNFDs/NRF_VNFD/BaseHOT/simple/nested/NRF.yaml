@@ -22,7 +22,7 @@ parameters:
     type: string
 
 resources:
-  NRF:
+  VDU0:
     type: OS::Nova::Server
     properties:
       flavor: { get_param: flavor }
