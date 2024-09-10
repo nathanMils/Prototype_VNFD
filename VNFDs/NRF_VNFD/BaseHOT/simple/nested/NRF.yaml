@@ -1,5 +1,5 @@
 heat_template_version: 2013-05-23
-description: 'MySQL DB HOT for Sample VNF'
+description: 'NRF HOT for Sample VNF'
 
 parameters:
   flavor:
