@@ -1,5 +1,5 @@
 heat_template_version: 2013-05-23
-description: 'NRF base HOT for Sample VNF'
+description: 'MySQL DB HOT for Sample VNF'
 
 parameters:
   flavor:
@@ -12,9 +12,9 @@ parameters:
     type: string
   5g_network:
     type: string
-  elk_ip:
+  external_network:
     type: string
-  mysql_ip:
+  elk_ip:
     type: string
   filebeat_password:
     type: string
@@ -23,12 +23,12 @@ parameters:
 
 resources:
 
-  NRF:
+  MySQL:
     type: OS::Nova::Server
     properties:
       flavor: { get_param: flavor }
       image: { get_param: image }
-      name: NRF
+      name: MySQL
       networks:
         - port:
             get_resource: elk_CP
@@ -45,27 +45,24 @@ resources:
             # Optionally, add the user to the sudoers file for administrative privileges
             echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
             ELK_IP=$PARAM_0
-            MYSQL_IP=$PARAM_1
 
             echo "$ELK_IP elasticsearch" >> /etc/hosts
             echo "$ELK_IP logstash" >> /etc/hosts
-            echo "$MYSQL_IP mysql" >> /etc/hosts
 
             # Exporting required vars
-            export FILEBEAT_INTERNAL_PASSWORD=$PARAM_2
-            export BEATS_SYSTEM_PASSWORD=$PARAM_3
+            export FILEBEAT_INTERNAL_PASSWORD=$PARAM_1
+            export BEATS_SYSTEM_PASSWORD=$PARAM_2
             export INTERFACE="ens3"
 
             # Starting containers and networks
             TARGET_DIR=/opt/prototype_master
             docker load -i $TARGET_DIR/images.tar
-            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-base.yml -f $TARGET_DIR/prototype_compose/docker-compose-nrf.yml up -d
-          
+            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-base.yml -f $TARGET_DIR/prototype_compose/docker-compose-mysql.yml up -d
+            
           params:
             $PARAM_0: { get_param: elk_ip }
-            $PARAM_1: { get_param: mysql_ip }
-            $PARAM_2: { get_param: filebeat_password }
-            $PARAM_3: { get_param: beats_password }
+            $PARAM_1: { get_param: filebeat_password }
+            $PARAM_2: { get_param: beats_password }
 
   elk_CP:
     type: OS::Neutron::Port
@@ -104,6 +101,6 @@ resources:
       port_id: { get_resource: elk_CP }
 
 outputs:
-  NRF_IP:
+  MySQL_IP:
     description: IPv4 address of the 5g_CP port
     value: { get_attr: [ 5g_CP, fixed_ips, 0, ip_address ] }
