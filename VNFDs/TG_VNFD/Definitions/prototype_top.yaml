@@ -22,7 +22,7 @@ topology_template:
         flavour_id: { get_input: selected_flavour }
         descriptor_id: 00000000-0000-0000-0000-000000000009
         provider: Nathan
-        product_name: TG VNF
+        product_name: TG VNFD
         software_version: '1.0'
         descriptor_version: '1.0'
         vnfm_info:
