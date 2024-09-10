@@ -1,5 +1,5 @@
 heat_template_version: 2013-05-23
-description: 'NRF Base HOT VNF'
+description: 'Simple NRF Base HOT VNF'
 
 parameters:
   nfv:
