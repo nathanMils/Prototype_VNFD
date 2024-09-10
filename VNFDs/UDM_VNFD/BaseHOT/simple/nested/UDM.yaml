@@ -58,7 +58,7 @@ resources:
             # Exporting required vars
             export FILEBEAT_INTERNAL_PASSWORD=$PARAM_3
             export BEATS_SYSTEM_PASSWORD=$PARAM_4
-            export INTERFACE="ens3"
+            export INTERFACE="ens4"
 
             # Starting containers and networks
             TARGET_DIR=/opt/prototype_master
