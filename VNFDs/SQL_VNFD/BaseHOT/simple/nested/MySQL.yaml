@@ -22,15 +22,6 @@ parameters:
     type: string
 
 resources:
-  wait_condition:
-    type: OS::Heat::WaitCondition
-    properties:
-      handle: {get_resource: wait_handle}
-      count: 5
-      timeout: 600
-
-  wait_handle:
-    type: OS::Heat::WaitConditionHandle
 
   MySQL:
     type: OS::Nova::Server
@@ -115,5 +106,3 @@ outputs:
   MySQL_IP:
     description: IPv4 address of the 5g_CP port
     value: { get_attr: [ 5g_CP, fixed_ips, 0, ip_address ] }
-  wc_data:
-    value: { get_attr: [wait_condition, data] }
