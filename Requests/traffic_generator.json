@@ -3,7 +3,7 @@
     "vimConnectionInfo": {
       "vim": {
         "id": "3cc2c4ff-525c-48b4-94c9-29247223322f",
-        "vimId": "<VIM_ID>",
+        "vimId": "a4ec4a0c-8a62-4f6e-84a2-79abdf036211",
         "vimType": "openstack"
       }
     },
@@ -33,7 +33,7 @@
                 "id": "public"
             }
           },
-          "target": {
+          "target-0": {
             "ip": ""
           }
         }
