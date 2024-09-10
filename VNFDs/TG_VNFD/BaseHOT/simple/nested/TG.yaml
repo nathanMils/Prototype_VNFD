@@ -78,8 +78,3 @@ resources:
     properties:
       floatingip_id: { get_resource: elk_extvCP }
       port_id: { get_resource: elk_CP }
-
-outputs:
-  MySQL_IP:
-    description: IPv4 address of the 5g_CP port
-    value: { get_attr: [ 5g_CP, fixed_ips, 0, ip_address ] }
