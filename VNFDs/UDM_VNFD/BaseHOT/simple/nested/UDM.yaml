@@ -1,5 +1,5 @@
 heat_template_version: 2013-05-23
-description: 'UDM HOT for Sample VNF'
+description: 'UDR HOT for Sample VNF'
 
 parameters:
   flavor:
@@ -71,6 +71,8 @@ resources:
             $PARAM_2: { get_param: nrf_ip }
             $PARAM_3: { get_param: filebeat_password }
             $PARAM_4: { get_param: beats_password }
+
+      
 
   elk_CP:
     type: OS::Neutron::Port
