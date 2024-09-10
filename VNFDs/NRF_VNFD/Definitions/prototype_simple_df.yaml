@@ -51,7 +51,7 @@ topology_template:
           scale_start: []
           scale_end: []
 
-    VDU0:
+    NRF:
       type: tosca.nodes.nfv.Vdu.Compute
       properties:
         name: NRF

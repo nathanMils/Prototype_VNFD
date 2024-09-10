@@ -6,7 +6,7 @@ parameters:
     type: json
 
 resources:
-  VDU0:
+  NRF:
     type: NRF.yaml
     properties:
       flavor: { get_param: [ nfv, VDU, NRF, computeFlavourId ] }
