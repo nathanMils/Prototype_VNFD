@@ -12,11 +12,7 @@ parameters:
     type: string
   external_network:
     type: string
-  elk_ip:
-    type: string
-  filebeat_password:
-    type: string
-  beats_password:
+  target_ip:
     type: string
 
 resources:
@@ -46,7 +42,8 @@ resources:
             
 
             # Starting containers and networks
-            
+            docker run --privileged --init --name oai-ext-dn oaisoftwarealliance/trf-gen-cn5g:latest /bin/bash -c "ip route add 12.1.1.0/24 via $PARAM_0 dev ens4; ip route; sleep infinity"
+
           params:
             $PARAM_0: { get_param: target_ip }
   elk_CP:

@@ -6,17 +6,15 @@ parameters:
     type: json
 
 resources:
-  MySQL:
-    type: MySQL.yaml
+  TG:
+    type: TG.yaml
     properties:
-      flavor: { get_param: [ nfv, VDU, MySQL, computeFlavourId ] }
-      image: { get_param: [ nfv, VDU, MySQL, vcImageId ] }
+      flavor: { get_param: [ nfv, VDU, TG, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, TG, vcImageId ] }
       ip: { get_param: [ nfv, input, nfs, mysql, ip ]}
       elk_network: { get_param: [ nfv, input, networks, elk_net, id ]}
       5g_network: { get_param: [ nfv, input, networks, 5g_net, id ] }
       external_network: { get_param: [ nfv, input, networks, external, id ]}
-      elk_ip: { get_param: [ nfv, input, elk, ip ] }
-      filebeat_password: { get_param: [ nfv, input, elk, filebeat_password ] }
-      beats_password: { get_param: [ nfv, input, elk, beats_password ] }
+      target_ip: { get_param: [ nfv, input, target, ip ]}
 
 outputs: {}

@@ -51,11 +51,11 @@ topology_template:
           scale_start: []
           scale_end: []
 
-    MySQL:
+    TG:
       type: tosca.nodes.nfv.Vdu.Compute
       properties:
-        name: MySQL
-        description: MySQL compute node
+        name: TG
+        description: TG compute node
         vdu_profile:
           min_number_of_instances: 1
           max_number_of_instances: 1
@@ -124,7 +124,7 @@ topology_template:
         properties:
           initial_delta:
             number_of_instances: 1
-        targets: [ MySQL ]
+        targets: [ TG ]
 
     - scaling_aspect_deltas:
         type: tosca.policies.nfv.VduScalingAspectDeltas
@@ -133,7 +133,7 @@ topology_template:
           deltas:
             delta_1:
               number_of_instances: 1
-        targets: [ MySQL ]
+        targets: [ TG ]
 
     - instantiation_levels:
         type: tosca.policies.nfv.InstantiationLevels
@@ -152,4 +152,4 @@ topology_template:
           levels:
             instantiation_level_1:
               number_of_instances: 1
-        targets: [ MySQL ]
+        targets: [ TG ]
