@@ -7,7 +7,7 @@ parameters:
 
 resources:
   NRF:
-    type: NRF.yaml
+    type: NRF1.yaml
     properties:
       flavor: { get_param: [ nfv, VDU, NRF, computeFlavourId ] }
       image: { get_param: [ nfv, VDU, NRF, vcImageId ] }

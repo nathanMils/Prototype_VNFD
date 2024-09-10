@@ -1,5 +1,5 @@
 heat_template_version: 2013-05-23
-description: 'NRF HOT for Sample VNF'
+description: 'NRF base HOT for Sample VNF'
 
 parameters:
   flavor:
@@ -22,6 +22,7 @@ parameters:
     type: string
 
 resources:
+
   NRF:
     type: OS::Nova::Server
     properties:
@@ -59,6 +60,7 @@ resources:
             TARGET_DIR=/opt/prototype_master
             docker load -i $TARGET_DIR/images.tar
             docker compose -f $TARGET_DIR/prototype_compose/docker-compose-base.yml -f $TARGET_DIR/prototype_compose/docker-compose-nrf.yml up -d
+          
           params:
             $PARAM_0: { get_param: elk_ip }
             $PARAM_1: { get_param: mysql_ip }
