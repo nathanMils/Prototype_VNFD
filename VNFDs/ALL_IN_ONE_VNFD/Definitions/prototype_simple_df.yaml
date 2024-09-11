@@ -513,6 +513,72 @@ topology_template:
       requirements:
         - internal_virtual_link: 5gVL1
 
+    MySQL:
+      type: tosca.nodes.nfv.Vdu.Compute
+      properties:
+        name: MySQL
+        description: MySQL compute node
+        vdu_profile:
+          min_number_of_instances: 1
+          max_number_of_instances: 1
+        sw_image_data:
+          name: prototype_master
+          version: '1'
+          checksum:
+            algorithm: sha-256
+            hash: f23a89e3648ebbfbe6626974cf7c1c2d1ae2b2f25d6c3dfca587baa6e7f64844
+          container_format: bare
+          disk_format: qcow2
+          min_disk: 10 GB
+          size: 10 GB
+      capabilities:
+        virtual_compute:
+          properties:
+            requested_additional_capabilities:
+              properties:
+                requested_additional_capability_name: nf_basic
+                support_mandatory: true
+                target_performance_parameters:
+                  entry_schema: test
+            virtual_memory:
+              virtual_mem_size: 2 GB
+            virtual_cpu:
+              num_virtual_cpu: 2
+            virtual_local_storage:
+              - size_of_storage: 10 GB
+    
+    MySQL_CP1:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 4
+      requirements:
+        - virtual_binding: MySQL
+        - virtual_link: elkVL1
+
+    MySQL_CP2:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 5
+      requirements:
+        - virtual_binding: MySQL
+        - virtual_link: 5gVL1
+
+    MySQL_extCP1:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: elkVL1
+
+    MySQL_extCP2:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: 5gVL1
+
     ELK:
       type: tosca.nodes.nfv.Vdu.Compute
       properties:
@@ -618,7 +684,7 @@ topology_template:
         properties:
           initial_delta:
             number_of_instances: 1
-        targets: [ ELK, NRF, UDR, UDM, AUSF, AMF, SMF, UPF ]
+        targets: [ ELK, MySQL, NRF, UDR, UDM, AUSF, AMF, SMF, UPF ]
 
     - scaling_aspect_deltas:
         type: tosca.policies.nfv.VduScalingAspectDeltas
@@ -627,7 +693,7 @@ topology_template:
           deltas:
             delta_1:
               number_of_instances: 1
-        targets: [ ELK, NRF, UDR, UDM, AUSF, AMF, SMF, UPF ]
+        targets: [ ELK, MySQL, NRF, UDR, UDM, AUSF, AMF, SMF, UPF ]
 
     - instantiation_levels:
         type: tosca.policies.nfv.InstantiationLevels
@@ -646,7 +712,7 @@ topology_template:
           levels:
             instantiation_level_1:
               number_of_instances: 1
-        targets: [ ELK, NRF, UDR, UDM, AUSF, AMF, SMF, UPF ]
+        targets: [ ELK, MySQL, NRF, UDR, UDM, AUSF, AMF, SMF, UPF ]
 
     - elkVL1_instantiation_levels:
         type: tosca.policies.nfv.VirtualLinkInstantiationLevels
