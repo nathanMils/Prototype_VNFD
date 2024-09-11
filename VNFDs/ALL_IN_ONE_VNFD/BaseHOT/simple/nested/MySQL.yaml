@@ -12,17 +12,30 @@ parameters:
     type: string
   external_network:
     type: string
-  target_ip:
+  elk_ip:
+    type: string
+  filebeat_password:
+    type: string
+  beats_password:
     type: string
 
 resources:
+  wait_condition:
+    type: OS::Heat::WaitCondition
+    properties:
+      handle: {get_resource: wait_handle}
+      count: 1
+      timeout: 600
 
-  TG:
+  wait_handle:
+    type: OS::Heat::WaitConditionHandle
+
+  MySQL:
     type: OS::Nova::Server
     properties:
       flavor: { get_param: flavor }
       image: { get_param: image }
-      name: TG
+      name: MySQL
       networks:
         - port:
             get_resource: elk_CP
@@ -38,14 +51,29 @@ resources:
             echo "nathan:stupid" | sudo chpasswd
             # Optionally, add the user to the sudoers file for administrative privileges
             echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
+            ELK_IP=$PARAM_0
 
-            
+            echo "$ELK_IP elasticsearch" >> /etc/hosts
+            echo "$ELK_IP logstash" >> /etc/hosts
+
+            # Exporting required vars
+            export FILEBEAT_INTERNAL_PASSWORD=$PARAM_1
+            export BEATS_SYSTEM_PASSWORD=$PARAM_2
+            export INTERFACE="ens4"
 
             # Starting containers and networks
-            docker run --privileged --init --network host --name oai-ext-dn oaisoftwarealliance/trf-gen-cn5g:latest /bin/bash -c "ip route add 12.1.1.0/24 via $PARAM_0 dev ens4; ip route; sleep infinity"
-
+            TARGET_DIR=/opt/prototype_master
+            docker load -i $TARGET_DIR/images.tar
+            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-base.yml -f $TARGET_DIR/prototype_compose/docker-compose-mysql.yml up -d
+            
+            # Tell Openstack the script is finished
+            wc_notify --data-binary '{"status": "SUCCESS"}'
           params:
-            $PARAM_0: { get_param: target_ip }
+            $PARAM_0: { get_param: elk_ip }
+            $PARAM_1: { get_param: filebeat_password }
+            $PARAM_2: { get_param: beats_password }
+            wc_notify: { get_attr: [wait_handle, curl_cli] }
+
   elk_CP:
     type: OS::Neutron::Port
     properties:
@@ -57,6 +85,7 @@ resources:
     properties:
       network: { get_param: 5g_network }
       port_security_enabled: false
+
   5g_extvCP:
     type: OS::Neutron::FloatingIP
     properties:
@@ -78,3 +107,10 @@ resources:
     properties:
       floatingip_id: { get_resource: elk_extvCP }
       port_id: { get_resource: elk_CP }
+
+outputs:
+  MySQL_IP:
+    description: IPv4 address of the 5g_CP port
+    value: { get_attr: [ 5g_CP, fixed_ips, 0, ip_address ] }
+  wc_data:
+    value: { get_attr: [wait_condition, data] }

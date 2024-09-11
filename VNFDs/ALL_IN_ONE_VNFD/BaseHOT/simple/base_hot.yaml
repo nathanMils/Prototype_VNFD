@@ -1,0 +1,163 @@
+heat_template_version: 2013-05-23
+description: 'All in one Base HOT for Sample VNF'
+
+parameters:
+  nfv:
+    type: json
+
+resources:
+  UPF:
+    type: UPF.yaml
+    depends_on: SMF
+    properties:
+      flavor: { get_param: [ nfv, VDU, UPF, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, UPF, vcImageId ] }
+      elk_network: { get_attr: [ elk_net, elk_net ]}
+      5g_network: { get_attr: [ 5g_net, 5g_net ]}
+      external_network: { get_param: [ nfv, input, networks, external, id ]}
+      elk_ip: { get_attr: [ ELK, ELK_IP ] }
+      mysql_ip: { get_attr: [ MySQL, MySQL_IP ] }
+      nrf_ip: { get_attr: [ NRF, NRF_IP ]}
+      filebeat_password: { get_param: [ nfv, input, elk, filebeat_password ] }
+      beats_password: { get_param: [ nfv, input, elk, beats_password ] }
+
+  SMF:
+    type: SMF.yaml
+    depends_on: AMF
+    properties:
+      flavor: { get_param: [ nfv, VDU, SMF, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, SMF, vcImageId ] }
+      elk_network: { get_attr: [ elk_net, elk_net ]}
+      5g_network: { get_attr: [ 5g_net, 5g_net ]}
+      external_network: { get_param: [ nfv, input, networks, external, id ]}
+      elk_ip: { get_attr: [ ELK, ELK_IP ] }
+      mysql_ip: { get_attr: [ MySQL, MySQL_IP ] }
+      nrf_ip: { get_attr: [ NRF, NRF_IP ]}
+      filebeat_password: { get_param: [ nfv, input, elk, filebeat_password ] }
+      beats_password: { get_param: [ nfv, input, elk, beats_password ] }
+
+  AMF:
+    type: AMF.yaml
+    depends_on: AUSF
+    properties:
+      flavor: { get_param: [ nfv, VDU, AMF, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, AMF, vcImageId ] }
+      elk_network: { get_attr: [ elk_net, elk_net ]}
+      5g_network: { get_attr: [ 5g_net, 5g_net ]}
+      external_network: { get_param: [ nfv, input, networks, external, id ]}
+      elk_ip: { get_attr: [ ELK, ELK_IP ] }
+      mysql_ip: { get_attr: [ MySQL, MySQL_IP ] }
+      nrf_ip: { get_attr: [ NRF, NRF_IP ]}
+      filebeat_password: { get_param: [ nfv, input, elk, filebeat_password ] }
+      beats_password: { get_param: [ nfv, input, elk, beats_password ] }
+
+  AUSF:
+    type: AUSF.yaml
+    depends_on: UDM
+    properties:
+      flavor: { get_param: [ nfv, VDU, AUSF, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, AUSF, vcImageId ] }
+      elk_network: { get_attr: [ elk_net, elk_net ]}
+      5g_network: { get_attr: [ 5g_net, 5g_net ]}
+      external_network: { get_param: [ nfv, input, networks, external, id ]}
+      elk_ip: { get_attr: [ ELK, ELK_IP ] }
+      mysql_ip: { get_attr: [ MySQL, MySQL_IP ] }
+      nrf_ip: { get_attr: [ NRF, NRF_IP ]}
+      filebeat_password: { get_param: [ nfv, input, elk, filebeat_password ] }
+      beats_password: { get_param: [ nfv, input, elk, beats_password ] }
+
+  UDM:
+    type: UDM.yaml
+    depends_on: UDR
+    properties:
+      flavor: { get_param: [ nfv, VDU, UDM, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, UDM, vcImageId ] }
+      elk_network: { get_attr: [ elk_net, elk_net ]}
+      5g_network: { get_attr: [ 5g_net, 5g_net ]}
+      external_network: { get_param: [ nfv, input, networks, external, id ]}
+      elk_ip: { get_attr: [ ELK, ELK_IP ] }
+      mysql_ip: { get_attr: [ MySQL, MySQL_IP ] }
+      nrf_ip: { get_attr: [ NRF, NRF_IP ]}
+      filebeat_password: { get_param: [ nfv, input, elk, filebeat_password ] }
+      beats_password: { get_param: [ nfv, input, elk, beats_password ] }
+
+  UDR:
+    type: UDR.yaml
+    depends_on: NRF
+    properties:
+      flavor: { get_param: [ nfv, VDU, UDR, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, UDR, vcImageId ] }
+      elk_network: { get_attr: [ elk_net, elk_net ]}
+      5g_network: { get_attr: [ 5g_net, 5g_net ]}
+      external_network: { get_param: [ nfv, input, networks, external, id ]}
+      elk_ip: { get_attr: [ ELK, ELK_IP ] }
+      mysql_ip: { get_attr: [ MySQL, MySQL_IP ] }
+      nrf_ip: { get_attr: [ NRF, NRF_IP ]}
+      filebeat_password: { get_param: [ nfv, input, elk, filebeat_password ] }
+      beats_password: { get_param: [ nfv, input, elk, beats_password ] }
+
+  NRF:
+    type: NRF.yaml
+    depends_on: MySQL
+    properties:
+      flavor: { get_param: [ nfv, VDU, NRF, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, NRF, vcImageId ] }
+      elk_network: { get_attr: [ elk_net, elk_net ]}
+      5g_network: { get_attr: [ 5g_net, 5g_net ]}
+      external_network: { get_param: [ nfv, input, networks, external, id ]}
+      elk_ip: { get_attr: [ ELK, ELK_IP ] }
+      mysql_ip: { get_attr: [ MySQL, MySQL_IP ] }
+      filebeat_password: { get_param: [ nfv, input, elk, filebeat_password ] }
+      beats_password: { get_param: [ nfv, input, elk, beats_password ] }
+
+  MySQL:
+    type: MySQL.yaml
+    depends_on: ELK
+    properties:
+      flavor: { get_param: [ nfv, VDU, MySQL, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, MySQL, vcImageId ] }
+      elk_network: { get_attr: [ elk_net, elk_net ]}
+      5g_network: { get_attr: [ 5g_net, 5g_net ]}
+      external_network: { get_param: [ nfv, input, networks, external, id ]}
+      elk_ip: { get_attr: [ ELK, ELK_IP ] }
+      filebeat_password: { get_param: [ nfv, input, elk, filebeat_password ] }
+      beats_password: { get_param: [ nfv, input, elk, beats_password ] }
+
+  ELK:
+    type: ELK.yaml
+    depends_on: router
+    properties:
+      flavor: { get_param: [ nfv, VDU, ELK, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, ELK, vcImageId ] }
+      elastic_password: { get_param: [ nfv, input, elk, elastic_password ]}
+      logstash_password: { get_param: [ nfv, input, elk, logstash_password ]}
+      kibana_password: { get_param: [ nfv, input, elk, kibana_password ]}
+      filebeat_password: { get_param: [ nfv, input, elk, filebeat_password ]}
+      beats_password: { get_param: [ nfv, input, elk, beats_password ]}
+      net: { get_attr: [ elk_net, elk_net ]}
+
+  5g_net:
+    type: 5G_net.yaml
+    properties:
+      cidr_ipv4: { get_param: [ nfv, input, networking, 5g_net, cidr_ipv4 ] }
+      cidr_ipv6: { get_param: [ nfv, input, networking, 5g_net, cidr_ipv6 ] }
+
+  elk_net:
+    type: ELK_net.yaml
+    properties:
+      cidr_ipv4: { get_param: [ nfv, input, networking, elk_net, cidr_ipv4 ] }
+      cidr_ipv6: { get_param: [ nfv, input, networking, elk_net, cidr_ipv6 ] }
+
+  router:
+    type: Router.yaml
+    depends_on:
+      - elk_net
+      - 5g_net
+    properties:
+      elk_subnet_ipv4: { get_attr: [ elk_net, elk_subnet_ipv4 ] }
+      elk_subnet_ipv6: { get_attr: [ elk_net, elk_subnet_ipv6 ] }
+      5g_subnet_ipv4: { get_attr: [ 5g_net, 5g_subnet_ipv4 ] }
+      5g_subnet_ipv6: { get_attr: [ 5g_net, 5g_subnet_ipv6 ] }
+      external_net: { get_param: [ nfv, input, networking, external, id ]}
+
+outputs: {}
