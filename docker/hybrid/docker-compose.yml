@@ -179,6 +179,7 @@ services:
       - --strict.perms=false
     volumes:
       - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro,Z
+      - ./filebeat/config/hasher.js:/usr/nathan_helper/hasher.js:ro,Z
       - ./gateway/zeek_logs:/usr/local/zeek/logs
       - type: bind
         source: /var/lib/docker/containers
@@ -191,6 +192,7 @@ services:
     environment:
       FILEBEAT_INTERNAL_PASSWORD: ${FILEBEAT_INTERNAL_PASSWORD:-}
       BEATS_SYSTEM_PASSWORD: ${BEATS_SYSTEM_PASSWORD:-}
+      HMAC_SECRET_KEY: ${HMAC_SECRET_KEY:-}
     networks:
       - elk
 
