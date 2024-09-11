@@ -134,7 +134,7 @@ processors:
           };
           var message = event.Get("message");
           var digest = sha256(message);
-          event.Put('message_sha256', digest);
+          event.Put('digest', digest);
         }
 
 monitoring:

@@ -131,9 +131,9 @@ amf:
   sbi:
     port: 8080
     api_version: v1
-    interface_name: ens3
+    interface_name: ens4
   n2:
-    interface_name: ens3
+    interface_name: ens4
     port: 38412
   amf_name: "OAI-AMF"
   # This really depends on if we want to keep the "mini" version or not
@@ -178,9 +178,9 @@ smf:
   sbi:
     port: 8080
     api_version: v1
-    interface_name: ens3
+    interface_name: ens4
   n4:
-    interface_name: ens3
+    interface_name: ens4
     port: 8805
   ue_mtu: 1500
   support_features:
@@ -236,17 +236,17 @@ upf:
   sbi:
     port: 8080
     api_version: v1
-    interface_name: ens3
+    interface_name: ens4
   n3:
-    interface_name: ens3
+    interface_name: ens4
     port: 2152
   n4:
-    interface_name: ens3
+    interface_name: ens4
     port: 8805
   n6:
-    interface_name: ens3
+    interface_name: ens4
   n9:
-    interface_name: ens3
+    interface_name: ens4
     port: 2152
   support_features:
     enable_bpf_datapath: no    # If "on": BPF is used as datapath else simpleswitch is used, DEFAULT= off
@@ -285,22 +285,22 @@ ausf:
   sbi:
     port: 8080
     api_version: v1
-    interface_name: ens3
+    interface_name: ens4
 
 nrf:
   sbi:
     port: 8080
     api_version: v1
-    interface_name: ens3
+    interface_name: ens4
 
 udm:
   sbi:
     port: 8080
     api_version: v1
-    interface_name: ens3
+    interface_name: ens4
 
 udr:
   sbi:
     port: 8080
     api_version: v1
-    interface_name: ens3
+    interface_name: ens4
