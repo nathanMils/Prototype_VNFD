@@ -12,7 +12,6 @@
         "ecs-logstash-*",
         "nf-*",
         "gateway-*",
-        "zeek-monitor-*",
         "instance-*"
       ],
       "privileges": [

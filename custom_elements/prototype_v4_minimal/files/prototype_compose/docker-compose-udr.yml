@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+
+  oai-udr:
+    container_name: "oai-udr"
+    image: oaisoftwarealliance/oai-udr:v2.0.1
+    volumes:
+        - ./nf/conf/basic_nrf_config.yaml:/openair-udr/etc/config.yaml
+    environment:
+        - TZ=Europe/Paris
+    privileged: true
+    network_mode: "host"

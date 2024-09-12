@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+
+  oai-nrf:
+    container_name: "oai-nrf"
+    image: oaisoftwarealliance/oai-nrf:v2.0.1
+    volumes:
+        - ./nf/conf/basic_nrf_config.yaml:/openair-nrf/etc/config.yaml
+    environment:
+        - TZ=Europe/Paris
+    privileged: true
+    network_mode: "host"
