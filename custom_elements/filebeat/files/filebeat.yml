@@ -59,6 +59,12 @@ filebeat.modules:
     var.paths: ["/usr/local/zeek/logs/current/weird.log*"]
 
 processors:
+  - add_fields:
+      target: ''
+      fields:
+        source: 'VNF'
+        vnf: '${VNF_TYPE}'
+        id: '${VNF_ID}'
   # SHA 256 hash proccessor
   - script:
       lang: javascript
