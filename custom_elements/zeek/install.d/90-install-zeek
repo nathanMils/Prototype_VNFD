@@ -2,16 +2,28 @@
 
 set -e
 
+echo "Starting Zeek installation script..."
+
 # Add Zeek's repository and key for Ubuntu 22.04
+echo 'Adding Zeek repository...'
 echo 'deb http://download.opensuse.org/repositories/security:/zeek/xUbuntu_22.04/ /' | tee /etc/apt/sources.list.d/security:zeek.list
+
+echo 'Adding Zeek repository key...'
 curl -fsSL https://download.opensuse.org/repositories/security:/zeek/xUbuntu_22.04/Release.key | gpg --dearmor | tee /etc/apt/trusted.gpg.d/security_zeek.gpg > /dev/null
 
-# Update and install Zeek 6.0
+echo 'Updating package list...'
 apt update
-apt install -y zeek-6.0
+
+# Install Zeek 6.0
+echo 'Installing Zeek...'
+apt install -y zeek || { echo "Zeek installation failed"; exit 1; }
 
 # Enable Zeek to start on boot
+echo 'Enabling Zeek to start on boot...'
 systemctl enable zeek
 
 # Cleanup
+echo 'Cleaning up...'
 apt-get clean
+
+echo "Zeek installation completed."
