@@ -9,9 +9,6 @@ redef digest_salt = "Please change this value.";
 # This script logs which scripts were loaded during each run.
 @load misc/loaded-scripts
 
-# Apply the default tuning scripts for common tuning settings.
-@load tuning/defaults
-
 # Estimate and log capture loss.
 @load misc/capture-loss
 
@@ -47,7 +44,7 @@ redef digest_salt = "Please change this value.";
 @load protocols/http/software
 # The detect-webapps script could possibly cause performance trouble when
 # running on live traffic.  Enable it cautiously.
-@load protocols/http/detect-webapps
+#@load protocols/http/detect-webapps
 
 # This script detects DNS results pointing toward your Site::local_nets
 # where the name is not part of your local DNS zone and is being hosted
@@ -97,10 +94,6 @@ redef digest_salt = "Please change this value.";
 # telemetry_histogram.log.
 @load frameworks/telemetry/log
 
-# Enable metrics centralization on the manager. This opens port 9911/tcp
-# on the manager node that can be readily scraped by Prometheus.
-# @load frameworks/telemetry/prometheus
-
 # Uncomment the following line to enable detection of the heartbleed attack. Enabling
 # this might impact performance a bit.
 # @load policy/protocols/ssl/heartbleed
@@ -119,3 +112,5 @@ redef digest_salt = "Please change this value.";
 
 # Uncomment this to source zkg's package state
 # @load packages
+
+@load policy/tuning/json-logs.zeek

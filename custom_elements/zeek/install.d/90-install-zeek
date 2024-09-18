@@ -24,3 +24,16 @@ echo 'export PATH=$PATH:/opt/zeek/bin' >> ~/.bashrc
 source ~/.bashrc
 
 echo "Zeek installation completed."
+
+echo "Copying configurations into Zeek"
+
+TARGET_DIR=/opt/zeek
+SOURCE_DIR=$(dirname $0)/../files
+
+cp $SOURCE_DIR/networks.cfg $TARGET_DIR/etc
+cp $SOURCE_DIR/node.cfg $TARGET_DIR/etc
+cp $SOURCE_DIR/zeekctl.cfg $TARGET_DIR/etc
+cp $SOURCE_DIR/zkg/config $TARGET_DIR/etc/zkg/config
+cp $SOURCE_DIR/local.zeek $TARGET_DIR/share/zeek/site/local.zeek
+
+echo "Configurations Complete"
