@@ -14,6 +14,6 @@ mkdir -p $TARGET_DIR
 cp -r $SOURCE_DIR/prototype_compose $TARGET_DIR
 
 # Copy the filebeat config to the target system
-cp $SOURCE_DIR/config/filebeat.yaml /etc/filebeat/filebeat.yml
+cp $SOURCE_DIR/config/filebeat.yml /etc/filebeat/filebeat.yml
 
 # Will copy config files to the correct source at some point
