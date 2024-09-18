@@ -14,13 +14,16 @@ curl -fsSL https://download.opensuse.org/repositories/security:/zeek/xUbuntu_22.
 echo 'Updating package list...'
 apt update
 
-# Install Zeek 6.0
+# Install Zeek 7.0.1
 echo 'Installing Zeek...'
-apt install -y zeek || { echo "Zeek installation failed"; exit 1; }
+apt install -y zeek-7.0.1
 
-# Enable Zeek to start on boot
-echo 'Enabling Zeek to start on boot...'
-systemctl enable zeek
+# Initialize and configure Zeek with zeekctl
+echo 'Initializing Zeek with zeekctl...'
+zeekctl deploy
+
+# Zeek does not use a native systemd service, so we rely on zeekctl
+# to manage Zeek's lifecycle.
 
 # Cleanup
 echo 'Cleaning up...'
