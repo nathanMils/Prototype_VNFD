@@ -10,9 +10,6 @@
         "logs-generic-default",
         "logstash-*",
         "ecs-logstash-*",
-        "nf-*",
-        "gateway-*",
-        "zeek-monitor-*",
         "instance-*"
       ],
       "privileges": [

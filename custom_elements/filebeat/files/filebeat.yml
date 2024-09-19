@@ -6,65 +6,81 @@ name: filebeat
 
 filebeat.inputs:
   - type: log
-    enabled: false
+    enabled: true
+    paths:
+      - /usr/local/zeek/logs/current/conn.log
+    fields:
+      source: connection
+      vnf: ${VNF_TYPE}
+      id: ${VNF_ID}
 
-# - type: log
-#   enabled: true
-#   paths:
-#     - /usr/local/zeek/logs/conn.log
-#   fields:
-#     source: conn
-#     vnf: ${VNF_TYPE}
-#     id: ${ID}
+  - type: log
+    enabled: true
+    paths:
+      - /usr/local/zeek/logs/current/stats.log
+    fields:
+      source: stats
+      vnf: ${VNF_TYPE}
+      id: ${VNF_ID}
 
-# - type: log
-#   enabled: true
-#   paths:
-#     - /usr/local/zeek/logs/stats.log
-#   fields:
-#     source: stats
-#     vnf: ${VNF_TYPE}
-#     id: ${ID}
+  - type: log
+    enabled: true
+    paths:
+      - /usr/local/zeek/logs/current/notice.log
+    fields:
+      source: notice
+      vnf: ${VNF_TYPE}
+      id: ${VNF_ID}
 
-# Module: zeek
-# Docs: https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-module-zeek.html
-filebeat.modules:
-- module: zeek
-  connection:
+  - type: log
     enabled: true
-    var.paths: ["/usr/local/zeek/logs/current/conn.log*"]
-  
-  dns:
+    paths:
+      - /usr/local/zeek/logs/current/weird.log
+    fields:
+      source: weird
+      vnf: ${VNF_TYPE}
+      id: ${VNF_ID}
+
+  - type: log
     enabled: true
-    var.paths: ["/usr/local/zeek/logs/current/dns.log*"]
-  
-  http:
+    paths:
+      - /usr/local/zeek/logs/current/http.log
+    fields:
+      source: http
+      vnf: ${VNF_TYPE}
+      id: ${VNF_ID}
+
+  - type: log
     enabled: true
-    var.paths: ["/usr/local/zeek/logs/current/http.log*"]
-  
-  ssl:
+    paths:
+      - /usr/local/zeek/logs/current/ssl.log
+    fields:
+      source: ssl
+      vnf: ${VNF_TYPE}
+      id: ${VNF_ID}
+
+  - type: log
     enabled: true
-    var.paths: ["/usr/local/zeek/logs/current/ssl.log*"]
-  
-  files:
+    paths:
+      - /usr/local/zeek/logs/current/dns.log
+    fields:
+      source: dns
+      vnf: ${VNF_TYPE}
+      id: ${VNF_ID}
+
+  - type: log
     enabled: true
-    var.paths: ["/usr/local/zeek/logs/current/files.log*"]
-  
-  notice:
-    enabled: true
-    var.paths: ["/usr/local/zeek/logs/current/notice.log*"]
-  
-  weird:
-    enabled: true
-    var.paths: ["/usr/local/zeek/logs/current/weird.log*"]
+    paths:
+      - /usr/local/zeek/logs/current/reporter.log
+    fields:
+      source: reporter
+      vnf: ${VNF_TYPE}
+      id: ${VNF_ID}
 
 processors:
-  - add_fields:
-      target: ''
-      fields:
-        source: 'VNF'
-        vnf: '${VNF_TYPE}'
-        id: '${VNF_ID}'
+  - decode_json_fields:
+      fields: ["message"]
+      target: "zeek"
   # SHA 256 hash proccessor
   - script:
       lang: javascript
@@ -168,7 +184,7 @@ processors:
           };
           var message = event.Get("message");
           var digest = sha256(message);
-          event.Put('digest', digest);
+          event.Put('fields.digest', digest);
         }
 
 monitoring:

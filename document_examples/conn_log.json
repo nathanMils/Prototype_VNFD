@@ -1,0 +1,60 @@
+{
+    "fields": {
+      "digest": "b783aa541db79c640f8f4167dc1668d8cfcadac053872645d18152f14f0b8c99",
+      "source": "connection",
+      "vnf": "nrf",
+      "id": 12345
+    },
+    "input": {
+      "type": "log"
+    },
+    "agent": {
+      "ephemeral_id": "d4f05665-010e-4d42-a1eb-d33315ef95e5",
+      "name": "filebeat",
+      "version": "8.15.0",
+      "type": "filebeat",
+      "id": "970dfbd7-49ed-4802-a444-bd4dd8d5e32b"
+    },
+    "log": {
+      "offset": 2502,
+      "file": {
+        "path": "/usr/local/zeek/logs/conn.log"
+      }
+    },
+    "message": "{\"ts\":1726741567.87692,\"uid\":\"CDzIuv1wWmWY29P2v7\",\"id.orig_h\":\"172.20.0.3\",\"id.orig_p\":47572,\"id.resp_h\":\"172.21.0.3\",\"id.resp_p\":80,\"proto\":\"tcp\",\"duration\":0.00004410743713378906,\"orig_bytes\":0,\"resp_bytes\":0,\"conn_state\":\"RSTRH\",\"local_orig\":true,\"local_resp\":true,\"missed_bytes\":0,\"history\":\"Cr\",\"orig_pkts\":0,\"orig_ip_bytes\":0,\"resp_pkts\":1,\"resp_ip_bytes\":40}",
+    "@version": "1",
+    "@timestamp": "2024-09-19T10:26:16.979Z",
+    "event": {
+      "original": "{\"ts\":1726741567.87692,\"uid\":\"CDzIuv1wWmWY29P2v7\",\"id.orig_h\":\"172.20.0.3\",\"id.orig_p\":47572,\"id.resp_h\":\"172.21.0.3\",\"id.resp_p\":80,\"proto\":\"tcp\",\"duration\":0.00004410743713378906,\"orig_bytes\":0,\"resp_bytes\":0,\"conn_state\":\"RSTRH\",\"local_orig\":true,\"local_resp\":true,\"missed_bytes\":0,\"history\":\"Cr\",\"orig_pkts\":0,\"orig_ip_bytes\":0,\"resp_pkts\":1,\"resp_ip_bytes\":40}"
+    },
+    "ecs": {
+      "version": "8.0.0"
+    },
+    "tags": [
+      "beats_input_codec_plain_applied"
+    ],
+    "zeek": {
+      "conn_state": "RSTRH",
+      "id.orig_h": "172.20.0.3",
+      "missed_bytes": 0,
+      "resp_pkts": 1,
+      "orig_ip_bytes": 0,
+      "orig_bytes": 0,
+      "duration": 0.00004410743713378906,
+      "history": "Cr",
+      "local_orig": true,
+      "orig_pkts": 0,
+      "ts": 1726741567.87692,
+      "resp_ip_bytes": 40,
+      "id.resp_p": 80,
+      "resp_bytes": 0,
+      "uid": "CDzIuv1wWmWY29P2v7",
+      "proto": "tcp",
+      "id.orig_p": 47572,
+      "id.resp_h": "172.21.0.3",
+      "local_resp": true
+    },
+    "host": {
+      "name": "filebeat"
+    }
+  }

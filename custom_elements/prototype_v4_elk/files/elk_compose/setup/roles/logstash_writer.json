@@ -10,8 +10,6 @@
         "logs-generic-default",
         "logstash-*",
         "ecs-logstash-*",
-        "nf-*",
-        "gateway-*",
         "instance-*"
       ],
       "privileges": [
