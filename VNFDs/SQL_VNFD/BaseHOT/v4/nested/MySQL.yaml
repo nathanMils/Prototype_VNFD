@@ -1,18 +1,16 @@
 heat_template_version: 2013-05-23
-description: 'AMF HOT for Sample VNF'
+description: 'MySQL DB HOT for Sample VNF'
 
 parameters:
   flavor:
     type: string
   image:
     type: string
+  ip:
+    type: string
   elk_network:
     type: string
   5g_network:
-    type: string
-  mysql_ip:
-    type: string
-  nrf_ip:
     type: string
   external_network:
     type: string
@@ -27,12 +25,12 @@ parameters:
 
 resources:
 
-  AMF:
+  MySQL:
     type: OS::Nova::Server
     properties:
       flavor: { get_param: flavor }
       image: { get_param: image }
-      name: AMF
+      name: MySQL
       networks:
         - port:
             get_resource: elk_CP
@@ -49,19 +47,15 @@ resources:
             # Optionally, add the user to the sudoers file for administrative privileges
             echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
             ELK_IP=$PARAM_0
-            MYSQL_IP=$PARAM_1
-            NRF_IP=$PARAM_2
 
             echo "$ELK_IP elasticsearch" >> /etc/hosts
             echo "$ELK_IP logstash" >> /etc/hosts
-            echo "$MYSQL_IP mysql" >> /etc/hosts
-            echo "$NRF_IP oai-nrf" >> /etc/hosts
 
             # Exporting required vars
-            export FILEBEAT_INTERNAL_PASSWORD=$PARAM_3
-            export BEATS_SYSTEM_PASSWORD=$PARAM_4
-            export VNF_TYPE="amf"
-            export VNF_ID=$PARAM_5
+            export FILEBEAT_INTERNAL_PASSWORD=$PARAM_1
+            export BEATS_SYSTEM_PASSWORD=$PARAM_2
+            export VNF_TYPE="mysql"
+            export VNF_ID=$PARAM_3
             export INTERFACE="ens4"
 
             # Start the filebeat service
@@ -72,17 +66,13 @@ resources:
 
             # Starting containers and networks
             TARGET_DIR=/opt/prototype_master
-            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-amf.yml up -d
-
+            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-mysql.yml up -d
+            
           params:
             $PARAM_0: { get_param: elk_ip }
-            $PARAM_1: { get_param: mysql_ip }
-            $PARAM_2: { get_param: nrf_ip }
-            $PARAM_3: { get_param: filebeat_password }
-            $PARAM_4: { get_param: beats_password }
-            $PARAM_5: { get_param: id }
-
-      
+            $PARAM_1: { get_param: filebeat_password }
+            $PARAM_2: { get_param: beats_password }
+            $PARAM_3: { get_param: id }
 
   elk_CP:
     type: OS::Neutron::Port
@@ -95,6 +85,8 @@ resources:
     properties:
       network: { get_param: 5g_network }
       port_security_enabled: false
+      fixed_ips:
+        - ip_address: { get_param: ip }
 
   5g_extvCP:
     type: OS::Neutron::FloatingIP
@@ -117,3 +109,8 @@ resources:
     properties:
       floatingip_id: { get_resource: elk_extvCP }
       port_id: { get_resource: elk_CP }
+
+outputs:
+  MySQL_IP:
+    description: IPv4 address of the 5g_CP port
+    value: { get_attr: [ 5g_CP, fixed_ips, 0, ip_address ] }
