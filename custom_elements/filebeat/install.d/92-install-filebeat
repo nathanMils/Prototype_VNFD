@@ -7,4 +7,5 @@ sudo dpkg -i filebeat-8.15.1-amd64.deb
 
 SOURCE_DIR=$(dirname $0)/../files
 # Copy the filebeat config to the target system
-cp $SOURCE_DIR/config/filebeat.yml /etc/filebeat/filebeat.yml
+cp $SOURCE_DIR/filebeat.yml /etc/filebeat/filebeat.yml
+cp $SOURCE_DIR/.env /etc/filebeat/.env
