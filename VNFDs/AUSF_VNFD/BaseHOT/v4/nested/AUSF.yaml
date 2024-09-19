@@ -60,7 +60,7 @@ resources:
             # Exporting required vars
             export FILEBEAT_INTERNAL_PASSWORD=$PARAM_3
             export BEATS_SYSTEM_PASSWORD=$PARAM_4
-            export VNF_TYPE="nrf"
+            export VNF_TYPE="ausf"
             export VNF_ID=$PARAM_5
             export INTERFACE="ens4"
 

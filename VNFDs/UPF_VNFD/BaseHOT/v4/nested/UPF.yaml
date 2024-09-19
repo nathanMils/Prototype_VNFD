@@ -1,5 +1,5 @@
 heat_template_version: 2013-05-23
-description: 'UDR HOT for Sample VNF'
+description: 'UPF HOT for Sample VNF'
 
 parameters:
   flavor:
@@ -22,17 +22,17 @@ parameters:
     type: string
   beats_password:
     type: string
-  id: 
+  id:
     type: string
 
 resources:
 
-  UDM:
+  UPF:
     type: OS::Nova::Server
     properties:
       flavor: { get_param: flavor }
       image: { get_param: image }
-      name: UDM
+      name: UPF
       networks:
         - port:
             get_resource: elk_CP
@@ -60,7 +60,7 @@ resources:
             # Exporting required vars
             export FILEBEAT_INTERNAL_PASSWORD=$PARAM_3
             export BEATS_SYSTEM_PASSWORD=$PARAM_4
-            export VNF_TYPE="udm"
+            export VNF_TYPE="upf"
             export VNF_ID=$PARAM_5
             export INTERFACE="ens4"
 
@@ -72,7 +72,7 @@ resources:
 
             # Starting containers and networks
             TARGET_DIR=/opt/prototype_master
-            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-udm.yml up -d
+            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-upf.yml up -d
 
           params:
             $PARAM_0: { get_param: elk_ip }
@@ -81,7 +81,7 @@ resources:
             $PARAM_3: { get_param: filebeat_password }
             $PARAM_4: { get_param: beats_password }
             $PARAM_5: { get_param: id }
-      
+
 
   elk_CP:
     type: OS::Neutron::Port
