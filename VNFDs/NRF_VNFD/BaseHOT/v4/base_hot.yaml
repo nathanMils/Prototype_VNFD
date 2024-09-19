@@ -19,5 +19,6 @@ resources:
       mysql_ip: { get_param: [ nfv, input, nfs, mysql, ip ]}
       filebeat_password: { get_param: [ nfv, input, elk, filebeat_password ] }
       beats_password: { get_param: [ nfv, input, elk, beats_password ] }
+      id: { get_param: [ nfv, input, nfs, nrf, id ] }
 
 outputs: {}

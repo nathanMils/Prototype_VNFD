@@ -22,6 +22,8 @@ parameters:
     type: string
   beats_password:
     type: string
+  id:
+    type: string
 
 resources:
 
@@ -56,7 +58,15 @@ resources:
             # Exporting required vars
             export FILEBEAT_INTERNAL_PASSWORD=$PARAM_2
             export BEATS_SYSTEM_PASSWORD=$PARAM_3
+            export VNF_TYPE="nrf"
+            export VNF_ID=$PARAM_4
             export INTERFACE="ens4"
+
+            # Start the filebeat service
+            filebeat &
+
+            # Start the zeek service
+            zeekctl deploy
 
             # Starting containers and networks
             TARGET_DIR=/opt/prototype_master
@@ -67,6 +77,7 @@ resources:
             $PARAM_1: { get_param: mysql_ip }
             $PARAM_2: { get_param: filebeat_password }
             $PARAM_3: { get_param: beats_password }
+            $PARAM_4: { get_param: id }
 
   elk_CP:
     type: OS::Neutron::Port
