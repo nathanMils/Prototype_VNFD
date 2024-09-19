@@ -31,7 +31,7 @@ topology_template:
   substitution_mappings:
     node_type: company.provider.VNF
     properties:
-      flavour_id: simple
+      flavour_id: v4
 
   node_templates:
     VNF:
