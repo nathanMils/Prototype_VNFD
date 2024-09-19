@@ -4,11 +4,12 @@ simple_gateway_v2: f6f6621f4b14f961da92be8435521e4841c0129c87af6bbc87269732c56af
 prototype_v1: b3a0ae46f233fb02d967a89d14bf83938b65105b1c7735bddbb675b2dc47eb14
 prototype_v2: 4012464e2ba538af1918c7e4aab16729635ad4071158b5815a03bd89de180695
 elk_image: a5fc5511868022996cb2ee4bfd97bd595138c6a50b77f4001ac95a4252ba5582
+prototype_v4_minmal: c13c449f4c6123cbe3a90214f38f94ace2180c0eae7ff00eb28c95f12dbb313d
+prototype_v4_elk: f993f9a26c3eadaa175bf2bf369915b198d631ea9281b245b65d2e7bc3198cd5
 
 ids:
 normal: b1bb0ce7-ebca-4fa7-95ed-4840d70a1177
 elk: b1bb0ce7-ebca-4fa7-95ed-4840d70a1178
 
-Prototype Image: DIB_RELEASE=jammy disk-image-create vm ubuntu-minimal iptables prototype_v1 docker_compose ping cloud-init os-collect-config os-refresh-config os-apply-config heat-config heat-config-script heat-config-cfn-init -o prototype_v1.qcow2
-ELK Image: DIB_RELEASE=jammy disk-image-create vm ubuntu-minimal iptables elk docker_compose ping cloud-init os-collect-config os-refresh-config os-apply-config heat-config heat-config-script heat-config-cfn-init -o elk_image.qcow2
- scp -P 2222 nathan@127.0.1.2:/home/nathan/Prototype_VNFD/custom_elements/elk/files/images.tar C:/Users/natei/Desktop/TYR_Shared
+Prototype_v4_minimal: DIB_RELEASE=jammy disk-image-create vm ubuntu-minimal iptables prototype_v4_minimal filebeat zeek docker_compose ping cloud-init os-collect-config os-refresh-config os-apply-config heat-config heat-config-script heat-config-cfn-init -o prototype_v4_minimal.qcow2
+Prototype_v4_elk: DIB_RELEASE=jammy disk-image-create vm ubuntu-minimal iptables prototype_v4_elk docker_compose ping cloud-init os-collect-config os-refresh-config os-apply-config heat-config heat-config-script heat-config-cfn-init -o prototype_v4_elk.qcow2
