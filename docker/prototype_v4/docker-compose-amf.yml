@@ -6,10 +6,10 @@ services:
     container_name: "oai-amf"
     image: oaisoftwarealliance/oai-amf:v2.0.1
     volumes:
-        - ./nf/conf/basic_nrf_config.yaml:/openair-amf/etc/config.yaml
+        - ./nf/conf/basic_vpp_nrf_config.yaml:/openair-amf/etc/config.yaml
     environment:
         - TZ=Europe/Paris
-        # - INT_ALGO_LIST=["NIA1" , "NIA2"]
-        # - CIPH_ALGO_LIST=["NEA1" , "NEA2"]
+    depends_on:
+        - zeek
     privileged: true
     network_mode: "host"

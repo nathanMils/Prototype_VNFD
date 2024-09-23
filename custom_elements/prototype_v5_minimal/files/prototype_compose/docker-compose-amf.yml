@@ -9,7 +9,7 @@ services:
         - ./nf/conf/basic_nrf_config.yaml:/openair-amf/etc/config.yaml
     environment:
         - TZ=Europe/Paris
-        # - INT_ALGO_LIST=["NIA1" , "NIA2"]
-        # - CIPH_ALGO_LIST=["NEA1" , "NEA2"]
+        - INT_ALGO_LIST=["NIA1" , "NIA2"]
+        - CIPH_ALGO_LIST=["NEA1" , "NEA2"]
     privileged: true
     network_mode: "host"

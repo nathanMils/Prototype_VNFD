@@ -6,10 +6,12 @@ services:
     container_name: "oai-smf"
     image: oaisoftwarealliance/oai-smf:v2.0.1
     volumes:
-        - ./nf/conf/basic_nrf_config.yaml:/openair-smf/etc/config.yaml
+        - ./nf/conf/basic_vpp_nrf_config.yaml:/openair-smf/etc/config.yaml
     environment:
         - TZ=Europe/Paris
-    # extra_hosts:
-    #         - "vpp-upf.node.5gcn.mnc95.mcc208.3gppnetwork.org:${3GPP_NETWORK}"
+    extra_hosts:
+        - "vpp-upf.node.5gcn.mnc95.mcc208.3gppnetwork.org:${3GPP_NETWORK}"
+    depends_on:
+        - zeek
     privileged: true
     network_mode: "host"
