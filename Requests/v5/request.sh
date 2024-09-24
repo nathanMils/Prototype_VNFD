@@ -18,6 +18,8 @@ FILE_IDS=(
     ["amf_instantiate.json"]="00000000-0000-0000-0000-000000000006"
     ["smf_instantiate.json"]="00000000-0000-0000-0000-000000000007"
     ["upf_instantiate.json"]="00000000-0000-0000-0000-000000000008"
+    ["ext_dn_instantiate.json"]="00000000-0000-0000-0000-000000000009"
+    ["ueransim_instantiate.json"]="00000000-0000-0000-0000-000000000010"
 )
 
 ID="${FILE_IDS[${VNF}_instantiate.json]}"
