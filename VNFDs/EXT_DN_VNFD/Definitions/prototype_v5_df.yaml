@@ -51,11 +51,11 @@ topology_template:
           scale_start: []
           scale_end: []
 
-    UPF:
+    EXT_DN:
       type: tosca.nodes.nfv.Vdu.Compute
       properties:
-        name: UPF
-        description: UPF compute node
+        name: EXT_DN
+        description: EXT_DN compute node
         vdu_profile:
           min_number_of_instances: 1
           max_number_of_instances: 1
@@ -91,40 +91,8 @@ topology_template:
         layer_protocols: [ ipv4 ]
         order: 4
 
-    CP2:
-      type: tosca.nodes.nfv.VduCp
-      properties:
-        layer_protocols: [ ipv4 ]
-        order: 5
-
-    CP3:
-      type: tosca.nodes.nfv.VduCp
-      properties:
-        layer_protocols: [ ipv4 ]
-        order: 6
-
-    CP4:
-      type: tosca.nodes.nfv.VduCp
-      properties:
-        layer_protocols: [ ipv4 ]
-        order: 7
 
     extCP1:
-      type: tosca.nodes.nfv.VnfExtCp
-      properties:
-        layer_protocols: [ ipv4 ]
-
-    extCP2:
-      type: tosca.nodes.nfv.VnfExtCp
-      properties:
-        layer_protocols: [ ipv4 ]
-
-    extCP3:
-      type: tosca.nodes.nfv.VnfExtCp
-      properties:
-        layer_protocols: [ ipv4 ]
-
-    extCP4:
       type: tosca.nodes.nfv.VnfExtCp
       properties:
         layer_protocols: [ ipv4 ]
@@ -147,7 +115,7 @@ topology_template:
         properties:
           initial_delta:
             number_of_instances: 1
-        targets: [ UPF ]
+        targets: [ EXT_DN ]
 
     - scaling_aspect_deltas:
         type: tosca.policies.nfv.VduScalingAspectDeltas
@@ -156,7 +124,7 @@ topology_template:
           deltas:
             delta_1:
               number_of_instances: 1
-        targets: [ UPF ]
+        targets: [ EXT_DN ]
 
     - instantiation_levels:
         type: tosca.policies.nfv.InstantiationLevels
@@ -175,4 +143,4 @@ topology_template:
           levels:
             instantiation_level_1:
               number_of_instances: 1
-        targets: [ UPF ]
+        targets: [ EXT_DN ]
