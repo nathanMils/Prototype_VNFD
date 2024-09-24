@@ -83,6 +83,7 @@ resources:
             export IP_2=$PARAM_7
             export IP_3=$PARAM_8
             export EXT_DN_IP=$PARAM_9
+            export NRF_IP=$PARAM_2
 
             # Start the filebeat service
             filebeat &

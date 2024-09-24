@@ -51,11 +51,11 @@ topology_template:
           scale_start: []
           scale_end: []
 
-    UPF:
+    UERANSIM:
       type: tosca.nodes.nfv.Vdu.Compute
       properties:
-        name: UPF
-        description: UPF compute node
+        name: UERANSIM
+        description: UERANSIM compute node
         vdu_profile:
           min_number_of_instances: 1
           max_number_of_instances: 1
@@ -67,23 +67,23 @@ topology_template:
             hash: c13c449f4c6123cbe3a90214f38f94ace2180c0eae7ff00eb28c95f12dbb313d
           container_format: bare
           disk_format: qcow2
-          min_disk: 10 GB
-          size: 10 GB
+          min_disk: 20 GB
+          size: 20 GB
       capabilities:
         virtual_compute:
           properties:
             requested_additional_capabilities:
               properties:
-                requested_additional_capability_name: nf_basic
+                requested_additional_capability_name: ueransim_basic
                 support_mandatory: true
                 target_performance_parameters:
                   entry_schema: test
             virtual_memory:
-              virtual_mem_size: 2 GB
+              virtual_mem_size: 4 GB
             virtual_cpu:
-              num_virtual_cpu: 2
+              num_virtual_cpu: 3
             virtual_local_storage:
-              - size_of_storage: 10 GB
+              - size_of_storage: 20 GB
     
     CP1:
       type: tosca.nodes.nfv.VduCp
@@ -96,18 +96,6 @@ topology_template:
       properties:
         layer_protocols: [ ipv4 ]
         order: 5
-
-    CP3:
-      type: tosca.nodes.nfv.VduCp
-      properties:
-        layer_protocols: [ ipv4 ]
-        order: 6
-
-    CP4:
-      type: tosca.nodes.nfv.VduCp
-      properties:
-        layer_protocols: [ ipv4 ]
-        order: 7
 
     extCP1:
       type: tosca.nodes.nfv.VnfExtCp
@@ -147,7 +135,7 @@ topology_template:
         properties:
           initial_delta:
             number_of_instances: 1
-        targets: [ UPF ]
+        targets: [ UERANSIM ]
 
     - scaling_aspect_deltas:
         type: tosca.policies.nfv.VduScalingAspectDeltas
@@ -156,7 +144,7 @@ topology_template:
           deltas:
             delta_1:
               number_of_instances: 1
-        targets: [ UPF ]
+        targets: [ UERANSIM ]
 
     - instantiation_levels:
         type: tosca.policies.nfv.InstantiationLevels
@@ -175,4 +163,4 @@ topology_template:
           levels:
             instantiation_level_1:
               number_of_instances: 1
-        targets: [ UPF ]
+        targets: [ UERANSIM ]

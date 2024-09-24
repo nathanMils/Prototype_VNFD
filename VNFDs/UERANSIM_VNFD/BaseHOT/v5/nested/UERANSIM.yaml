@@ -1,0 +1,97 @@
+heat_template_version: 2013-05-23
+description: 'UERANSIM HOT for Sample VNF'
+
+parameters:
+  flavor:
+    type: string
+  image:
+    type: string
+  5g_network:
+    type: string
+  5g_access_network:
+    type: string
+  external_network:
+    type: string
+  ip: 
+    type: string
+  ip_access:
+    type: string
+  amf_ip:
+    type: string
+
+resources:
+
+  UERANSIM:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      name: UERANSIM
+      networks:
+        - port:
+            get_resource: 5g_CP
+        - port:
+            get_resource: 5g_access_CP
+      user_data_format: RAW
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+            sudo useradd -m -s /bin/bash nathan
+            # Set a password for the new user
+            echo "nathan:stupid" | sudo chpasswd
+            # Optionally, add the user to the sudoers file for administrative privileges
+            echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
+            
+
+            # Exporting required vars
+            export UERANSIM_IP_PUBLIC_NET=$PARAM_0
+            export UERANSIM_IP_PUBLIC_NET_ACCESS=$PARAM_1
+            export AMF_IP_PUBLIC_NET=$PARAM_2
+
+            # Starting containers and networks
+            TARGET_DIR=/opt/prototype_master
+            docker compose -f $TARGET_DIR/ueransim_compose/docker-compose-ueransim-vpp.yml up -d
+
+          params:
+            $PARAM_0: { get_param: ip }
+            $PARAM_1: { get_param: ip_access }
+            $PARAM_2: { get_param: amf_ip }
+
+  5g_CP:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: 5g_network }
+      port_security_enabled: false
+      fixed_ips:
+        - ip_address: { get_param: ip }
+
+  5g_extvCP:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: public
+
+  5g_access_CP:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: 5g_access_network }
+      port_security_enabled: false
+      fixed_ips:
+        - ip_address: { get_param: ip_access }
+
+  5g_access_extvCP:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: public
+
+  5g_association:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: { get_resource: 5g_extvCP }
+      port_id: { get_resource: 5g_CP }
+
+  5g_access_association:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: { get_resource: 5g_access_extvCP }
+      port_id: { get_resource: 5g_access_CP }
