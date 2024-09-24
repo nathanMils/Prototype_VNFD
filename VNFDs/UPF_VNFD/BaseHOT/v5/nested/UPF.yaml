@@ -50,6 +50,10 @@ resources:
             get_resource: elk_CP
         - port:
             get_resource: 5g_CP
+        - port:
+            get_resource: 5g_core_CP
+        - port:
+            get_resource: 5g_access_CP
       user_data_format: RAW
       user_data:
         str_replace:
