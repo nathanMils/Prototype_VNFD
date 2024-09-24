@@ -88,7 +88,7 @@ resources:
 
             # Starting containers and networks
             TARGET_DIR=/opt/prototype_master
-            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-upf.yml up -d
+            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-upf-vpp.yml up -d
 
           params:
             $PARAM_0: { get_param: elk_ip }
