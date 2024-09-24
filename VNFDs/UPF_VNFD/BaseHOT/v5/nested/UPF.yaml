@@ -1,0 +1,171 @@
+heat_template_version: 2013-05-23
+description: 'UPF HOT for Sample VNF'
+
+parameters:
+  flavor:
+    type: string
+  image:
+    type: string
+  elk_network:
+    type: string
+  5g_network:
+    type: string
+  5g_core_network:
+    type: string
+  5g_access_network:
+    type: string
+  mysql_ip:
+    type: string
+  nrf_ip:
+    type: string
+  external_network:
+    type: string
+  ip: 
+    type: string
+  ip_core: 
+    type: string
+  ip_access:
+    type: string
+  ext_dn_ip:
+    type: string
+  elk_ip:
+    type: string
+  filebeat_password:
+    type: string
+  beats_password:
+    type: string
+  id:
+    type: string
+
+resources:
+
+  UPF:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      name: UPF
+      networks:
+        - port:
+            get_resource: elk_CP
+        - port:
+            get_resource: 5g_CP
+      user_data_format: RAW
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+            sudo useradd -m -s /bin/bash nathan
+            # Set a password for the new user
+            echo "nathan:stupid" | sudo chpasswd
+            # Optionally, add the user to the sudoers file for administrative privileges
+            echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
+            ELK_IP=$PARAM_0
+            MYSQL_IP=$PARAM_1
+            NRF_IP=$PARAM_2
+
+            echo "$ELK_IP elasticsearch" >> /etc/hosts
+            echo "$ELK_IP logstash" >> /etc/hosts
+            echo "$MYSQL_IP mysql" >> /etc/hosts
+            echo "$NRF_IP oai-nrf" >> /etc/hosts
+
+            # Exporting required vars
+            export FILEBEAT_INTERNAL_PASSWORD=$PARAM_3
+            export BEATS_SYSTEM_PASSWORD=$PARAM_4
+            export VNF_TYPE="upf"
+            export VNF_ID=$PARAM_5
+            export INTERFACE="ens4"
+            export 3GPP_NETWORK=$PARAM_6
+            export IP_2=$PARAM_7
+            export IP_3=$PARAM_8
+            export EXT_DN_IP=$PARAM_9
+
+            # Start the filebeat service
+            filebeat &
+
+            # Start the zeek service
+            zeekctl deploy
+
+            # Starting containers and networks
+            TARGET_DIR=/opt/prototype_master
+            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-upf.yml up -d
+
+          params:
+            $PARAM_0: { get_param: elk_ip }
+            $PARAM_1: { get_param: mysql_ip }
+            $PARAM_2: { get_param: nrf_ip }
+            $PARAM_3: { get_param: filebeat_password }
+            $PARAM_4: { get_param: beats_password }
+            $PARAM_5: { get_param: id }
+            $PARAM_6: { get_param: ip }
+            $PARAM_7: { get_param: ip_core }
+            $PARAM_8: { get_param: ip_access }
+            $PARAM_9: { get_param: ext_dn_ip }
+
+  elk_CP:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: elk_network }
+      port_security_enabled: false
+
+  5g_CP:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: 5g_network }
+      port_security_enabled: false
+
+  5g_extvCP:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: public
+
+  5g_core_CP:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: 5g_core_network }
+      port_security_enabled: false
+
+  5g_core_extvCP:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: public
+
+  5g_access_CP:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: 5g_access_network }
+      port_security_enabled: false
+
+  5g_access_extvCP:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: public
+
+  5g_association:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: { get_resource: 5g_extvCP }
+      port_id: { get_resource: 5g_CP }
+
+  5g_core_association:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: { get_resource: 5g_core_extvCP }
+      port_id: { get_resource: 5g_core_CP }
+
+  5g_access_association:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: { get_resource: 5g_access_extvCP }
+      port_id: { get_resource: 5g_access_CP }
+  
+  elk_extvCP:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: public
+
+  elk_association:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: { get_resource: elk_extvCP }
+      port_id: { get_resource: elk_CP }
