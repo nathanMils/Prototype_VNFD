@@ -10,10 +10,10 @@ services:
             - MNC=95
             - NCI=0x000000010
             - TAC=0xa000
-            - LINK_IP=192.168.70.141
-            - NGAP_IP=192.168.70.141
-            - GTP_IP=192.168.72.141
-            - NGAP_PEER_IP=192.168.70.132
+            - LINK_IP=${UERANSIM_IP_PUBLIC_NET}
+            - NGAP_IP=${UERANSIM_IP_PUBLIC_NET}
+            - GTP_IP=${UERANSIM_IP_PUBLIC_NET_ACCESS}
+            - NGAP_PEER_IP=${AMF_IP_PUBLIC_NET}
             - SST=222
             - SD=123
             - IGNORE_STREAM_IDS=true
@@ -26,7 +26,7 @@ services:
             - AMF_VALUE=8000
             - IMEI=356938035643803
             - IMEI_SV=0035609204079514
-            - GNB_IP_ADDRESS=192.168.70.141
+            - GNB_IP_ADDRESS=${UERANSIM_IP_PUBLIC_NET}
             - PDU_TYPE=IPv4
             - APN=default
             - SST_0=222
@@ -35,20 +35,20 @@ services:
             - SD_C=123
             - SST_D=222
             - SD_D=123
-        networks:
-            public_net:
-                ipv4_address: 192.168.70.141
-            public_net_access:
-                ipv4_address: 192.168.72.141
         healthcheck:
             test: /bin/bash -c "ifconfig uesimtun0"
             interval: 10s
             timeout: 5s
             retries: 5
-networks:
-    public_net:
-        external:
-            name: demo-oai-public-net
-    public_net_access:
-        external:
-            name: oai-public-access
+# networks:
+#     public_net:
+#         ipv4_address: ${UERANSIM_IP_PUBLIC_NET}
+#     public_net_access:
+#         ipv4_address: ${UERANSIM_IP_PUBLIC_NET_ACCESS}
+# networks:
+#     public_net:
+#         external:
+#             name: demo-oai-public-net
+#     public_net_access:
+#         external:
+#             name: oai-public-access
