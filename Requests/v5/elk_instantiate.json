@@ -3,7 +3,7 @@
     "vimConnectionInfo": {
       "vim": {
         "id": "3cc2c4ff-525c-48b4-94c9-29247223322f",
-        "vimId": "00ed1c16-c175-47ca-b8f1-44de3ec494c2",
+        "vimId": "<VIM_ID>",
         "vimType": "openstack"
       }
     },
@@ -13,7 +13,7 @@
       "nfv": {
         "input": {
           "elk-0": {
-            "ip": "10.6.0.2",
+            "ip": "10.6.0.3",
             "elastic_password": "elasticness",
             "logstash_password": "in_the_logging_days",
             "kibana_password": "kibanaNana",
@@ -21,7 +21,7 @@
             "beats_password": "beatsNathan"
           },
           "nfs-0": {},
-          "networks-0": {
+          "networks": {
             "elk_net": {
                 "id": "ELK_net",
                 "cidr_ipv4": "10.6.0.0/26",

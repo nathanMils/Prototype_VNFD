@@ -31,7 +31,7 @@ topology_template:
   substitution_mappings:
     node_type: company.provider.VNF
     properties:
-      flavour_id: v4
+      flavour_id: v5
 
   node_templates:
     VNF:
@@ -60,7 +60,7 @@ topology_template:
           min_number_of_instances: 1
           max_number_of_instances: 1
         sw_image_data:
-          name: prototype_v4_elk
+          name: prototype_v5_util
           version: '1'
           checksum:
             algorithm: sha-256
