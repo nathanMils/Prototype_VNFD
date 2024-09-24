@@ -33,7 +33,7 @@ resources:
       cidr_ipv6: { get_param: [ nfv, input, networks, 5g_core_net, cidr_ipv6 ] }
 
   5g_access_net:
-    type: 5G_core_net.yaml
+    type: 5G_access_net.yaml
     properties:
       cidr_ipv4: { get_param: [ nfv, input, networks, 5g_access_net, cidr_ipv4 ] }
       cidr_ipv6: { get_param: [ nfv, input, networks, 5g_access_net, cidr_ipv6 ] }
@@ -56,10 +56,10 @@ resources:
       elk_subnet_ipv6: { get_attr: [ elk_net, elk_subnet_ipv6 ] }
       5g_subnet_ipv4: { get_attr: [ 5g_net, 5g_subnet_ipv4 ] }
       5g_subnet_ipv6: { get_attr: [ 5g_net, 5g_subnet_ipv6 ] }
-      5g_core_subnet_ipv4: { get_attr: [ 5g_net, 5g_core_subnet_ipv4 ] }
-      5g_core_subnet_ipv6: { get_attr: [ 5g_net, 5g_core_subnet_ipv6 ] }
-      5g_access_subnet_ipv4: { get_attr: [ 5g_net, 5g_access_subnet_ipv4 ] }
-      5g_access_subnet_ipv6: { get_attr: [ 5g_net, 5g_access_subnet_ipv6 ] }
+      5g_core_subnet_ipv4: { get_attr: [ 5g_core_net, 5g_core_subnet_ipv4 ] }
+      5g_core_subnet_ipv6: { get_attr: [ 5g_core_net, 5g_core_subnet_ipv6 ] }
+      5g_access_subnet_ipv4: { get_attr: [ 5g_access_net, 5g_access_subnet_ipv4 ] }
+      5g_access_subnet_ipv6: { get_attr: [ 5g_access_net, 5g_access_subnet_ipv6 ] }
       external_net: { get_param: [ nfv, input, networks, external, id ]}
 
 outputs: {}
