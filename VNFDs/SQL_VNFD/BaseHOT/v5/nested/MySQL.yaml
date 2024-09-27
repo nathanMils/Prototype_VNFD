@@ -50,7 +50,8 @@ resources:
 
             echo "$ELK_IP elasticsearch" >> /etc/hosts
             echo "$ELK_IP logstash" >> /etc/hosts
-
+            echo 'export PATH=$PATH:/opt/zeek/bin' >> ~/.bashrc
+            source ~/.bashrc
             # Exporting required vars
             export FILEBEAT_INTERNAL_PASSWORD=$PARAM_1
             export BEATS_SYSTEM_PASSWORD=$PARAM_2
