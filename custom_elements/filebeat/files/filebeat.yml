@@ -8,7 +8,7 @@ filebeat.inputs:
   - type: log
     enabled: true
     paths:
-      - /usr/local/zeek/logs/current/conn.log
+      - /opt/zeek/logs/current/conn.log
     fields:
       source: connection
       vnf: ${VNF_TYPE}
@@ -17,7 +17,7 @@ filebeat.inputs:
   - type: log
     enabled: true
     paths:
-      - /usr/local/zeek/logs/current/stats.log
+      - /opt/zeek/logs/current/stats.log
     fields:
       source: stats
       vnf: ${VNF_TYPE}
@@ -26,7 +26,7 @@ filebeat.inputs:
   - type: log
     enabled: true
     paths:
-      - /usr/local/zeek/logs/current/notice.log
+      - /opt/zeek/logs/current/notice.log
     fields:
       source: notice
       vnf: ${VNF_TYPE}
@@ -35,7 +35,7 @@ filebeat.inputs:
   - type: log
     enabled: true
     paths:
-      - /usr/local/zeek/logs/current/weird.log
+      - /opt/zeek/logs/current/weird.log
     fields:
       source: weird
       vnf: ${VNF_TYPE}
@@ -44,7 +44,7 @@ filebeat.inputs:
   - type: log
     enabled: true
     paths:
-      - /usr/local/zeek/logs/current/http.log
+      - /opt/zeek/logs/current/http.log
     fields:
       source: http
       vnf: ${VNF_TYPE}
@@ -53,7 +53,7 @@ filebeat.inputs:
   - type: log
     enabled: true
     paths:
-      - /usr/local/zeek/logs/current/ssl.log
+      - /opt/zeek/logs/current/ssl.log
     fields:
       source: ssl
       vnf: ${VNF_TYPE}
@@ -62,7 +62,7 @@ filebeat.inputs:
   - type: log
     enabled: true
     paths:
-      - /usr/local/zeek/logs/current/dns.log
+      - /opt/zeek/logs/current/dns.log
     fields:
       source: dns
       vnf: ${VNF_TYPE}
@@ -71,7 +71,7 @@ filebeat.inputs:
   - type: log
     enabled: true
     paths:
-      - /usr/local/zeek/logs/current/reporter.log
+      - /opt/zeek/logs/current/reporter.log
     fields:
       source: reporter
       vnf: ${VNF_TYPE}
