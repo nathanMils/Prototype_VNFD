@@ -92,8 +92,7 @@ resources:
             zeekctl deploy
 
             # Starting containers and networks
-            docker run -d --privileged --name vpp-upf --network host -e IF_1_IP=${GPP_NETWORK} -e IF_1_TYPE=N4 -e IF_2_IP=${IP_2} -e IF_2_TYPE=N3 -e IF_2_NWI=access.oai.org -e IF_3_IP=${IP_3} -e IF_3_TYPE=N6 -e IF_3_IP_REMOTE=${EXT_DN_IP} -e IF_3_NWI=internet.oai.org -e NAME=VPP-UPF -e MNC=95 -e MCC=208 -e REALM=3gppnetwork.org -e VPP_MAIN_CORE=0 -e VPP_CORE_WORKER=1 -e VPP_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/vpp_plugins/ -e SNSSAI_SD=00007B -e SNSSAI_SST=222 -e DNN=default -e REGISTER_NRF=yes -e NRF_IP_ADDR=${NRF_IP_ADDR} -e NRF_PORT=8080 -e HTTP_VERSION=2 oaisoftwarealliance/oai-upf-vpp:v2.1.0
-
+            docker run -d --privileged --name vpp-upf --network host -e IF_1_IP=${GPP_NETWORK} -e IF_1_TYPE=N4 -e IF_1_IP_REMOTE=10.5.0.37 -e IF_2_IP=${IP_2} -e IF_2_TYPE=N3 -e IF_2_NWI=access.oai.org -e IF_3_IP=${IP_3} -e IF_3_TYPE=N6 -e IF_3_IP_REMOTE=${EXT_DN_IP} -e IF_3_NWI=internet.oai.org -e NAME=VPP-UPF -e MNC=95 -e MCC=208 -e REALM=3gppnetwork.org -e VPP_MAIN_CORE=0 -e VPP_CORE_WORKER=1 -e VPP_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/vpp_plugins/ -e SNSSAI_SD=00007B -e SNSSAI_SST=222 -e DNN=default -e REGISTER_NRF=yes -e NRF_IP_ADDR=${NRF_IP_ADDR} -e NRF_PORT=8080 -e HTTP_VERSION=2 oaisoftwarealliance/oai-upf-vpp:v2.1.0
 
           params:
             $PARAM_0: { get_param: elk_ip }
