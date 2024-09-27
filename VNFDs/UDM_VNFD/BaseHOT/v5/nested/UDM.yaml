@@ -56,7 +56,7 @@ resources:
             echo "$ELK_IP logstash" >> /etc/hosts
             echo "$MYSQL_IP mysql" >> /etc/hosts
             echo "$NRF_IP oai-nrf" >> /etc/hosts
-
+            export PATH=$PATH:/opt/zeek/bin
             # Exporting required vars
             export FILEBEAT_INTERNAL_PASSWORD=$PARAM_3
             export BEATS_SYSTEM_PASSWORD=$PARAM_4
