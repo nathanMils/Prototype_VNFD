@@ -30,7 +30,7 @@ if [ -z "$ID" ]; then
 fi
 
 # Set the VIM_ID variable
-VIM_ID="04100fca-a53d-46c0-baeb-834f04d2318e"
+VIM_ID="cbbc3129-3bb9-423c-be81-86708f12bab6"
 
 JSON_FILE="${VNF}_instantiate.json"
 TEMPLATE_FILE="template.json"
