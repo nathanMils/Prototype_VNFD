@@ -7,7 +7,7 @@ services:
         container_name: "vpp-upf"
         image: oaisoftwarealliance/oai-upf-vpp:v2.1.0
         environment:
-            - IF_1_IP=${3GPP_NETWORK}
+            - IF_1_IP=${GPP_NETWORK}
             - IF_1_TYPE=N4
             - IF_2_IP=${IP_2}
             - IF_2_TYPE=N3
