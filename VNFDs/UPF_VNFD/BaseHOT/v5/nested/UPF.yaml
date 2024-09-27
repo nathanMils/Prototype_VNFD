@@ -83,7 +83,7 @@ resources:
             export VNF_TYPE="upf"
             export VNF_ID=$PARAM_5
             export INTERFACE="ens4"
-            export 3GPP_NETWORK=$PARAM_6
+            export GPP_NETWORK=$PARAM_6
             export IP_2=$PARAM_7
             export IP_3=$PARAM_8
             export EXT_DN_IP=$PARAM_9
