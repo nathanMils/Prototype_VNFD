@@ -26,5 +26,7 @@ resources:
       filebeat_password: { get_param: [ nfv, input, elk, filebeat_password ] }
       beats_password: { get_param: [ nfv, input, elk, beats_password ] }
       id: { get_param: [ nfv, input, nfs, upf, id ] }
+      smf_ip: { get_param: [ nfv, input, nfs, smf, ip ] }
+      ueransim_ip: { get_param: [ nfv, input, nfs, ueransim, ip_access ] }
 
 outputs: {}
