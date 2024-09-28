@@ -51,6 +51,7 @@ resources:
 
             # Starting containers and networks
             TARGET_DIR=/opt/prototype_master
+            docker pull rohankharade/ueransim
             docker image tag rohankharade/ueransim:latest ueransim:latest
             docker compose -f $TARGET_DIR/ueransim_compose/docker-compose-ueransim-vpp.yml up -d
 
