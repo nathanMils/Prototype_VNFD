@@ -1,0 +1,92 @@
+heat_template_version: 2013-05-23
+description: 'ELK HOT for Sample VNF'
+
+parameters:
+  flavor:
+    type: string
+  image:
+    type: string
+  elastic_password:
+    type: string
+  logstash_password:
+    type: string
+  kibana_password:
+    type: string
+  filebeat_password:
+    type: string
+  beats_password:
+    type: string
+  net:
+    type: string
+
+resources:
+  wait_condition:
+    type: OS::Heat::WaitCondition
+    properties:
+      handle: {get_resource: wait_handle}
+      count: 1
+      timeout: 600
+
+  wait_handle:
+    type: OS::Heat::WaitConditionHandle
+  
+  ELK:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      name: elk
+      networks:
+        - port:
+            get_resource: elk_CP
+      user_data_format: RAW
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+
+            export ELASTIC_VERSION=8.15.0
+
+            export ELASTIC_PASSWORD=$PARAM_0
+            export LOGSTASH_INTERNAL_PASSWORD=$PARAM_1
+            export KIBANA_SYSTEM_PASSWORD=$PARAM_2
+            export FILEBEAT_INTERNAL_PASSWORD=$PARAM_3
+            export BEATS_SYSTEM_PASSWORD=$PARAM_4
+
+            TARGET_DIR=/opt/prototype_master/elk_compose
+            sudo docker compose -f $TARGET_DIR/docker-compose.yml up setup
+            sudo docker compose -f $TARGET_DIR/docker-compose.yml up -d
+
+            # Tell Openstack the script is finished
+            wc_notify --data-binary '{"status": "SUCCESS"}'
+          params:
+            $PARAM_0: { get_param: elastic_password }
+            $PARAM_1: { get_param: logstash_password }
+            $PARAM_2: { get_param: kibana_password }
+            $PARAM_3: { get_param: filebeat_password }
+            $PARAM_4: { get_param: beats_password }
+            wc_notify: { get_attr: [wait_handle, curl_cli] }
+
+  elk_CP:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: net }
+      port_security_enabled: false
+
+  extvCP:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: public
+
+  association:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: { get_resource: extvCP }
+      port_id: { get_resource: elk_CP }
+
+outputs:
+  ELK_IP:
+    description: IPv4 address of the elk_CP port
+    value: { get_attr: [ elk_CP, fixed_ips, 0, ip_address ] }
+  wc_data:
+    value: { get_attr: [wait_condition, data] }
