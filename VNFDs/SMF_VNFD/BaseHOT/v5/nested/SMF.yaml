@@ -67,7 +67,7 @@ resources:
             export VNF_TYPE="smf"
             export VNF_ID=$PARAM_5
             export INTERFACE="ens4"
-            export 3GPP_NETWORK=$PARAM_6
+            export GPP_NETWORK=$PARAM_6
 
             # Start the filebeat service
             filebeat &

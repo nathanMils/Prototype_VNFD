@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -eux
+
+apt update
+apt upgrade
+
+apt install make
+apt install gcc
+apt install g++
+apt install libsctp-dev lksctp-tools
+apt install iproute2
+snap install cmake --classic
+
+git clone https://github.com/aligungr/UERANSIM
+
+cd UERANSIM
+make
+cd ..
+
+# Define paths
+TARGET_DIR=/opt/prototype_master
+SOURCE_DIR=$(dirname $0)/../files
+
+mkdir -p $TARGET_DIR
