@@ -149,11 +149,9 @@ amf:
         - *embb_slice2
         - *custom_slice
   supported_integrity_algorithms:
-    - "NIA0"
     - "NIA1"
     - "NIA2"
   supported_encryption_algorithms:
-    - "NEA0"
     - "NEA1"
     - "NEA2"
 

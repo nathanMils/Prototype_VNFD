@@ -5,7 +5,7 @@ services:
   vpp-upf:
     privileged: true
     container_name: "vpp-upf"
-    image: oaisoftwarealliance/oai-upf-vpp:v2.1.0
+    image: oaisoftwarealliance/oai-upf-vpp:v2.0.1
     environment:
       - IF_1_IP=${GPP_NETWORK}
       - IF_1_TYPE=N4
