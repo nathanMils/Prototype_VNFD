@@ -24,6 +24,8 @@ parameters:
     type: string
   id:
     type: string
+  ip:
+    type: string
 
 resources:
 
@@ -94,6 +96,8 @@ resources:
     properties:
       network: { get_param: 5g_network }
       port_security_enabled: false
+      fixed_ips:
+        - ip_address: { get_param: ip }
 
   5g_extvCP:
     type: OS::Neutron::FloatingIP

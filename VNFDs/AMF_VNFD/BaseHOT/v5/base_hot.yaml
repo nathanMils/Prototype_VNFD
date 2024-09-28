@@ -18,6 +18,8 @@ resources:
       elk_ip: { get_param: [ nfv, input, elk, ip ] }
       mysql_ip: { get_param: [ nfv, input, nfs, mysql, ip ]}
       nrf_ip: { get_param: [ nfv, input, nfs, nrf, ip ]}
+      ausf_ip: { get_param: [ nfv, input, nfs, ausf, ip ] }
+      udm_ip: { get_param: [ nfv, input, nfs, udm, ip ] }
       filebeat_password: { get_param: [ nfv, input, elk, filebeat_password ] }
       beats_password: { get_param: [ nfv, input, elk, beats_password ] }
       id: { get_param: [ nfv, input, nfs, amf, id ]}

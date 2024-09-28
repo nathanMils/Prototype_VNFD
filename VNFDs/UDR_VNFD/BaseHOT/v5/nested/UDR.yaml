@@ -24,6 +24,8 @@ parameters:
     type: string
   id:
     type: string
+  ip:
+    type: string
 
 resources:
 
@@ -56,6 +58,8 @@ resources:
             echo "$ELK_IP logstash" >> /etc/hosts
             echo "$MYSQL_IP mysql" >> /etc/hosts
             echo "$NRF_IP oai-nrf" >> /etc/hosts
+            echo "$UDR_IP oai-udr" >> /etc/hosts
+
             export PATH=$PATH:/opt/zeek/bin
             # Exporting required vars
             export FILEBEAT_INTERNAL_PASSWORD=$PARAM_3
@@ -94,6 +98,8 @@ resources:
     properties:
       network: { get_param: 5g_network }
       port_security_enabled: false
+      fixed_ips:
+        - ip_address: { get_param: ip }
 
   5g_extvCP:
     type: OS::Neutron::FloatingIP
