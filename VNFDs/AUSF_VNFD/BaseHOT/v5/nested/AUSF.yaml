@@ -71,6 +71,7 @@ resources:
             zeekctl deploy
 
             # Starting containers and networks
+            TARGET_DIR=/opt/prototype_master
             docker compose -f $TARGET_DIR/prototype_compose/docker-compose-ausf.yml up -d
 
           params:
