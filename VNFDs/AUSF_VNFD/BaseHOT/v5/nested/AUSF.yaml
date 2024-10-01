@@ -14,6 +14,8 @@ parameters:
     type: string
   nrf_ip:
     type: string
+  udm_ip:
+    type: string
   external_network:
     type: string
   elk_ip:
@@ -53,17 +55,20 @@ resources:
             ELK_IP=$PARAM_0
             MYSQL_IP=$PARAM_1
             NRF_IP=$PARAM_2
+            UDM_IP=$PARAM_3
 
             echo "$ELK_IP elasticsearch" >> /etc/hosts
             echo "$ELK_IP logstash" >> /etc/hosts
             echo "$MYSQL_IP mysql" >> /etc/hosts
             echo "$NRF_IP oai-nrf" >> /etc/hosts
+            echo "$UDM_IP oai-udm" >> /etc/hosts
+
             export PATH=$PATH:/opt/zeek/bin
             # Exporting required vars
-            export FILEBEAT_INTERNAL_PASSWORD=$PARAM_3
-            export BEATS_SYSTEM_PASSWORD=$PARAM_4
+            export FILEBEAT_INTERNAL_PASSWORD=$PARAM_4
+            export BEATS_SYSTEM_PASSWORD=$PARAM_5
             export VNF_TYPE="ausf"
-            export VNF_ID=$PARAM_5
+            export VNF_ID=$PARAM_6
             export INTERFACE="ens4"
 
             # Start the filebeat service
@@ -80,9 +85,10 @@ resources:
             $PARAM_0: { get_param: elk_ip }
             $PARAM_1: { get_param: mysql_ip }
             $PARAM_2: { get_param: nrf_ip }
-            $PARAM_3: { get_param: filebeat_password }
-            $PARAM_4: { get_param: beats_password }
-            $PARAM_5: { get_param: id }
+            $PARAM_3: { get_param: udm_ip }
+            $PARAM_4: { get_param: filebeat_password }
+            $PARAM_5: { get_param: beats_password }
+            $PARAM_6: { get_param: id }
       
 
   elk_CP:
