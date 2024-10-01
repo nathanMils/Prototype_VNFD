@@ -88,8 +88,8 @@ resources:
             export IP_3=$PARAM_8
             export EXT_DN_IP=$PARAM_9
             export NRF_IP=$PARAM_2
-            export REMOTE_IP_FOR_N4=$PARAM_10
-            export REMOTE_IP_FOR_N3=$PARAM_11
+            export REMOTE_IP_FOR_N4="10.5.0.1"
+            export REMOTE_IP_FOR_N3="10.8.0.1"
 
             # Start the filebeat service
             filebeat &
@@ -98,8 +98,8 @@ resources:
             zeekctl deploy
 
             # Starting containers and networks
-            TARGET_DIR=/opt/prototype_master
-            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-upf-vpp.yml up -d
+            # TARGET_DIR=/opt/prototype_master
+            # docker compose -f $TARGET_DIR/prototype_compose/docker-compose-upf-vpp.yml up -d
 
           params:
             $PARAM_0: { get_param: elk_ip }
