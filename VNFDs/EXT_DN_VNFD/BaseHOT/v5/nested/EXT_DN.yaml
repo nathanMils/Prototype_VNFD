@@ -6,13 +6,13 @@ parameters:
     type: string
   image:
     type: string
-  5g_access_network:
+  5g_core_network:
     type: string
   external_network:
     type: string
   ip: 
     type: string
-  upf_ip_access:
+  upf_ip_core:
     type: string
 
 resources:
@@ -45,19 +45,19 @@ resources:
             docker compose -f $TARGET_DIR/prototype_compose/docker-compose-extdn.yml up -d
 
           params:
-            $PARAM_0: { get_param: upf_ip_access }
+            $PARAM_0: { get_param: upf_ip_core }
 
 
 
-  5g_access_CP:
+  5g_core_CP:
     type: OS::Neutron::Port
     properties:
-      network: { get_param: 5g_access_network }
+      network: { get_param: 5g_core_network }
       port_security_enabled: false
       fixed_ips:
         - ip_address: { get_param: ip }
 
-  5g_access_extvCP:
+  5g_core_extvCP:
     type: OS::Neutron::FloatingIP
     properties:
       floating_network: public
@@ -65,5 +65,5 @@ resources:
   5g_access_association:
     type: OS::Neutron::FloatingIPAssociation
     properties:
-      floatingip_id: { get_resource: 5g_access_extvCP }
-      port_id: { get_resource: 5g_access_CP }
+      floatingip_id: { get_resource: 5g_core_extvCP }
+      port_id: { get_resource: 5g_core_CP }

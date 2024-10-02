@@ -11,9 +11,9 @@ resources:
     properties:
       flavor: { get_param: [ nfv, VDU, EXT_DN, computeFlavourId ] }
       image: { get_param: [ nfv, VDU, EXT_DN, vcImageId ] }
-      5g_access_network: { get_param: [ nfv, input, networks, 5g_access_net, id ] }
+      5g_core_network: { get_param: [ nfv, input, networks, 5g_core_net, id ] }
       external_network: { get_param: [ nfv, input, networks, external, id ] }
       ip: { get_param: [ nfv, input, nfs, ext_dn, ip ] }
-      upf_ip_access: { get_param: [ nfv, input, nfs, upf, ip_access ] }
+      upf_ip_core: { get_param: [ nfv, input, nfs, upf, ip_core ] }
 
 outputs: {}
