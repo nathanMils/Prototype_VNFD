@@ -6,6 +6,56 @@ parameters:
     type: json
 
 resources:
+  UERANSIM:
+    type: UERANSIM.yaml
+    depends_on: SMF
+    properties:
+      flavor: { get_param: [ nfv, VDU, UERANSIM, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, UERANSIM, vcImageId ] }
+      5g_network: { get_param: [ nfv, input, networks, 5g_net, id ] }
+      5g_access_network: { get_param: [ nfv, input, networks, 5g_access_net, id ] }
+      external_network: { get_param: [ nfv, input, networks, external, id ] }
+      ip: { get_param: [ nfv, input, nfs, ueransim, ip ] }
+      ip_access: { get_param: [ nfv, input, nfs, ueransim, ip_access ] }
+      amf_ip: { get_param: [ nfv, input, nfs, amf, ip ] }
+
+  SMF:
+    type: SMF.yaml
+    depends_on: AMF
+    properties:
+      flavor: { get_param: [ nfv, VDU, SMF, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, SMF, vcImageId ] }
+      elk_network: { get_param: [ nfv, input, networks, elk_net, id ]}
+      5g_network: { get_param: [ nfv, input, networks, 5g_net, id ] }
+      external_network: { get_param: [ nfv, input, networks, external, id ]}
+      3GPP_ip: { get_param: [ nfv, input, nfs, upf, ip ]} 
+      elk_ip: { get_param: [ nfv, input, elk, ip ] }
+      mysql_ip: { get_param: [ nfv, input, nfs, mysql, ip ]}
+      nrf_ip: { get_param: [ nfv, input, nfs, nrf, ip ]}
+      filebeat_password: { get_param: [ nfv, input, elk, filebeat_password ] }
+      beats_password: { get_param: [ nfv, input, elk, beats_password ] }
+      id: { get_param: [ nfv, input, nfs, smf, id ] }
+      ip: { get_param: [ nfv, input, nfs, smf, ip ] }
+
+  AMF:
+    type: AMF.yaml
+    depends_on: UPF
+    properties:
+      flavor: { get_param: [ nfv, VDU, AMF, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, AMF, vcImageId ] }
+      elk_network: { get_param: [ nfv, input, networks, elk_net, id ]}
+      5g_network: { get_param: [ nfv, input, networks, 5g_net, id ] }
+      external_network: { get_param: [ nfv, input, networks, external, id ]}
+      ip: { get_param: [ nfv, input, nfs, amf, ip ]}
+      elk_ip: { get_param: [ nfv, input, elk, ip ] }
+      mysql_ip: { get_param: [ nfv, input, nfs, mysql, ip ]}
+      nrf_ip: { get_param: [ nfv, input, nfs, nrf, ip ]}
+      ausf_ip: { get_param: [ nfv, input, nfs, ausf, ip ] }
+      udm_ip: { get_param: [ nfv, input, nfs, udm, ip ] }
+      filebeat_password: { get_param: [ nfv, input, elk, filebeat_password ] }
+      beats_password: { get_param: [ nfv, input, elk, beats_password ] }
+      id: { get_param: [ nfv, input, nfs, amf, id ]}
+
   UPF:
     type: UPF.yaml
     depends_on: EXT_DN
