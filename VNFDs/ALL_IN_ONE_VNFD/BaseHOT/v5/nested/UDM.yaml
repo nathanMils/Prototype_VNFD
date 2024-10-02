@@ -18,11 +18,15 @@ parameters:
     type: string
   elk_ip:
     type: string
+  udr_ip:
+    type: string
   filebeat_password:
     type: string
   beats_password:
     type: string
   id: 
+    type: string
+  ip:
     type: string
 
 resources:
@@ -60,17 +64,20 @@ resources:
             ELK_IP=$PARAM_0
             MYSQL_IP=$PARAM_1
             NRF_IP=$PARAM_2
+            UDR_IP=$PARAM_3
 
             echo "$ELK_IP elasticsearch" >> /etc/hosts
             echo "$ELK_IP logstash" >> /etc/hosts
             echo "$MYSQL_IP mysql" >> /etc/hosts
             echo "$NRF_IP oai-nrf" >> /etc/hosts
+            echo "$UDR_IP oai-udr" >> /etc/hosts
+
             export PATH=$PATH:/opt/zeek/bin
             # Exporting required vars
-            export FILEBEAT_INTERNAL_PASSWORD=$PARAM_3
-            export BEATS_SYSTEM_PASSWORD=$PARAM_4
+            export FILEBEAT_INTERNAL_PASSWORD=$PARAM_4
+            export BEATS_SYSTEM_PASSWORD=$PARAM_5
             export VNF_TYPE="udm"
-            export VNF_ID=$PARAM_5
+            export VNF_ID=$PARAM_6
             export INTERFACE="ens4"
 
             # Start the filebeat service
@@ -83,14 +90,16 @@ resources:
             TARGET_DIR=/opt/prototype_master
             docker compose -f $TARGET_DIR/prototype_compose/docker-compose-udm.yml up -d
 
+            # Tell Openstack the script is finished
             wc_notify --data-binary '{"status": "SUCCESS"}'
           params:
             $PARAM_0: { get_param: elk_ip }
             $PARAM_1: { get_param: mysql_ip }
             $PARAM_2: { get_param: nrf_ip }
-            $PARAM_3: { get_param: filebeat_password }
-            $PARAM_4: { get_param: beats_password }
-            $PARAM_5: { get_param: id }
+            $PARAM_3: { get_param: udr_ip }
+            $PARAM_4: { get_param: filebeat_password }
+            $PARAM_5: { get_param: beats_password }
+            $PARAM_6: { get_param: id }
             wc_notify: { get_attr: [wait_handle, curl_cli] }
 
   elk_CP:
@@ -104,6 +113,8 @@ resources:
     properties:
       network: { get_param: 5g_network }
       port_security_enabled: false
+      fixed_ips:
+        - ip_address: { get_param: ip }
 
   5g_extvCP:
     type: OS::Neutron::FloatingIP

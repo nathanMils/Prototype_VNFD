@@ -24,6 +24,8 @@ parameters:
     type: string
   id:
     type: string
+  ip:
+    type: string
 
 resources:
   wait_condition:
@@ -35,6 +37,7 @@ resources:
 
   wait_handle:
     type: OS::Heat::WaitConditionHandle
+
 
   UDR:
     type: OS::Nova::Server
@@ -65,6 +68,8 @@ resources:
             echo "$ELK_IP logstash" >> /etc/hosts
             echo "$MYSQL_IP mysql" >> /etc/hosts
             echo "$NRF_IP oai-nrf" >> /etc/hosts
+            echo "$UDR_IP oai-udr" >> /etc/hosts
+
             export PATH=$PATH:/opt/zeek/bin
             # Exporting required vars
             export FILEBEAT_INTERNAL_PASSWORD=$PARAM_3
@@ -83,6 +88,7 @@ resources:
             TARGET_DIR=/opt/prototype_master
             docker compose -f $TARGET_DIR/prototype_compose/docker-compose-udr.yml up -d
 
+            # Tell Openstack the script is finished
             wc_notify --data-binary '{"status": "SUCCESS"}'
           params:
             $PARAM_0: { get_param: elk_ip }
@@ -92,7 +98,6 @@ resources:
             $PARAM_4: { get_param: beats_password }
             $PARAM_5: { get_param: id }
             wc_notify: { get_attr: [wait_handle, curl_cli] }
-      
 
   elk_CP:
     type: OS::Neutron::Port
@@ -105,6 +110,8 @@ resources:
     properties:
       network: { get_param: 5g_network }
       port_security_enabled: false
+      fixed_ips:
+        - ip_address: { get_param: ip }
 
   5g_extvCP:
     type: OS::Neutron::FloatingIP

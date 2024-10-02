@@ -1,0 +1,115 @@
+{
+    "flavourId":"v5",
+    "vimConnectionInfo": {
+      "vim": {
+        "id": "3cc2c4ff-525c-48b4-94c9-29247223322f",
+        "vimId": "<VIM_ID>",
+        "vimType": "openstack"
+      }
+    },
+    "additionalParams": {
+      "lcm-operation-user-data": "./UserData/lcm_user_data.py",
+      "lcm-operation-user-data-class": "StandardUserData",
+      "nfv": {
+        "input": {
+          "elk-0": {
+            "ip": "10.6.0.3",
+            "elastic_password": "elasticness",
+            "logstash_password": "in_the_logging_days",
+            "kibana_password": "kibanaNana",
+            "filebeat_password": "filebeatNathan",
+            "beats_password": "beatsNathan"
+          },
+          "nfs-0": {
+            "mysql": {
+              "ip": "10.5.0.3",
+              "id": "00000000-0000-0000-0000-000000000001"
+            },
+            "nrf": {
+              "ip": "10.5.0.4",
+              "id": "00000000-0000-0000-0000-000000000002"
+            },
+            "udr": {
+              "ip": "10.5.0.10",
+              "id": "00000000-0000-0000-0000-000000000003"
+            },
+            "udm": {
+              "ip": "10.5.0.9",
+              "id": "00000000-0000-0000-0000-000000000004"
+            },
+            "ausf": {
+              "ip": "10.5.0.8",
+              "id": "00000000-0000-0000-0000-000000000005"
+            },
+            "amf": {
+              "ip": "10.5.0.5",
+              "id": "00000000-0000-0000-0000-000000000006"
+            },
+            "smf": {
+              "ip": "10.5.0.7",
+              "id": "00000000-0000-0000-0000-000000000007"
+            },
+            "upf": {
+              "ip": "10.5.0.201",
+              "ip_core": "10.7.0.201",
+              "ip_access": "10.8.0.201",
+              "id": "00000000-0000-0000-0000-000000000008"
+            },
+            "ext_dn": {
+              "ip": "10.7.0.4",
+              "id": "00000000-0000-0000-0000-000000000009"
+            },
+            "ueransim": {
+              "ip": "10.5.0.6",
+              "ip_core": "10.7.0.3",
+              "ip_access": "10.8.0.5",
+              "id": "00000000-0000-0000-0000-000000000010"
+            }
+          },
+          "networks-0": {
+            "elk_net": {
+                "id": "ELK_net"
+            },
+            "5g_net": {
+                "id": "5G_net"
+            },
+            "5g_core_net": {
+                "id": "5G_core_net"
+            },
+            "5g_access_net": {
+                "id": "5G_access_net"
+            },
+            "external": {
+                "id": "public"
+            }
+          },
+          "networks": {
+            "elk_net": {
+                "id": "ELK_net",
+                "cidr_ipv4": "10.6.0.0/24",
+                "cidr_ipv6": "2001:db8:abcd:002::/64"
+            },
+            "5g_net": {
+                "id": "5G_net",
+                "cidr_ipv4": "10.5.0.0/24",
+                "cidr_ipv6": "2001:db8:abcd:001::/64"
+            },
+            "5g_core_net": {
+                "id": "5G_core_net",
+                "cidr_ipv4": "10.7.0.0/24",
+                "cidr_ipv6": "2001:db8:abcd:003::/64"
+            },
+            "5g_access_net": {
+                "id": "5G_access_net",
+                "cidr_ipv4": "10.8.0.0/24",
+                "cidr_ipv6": "2001:db8:abcd:004::/64"
+            },
+            "external": {
+                "id": "public",
+                "external_gateway": "172.24.4.10"
+            }
+          }
+        }
+      }
+    }
+  }

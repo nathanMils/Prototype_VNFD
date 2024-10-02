@@ -36,10 +36,6 @@ parameters:
     type: string
   id:
     type: string
-  smf_ip:
-    type: string
-  ueransim_ip:
-    type: string
 
 resources:
   wait_condition:
@@ -96,9 +92,7 @@ resources:
             export IP_2=$PARAM_7
             export IP_3=$PARAM_8
             export EXT_DN_IP=$PARAM_9
-            export NRF_IP=$PARAM_2
-            export REMOTE_IP_FOR_N4=$PARAM_10
-            export REMOTE_IP_FOR_N3=$PARAM_11
+            export NRF_IP_ADDR=$PARAM_2
 
             # Start the filebeat service
             filebeat &
@@ -106,10 +100,11 @@ resources:
             # Start the zeek service
             zeekctl deploy
 
-            # Starting containers and networks
+            Starting containers and networks
             TARGET_DIR=/opt/prototype_master
             docker compose -f $TARGET_DIR/prototype_compose/docker-compose-upf-vpp.yml up -d
-
+          
+            # Tell Openstack the script is finished
             wc_notify --data-binary '{"status": "SUCCESS"}'
           params:
             $PARAM_0: { get_param: elk_ip }
@@ -119,11 +114,9 @@ resources:
             $PARAM_4: { get_param: beats_password }
             $PARAM_5: { get_param: id }
             $PARAM_6: { get_param: ip }
-            $PARAM_7: { get_param: ip_core }
-            $PARAM_8: { get_param: ip_access }
+            $PARAM_7: { get_param: ip_access }
+            $PARAM_8: { get_param: ip_core }
             $PARAM_9: { get_param: ext_dn_ip }
-            $PARAM_10: { get_param: smf_ip }
-            $PARAM_11: { get_param: ueransim_ip }
             wc_notify: { get_attr: [wait_handle, curl_cli] }
 
   elk_CP:

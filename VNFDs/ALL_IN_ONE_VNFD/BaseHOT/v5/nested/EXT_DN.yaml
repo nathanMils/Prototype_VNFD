@@ -16,6 +16,15 @@ parameters:
     type: string
 
 resources:
+  wait_condition:
+    type: OS::Heat::WaitCondition
+    properties:
+      handle: {get_resource: wait_handle}
+      count: 1
+      timeout: 600
+
+  wait_handle:
+    type: OS::Heat::WaitConditionHandle
 
   EXT_DN:
     type: OS::Nova::Server
@@ -25,7 +34,7 @@ resources:
       name: 
       networks:
         - port:
-            get_resource: 5g_core_CP
+            get_resource: 5g_access_CP
       user_data_format: RAW
       user_data:
         str_replace:
@@ -44,9 +53,11 @@ resources:
             TARGET_DIR=/opt/prototype_master
             docker compose -f $TARGET_DIR/prototype_compose/docker-compose-extdn.yml up -d
 
+            # Tell Openstack the script is finished
+            wc_notify --data-binary '{"status": "SUCCESS"}'
           params:
             $PARAM_0: { get_param: upf_ip_core }
-
+            wc_notify: { get_attr: [wait_handle, curl_cli] }
 
 
   5g_core_CP:
@@ -67,3 +78,7 @@ resources:
     properties:
       floatingip_id: { get_resource: 5g_core_extvCP }
       port_id: { get_resource: 5g_core_CP }
+
+outputs:
+  wc_data:
+    value: { get_attr: [wait_condition, data] }

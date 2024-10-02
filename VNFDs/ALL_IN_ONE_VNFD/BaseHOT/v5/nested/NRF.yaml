@@ -6,6 +6,8 @@ parameters:
     type: string
   image:
     type: string
+  ip:
+    type: string
   elk_network:
     type: string
   5g_network:
@@ -79,6 +81,7 @@ resources:
             TARGET_DIR=/opt/prototype_master
             docker compose -f $TARGET_DIR/prototype_compose/docker-compose-nrf.yml up -d
             
+            # Tell Openstack the script is finished
             wc_notify --data-binary '{"status": "SUCCESS"}'
           params:
             $PARAM_0: { get_param: elk_ip }
@@ -99,6 +102,8 @@ resources:
     properties:
       network: { get_param: 5g_network }
       port_security_enabled: false
+      fixed_ips:
+        - ip_address: { get_param: ip }
 
   5g_extvCP:
     type: OS::Neutron::FloatingIP

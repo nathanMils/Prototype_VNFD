@@ -6,6 +6,8 @@ parameters:
     type: string
   image:
     type: string
+  ip:
+    type: string
   elastic_password:
     type: string
   logstash_password:
@@ -25,11 +27,11 @@ resources:
     properties:
       handle: {get_resource: wait_handle}
       count: 1
-      timeout: 600
+      timeout: 1200
 
   wait_handle:
     type: OS::Heat::WaitConditionHandle
-  
+
   ELK:
     type: OS::Nova::Server
     properties:
@@ -72,6 +74,8 @@ resources:
     properties:
       network: { get_param: net }
       port_security_enabled: false
+      fixed_ips:
+        - ip_address: { get_param: ip }
 
   extvCP:
     type: OS::Neutron::FloatingIP
@@ -85,8 +89,5 @@ resources:
       port_id: { get_resource: elk_CP }
 
 outputs:
-  ELK_IP:
-    description: IPv4 address of the elk_CP port
-    value: { get_attr: [ elk_CP, fixed_ips, 0, ip_address ] }
   wc_data:
     value: { get_attr: [wait_condition, data] }
