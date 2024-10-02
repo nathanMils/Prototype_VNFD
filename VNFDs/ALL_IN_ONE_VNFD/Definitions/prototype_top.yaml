@@ -21,7 +21,7 @@ topology_template:
       type: company.provider.VNF
       properties:
         flavour_id: { get_input: selected_flavour }
-        descriptor_id: 00000000-0000-0000-0000-000000000010
+        descriptor_id: 00000000-0000-0000-0000-000000000011
         provider: Nathan
         product_name: ALL_In_One
         software_version: '1.0'

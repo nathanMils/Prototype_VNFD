@@ -20,6 +20,7 @@ FILE_IDS=(
     ["upf_instantiate.json"]="00000000-0000-0000-0000-000000000008"
     ["ext_dn_instantiate.json"]="00000000-0000-0000-0000-000000000009"
     ["ueransim_instantiate.json"]="00000000-0000-0000-0000-000000000010"
+    ["all_in_one.json"]="00000000-0000-0000-0000-000000000011"
 )
 
 ID="${FILE_IDS[${VNF}_instantiate.json]}"
