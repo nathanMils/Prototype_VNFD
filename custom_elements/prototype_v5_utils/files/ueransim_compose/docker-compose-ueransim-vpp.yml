@@ -41,15 +41,3 @@ services:
             timeout: 5s
             retries: 5
         network_mode: "host"
-# networks:
-#     public_net:
-#         ipv4_address: ${UERANSIM_IP_PUBLIC_NET}
-#     public_net_access:
-#         ipv4_address: ${UERANSIM_IP_PUBLIC_NET_ACCESS}
-# networks:
-#     public_net:
-#         external:
-#             name: demo-oai-public-net
-#     public_net_access:
-#         external:
-#             name: oai-public-access
