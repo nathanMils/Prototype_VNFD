@@ -399,10 +399,25 @@ topology_template:
         order: 4
       requirements:
         - virtual_binding: EXT_DN
+        - virtual_link: elk_VL1
+
+    EXT_DN_CP2:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 5
+      requirements:
+        - virtual_binding: EXT_DN
         - virtual_link: 5g_core_VL1
 
-
     EXT_DN_extCP1:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: elkVL1
+
+    EXT_DN_extCP2:
       type: tosca.nodes.nfv.VnfExtCp
       properties:
         layer_protocols: [ ipv4 ]

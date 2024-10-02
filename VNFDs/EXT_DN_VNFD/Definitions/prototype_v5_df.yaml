@@ -92,7 +92,18 @@ topology_template:
         order: 4
 
 
+    CP2:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 5
+
     extCP1:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+
+    extCP2:
       type: tosca.nodes.nfv.VnfExtCp
       properties:
         layer_protocols: [ ipv4 ]
