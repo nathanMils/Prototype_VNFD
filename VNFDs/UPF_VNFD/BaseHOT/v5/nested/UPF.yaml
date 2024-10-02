@@ -36,10 +36,6 @@ parameters:
     type: string
   id:
     type: string
-  smf_ip:
-    type: string
-  ueransim_ip:
-    type: string
 
 resources:
 
@@ -88,8 +84,6 @@ resources:
             export IP_3=$PARAM_8
             export EXT_DN_IP=$PARAM_9
             export NRF_IP=$PARAM_2
-            export REMOTE_IP_FOR_N4="10.5.0.1"
-            export REMOTE_IP_FOR_N3="10.8.0.1"
 
             # Start the filebeat service
             filebeat &
@@ -114,8 +108,6 @@ resources:
             $PARAM_7: { get_param: ip_core }
             $PARAM_8: { get_param: ip_access }
             $PARAM_9: { get_param: ext_dn_ip }
-            $PARAM_10: { get_attr: [ 5g_CP, fixed_ips, 0, ip_address ] }
-            $PARAM_11: { get_attr: [ 5g_access_CP, fixed_ips, 0, ip_address ] }
 
   elk_CP:
     type: OS::Neutron::Port
