@@ -105,8 +105,8 @@ resources:
             $PARAM_4: { get_param: beats_password }
             $PARAM_5: { get_param: id }
             $PARAM_6: { get_param: ip }
-            $PARAM_7: { get_param: ip_core }
-            $PARAM_8: { get_param: ip_access }
+            $PARAM_7: { get_param: ip_access }
+            $PARAM_8: { get_param: ip_core }
             $PARAM_9: { get_param: ext_dn_ip }
 
   elk_CP:
