@@ -16,15 +16,6 @@ parameters:
     type: string
 
 resources:
-  wait_condition:
-    type: OS::Heat::WaitCondition
-    properties:
-      handle: {get_resource: wait_handle}
-      count: 1
-      timeout: 600
-
-  wait_handle:
-    type: OS::Heat::WaitConditionHandle
 
   EXT_DN:
     type: OS::Nova::Server
@@ -33,8 +24,6 @@ resources:
       image: { get_param: image }
       name: 
       networks:
-        - port:
-            get_resource: elk_CP
         - port:
             get_resource: 5g_core_CP
       user_data_format: RAW
@@ -50,6 +39,7 @@ resources:
 
             # Exporting required vars
             export IP_3=$PARAM_0
+            export INTERFACE="ens3"
 
             # Starting containers and networks
             TARGET_DIR=/opt/prototype_master
@@ -57,12 +47,6 @@ resources:
 
           params:
             $PARAM_0: { get_param: upf_ip_core }
-
-  elk_CP:
-    type: OS::Neutron::Port
-    properties:
-      network: { get_param: elk_network }
-      port_security_enabled: false
 
   5g_core_CP:
     type: OS::Neutron::Port
@@ -82,18 +66,3 @@ resources:
     properties:
       floatingip_id: { get_resource: 5g_core_extvCP }
       port_id: { get_resource: 5g_core_CP }
-
-  elk_extvCP:
-    type: OS::Neutron::FloatingIP
-    properties:
-      floating_network: public
-
-  elk_association:
-    type: OS::Neutron::FloatingIPAssociation
-    properties:
-      floatingip_id: { get_resource: elk_extvCP }
-      port_id: { get_resource: elk_CP }
-
-outputs:
-  wc_data:
-    value: { get_attr: [wait_condition, data] }
