@@ -15,12 +15,6 @@ resources:
       5g_network: { get_param: [ nfv, input, networks, 5g_net, id ] }
       ip: { get_param: [ nfv, input, nfs, mysql, ip ] }
 
-      elk_network: { get_param: [ nfv, input, networks, elk_net, id ] }
-      elk_ip: { get_param: [ nfv, input, elk, ip ] }
-      filebeat_password: { get_param: [ nfv, input, elk, filebeat_password ] }
-      beats_password: { get_param: [ nfv, input, elk, beats_password ] }
-      id: { get_param: [ nfv, input, nfs, mysql, id ] }
-
       external_network: { get_param: [ nfv, input, networks, external, id ] }
 
 outputs: {}
