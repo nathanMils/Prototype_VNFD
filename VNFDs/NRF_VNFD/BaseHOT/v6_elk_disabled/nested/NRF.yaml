@@ -1,0 +1,68 @@
+heat_template_version: 2013-05-23
+description: 'NRF HOT for Sample VNF'
+
+parameters:
+  flavor:
+    type: string
+  image:
+    type: string
+
+  5g_network:
+    type: string
+  ip:
+    type: string
+  mysql_ip:
+    type: string
+    
+  external_network:
+    type: string
+
+resources:
+
+  NRF:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      name: NRF
+      networks:
+        - port:
+            get_resource: 5g_CP
+      user_data_format: RAW
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+
+            sudo useradd -m -s /bin/bash nathan
+            echo "nathan:stupid" | sudo chpasswd
+            echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
+
+            MYSQL_IP=$PARAM_0
+            echo "$MYSQL_IP mysql" >> /etc/hosts
+
+            # Starting nrf
+            TARGET_DIR=/opt/prototype_master
+            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-nrf.yml up -d
+            
+          params:
+            $PARAM_0: { get_param: mysql_ip }
+
+  5g_CP:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: 5g_network }
+      port_security_enabled: false
+      fixed_ips:
+        - ip_address: { get_param: ip }
+
+  5g_extvCP:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: public
+
+  5g_association:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: { get_resource: 5g_extvCP }
+      port_id: { get_resource: 5g_CP }

@@ -1,5 +1,5 @@
 heat_template_version: 2013-05-23
-description: 'MySQL DB HOT for Sample VNF'
+description: 'NRF HOT for Sample VNF'
 
 parameters:
   flavor:
@@ -10,6 +10,8 @@ parameters:
   5g_network:
     type: string
   ip:
+    type: string
+  mysql_ip:
     type: string
 
   elk_network:
@@ -25,14 +27,15 @@ parameters:
 
   external_network:
     type: string
+
 resources:
 
-  MySQL:
+  NRF:
     type: OS::Nova::Server
     properties:
       flavor: { get_param: flavor }
       image: { get_param: image }
-      name: MySQL
+      name: NRF
       networks:
         - port:
             get_resource: 5g_CP
@@ -49,31 +52,34 @@ resources:
             echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
 
             ELK_IP=$PARAM_0
+            MYSQL_IP=$PARAM_1
             echo "$ELK_IP elasticsearch" >> /etc/hosts
             echo "$ELK_IP logstash" >> /etc/hosts
-
-            export FILEBEAT_INTERNAL_PASSWORD=$PARAM_1
-            export BEATS_SYSTEM_PASSWORD=$PARAM_2
-            export VNF_TYPE="mysql"
-            export VNF_ID=$PARAM_3
+            echo "$MYSQL_IP mysql" >> /etc/hosts
+            
+            export FILEBEAT_INTERNAL_PASSWORD=$PARAM_2
+            export BEATS_SYSTEM_PASSWORD=$PARAM_3
+            export VNF_TYPE="nrf"
+            export VNF_ID=$PARAM_4
 
             export PATH=$PATH:/opt/zeek/bin
-            
+
             # Start the filebeat service
             filebeat &
 
             # Start the zeek service
             zeekctl deploy
 
-            # Starting mysql container
+            # Starting nrf
             TARGET_DIR=/opt/prototype_master
-            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-mysql.yml up -d
+            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-nrf.yml up -d
             
           params:
             $PARAM_0: { get_param: elk_ip }
-            $PARAM_1: { get_param: filebeat_password }
-            $PARAM_2: { get_param: beats_password }
-            $PARAM_3: { get_param: id }
+            $PARAM_1: { get_param: mysql_ip }
+            $PARAM_2: { get_param: filebeat_password }
+            $PARAM_3: { get_param: beats_password }
+            $PARAM_4: { get_param: id }
 
   5g_CP:
     type: OS::Neutron::Port
