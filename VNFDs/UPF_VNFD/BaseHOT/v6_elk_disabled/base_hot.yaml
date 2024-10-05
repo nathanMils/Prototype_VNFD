@@ -19,14 +19,8 @@ resources:
       ip_core: { get_param: [ nfv, input, nfs, upf, ip_core ] }
       ip_access: { get_param: [ nfv, input, nfs, upf, ip_access ] }
       ext_dn_ip: { get_param: [ nfv, input, nfs, ext_dn, ip ] }
-      mysql_ip: { get_param: [ nfv, input, nfs, mysql, ip ]}
-      nrf_ip: { get_param: [ nfv, input, nfs, nrf, ip ]}
-      
-      elk_network: { get_param: [ nfv, input, networks, elk_net, id ]}
-      elk_ip: { get_param: [ nfv, input, elk, ip ] }
-      filebeat_password: { get_param: [ nfv, input, elk, filebeat_password ] }
-      beats_password: { get_param: [ nfv, input, elk, beats_password ] }
-      id: { get_param: [ nfv, input, nfs, upf, id ] }
+      mysql_ip: { get_param: [ nfv, input, nfs, mysql, ip ] }
+      nrf_ip: { get_param: [ nfv, input, nfs, nrf, ip ] }
 
       external_network: { get_param: [ nfv, input, networks, external, id ] }
 

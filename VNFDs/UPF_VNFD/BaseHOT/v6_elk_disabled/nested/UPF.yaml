@@ -25,17 +25,6 @@ parameters:
     type: string
   ext_dn_ip:
     type: string
-
-  elk_network:
-    type: string
-  elk_ip:
-    type: string
-  filebeat_password:
-    type: string
-  beats_password:
-    type: string
-  id:
-    type: string
   
   external_network:
     type: string
@@ -56,8 +45,6 @@ resources:
             get_resource: 5g_CP
         - port:
             get_resource: 5g_core_CP
-        - port:
-            get_resource: elk_CP
       user_data_format: RAW
       user_data:
         str_replace:
@@ -68,48 +55,28 @@ resources:
             echo "nathan:stupid" | sudo chpasswd
             echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
 
-            ELK_IP=$PARAM_0
-            MYSQL_IP=$PARAM_1
-            NRF_IP=$PARAM_2
-            echo "$ELK_IP elasticsearch" >> /etc/hosts
-            echo "$ELK_IP logstash" >> /etc/hosts
+            MYSQL_IP=$PARAM_0
+            NRF_IP=$PARAM_1
             echo "$MYSQL_IP mysql" >> /etc/hosts
             echo "$NRF_IP oai-nrf" >> /etc/hosts
 
-            export FILEBEAT_INTERNAL_PASSWORD=$PARAM_3
-            export BEATS_SYSTEM_PASSWORD=$PARAM_4
-            export VNF_TYPE="upf"
-            export VNF_ID=$PARAM_5
-            export INTERFACE="ens4"
-            export GPP_NETWORK=$PARAM_6
-            export IP_2=$PARAM_7
-            export IP_3=$PARAM_8
-            export EXT_DN_IP=$PARAM_9
-            export NRF_IP_ADDR=$PARAM_2
-
-            export PATH=$PATH:/opt/zeek/bin
-
-            # Start the filebeat service
-            filebeat &
-
-            # Start the zeek service
-            zeekctl deploy
+            export GPP_NETWORK=$PARAM_2
+            export IP_2=$PARAM_3
+            export IP_3=$PARAM_4
+            export EXT_DN_IP=$PARAM_5
+            export NRF_IP_ADDR=$PARAM_1
 
             # Starting upf
             TARGET_DIR=/opt/prototype_master
             docker compose -f $TARGET_DIR/prototype_compose/docker-compose-upf-vpp.yml up -d
           
           params:
-            $PARAM_0: { get_param: elk_ip }
-            $PARAM_1: { get_param: mysql_ip }
-            $PARAM_2: { get_param: nrf_ip }
-            $PARAM_3: { get_param: filebeat_password }
-            $PARAM_4: { get_param: beats_password }
-            $PARAM_5: { get_param: id }
-            $PARAM_6: { get_param: ip }
-            $PARAM_7: { get_param: ip_access }
-            $PARAM_8: { get_param: ip_core }
-            $PARAM_9: { get_param: ext_dn_ip }
+            $PARAM_0: { get_param: mysql_ip }
+            $PARAM_1: { get_param: nrf_ip }
+            $PARAM_2: { get_param: ip }
+            $PARAM_3: { get_param: ip_access }
+            $PARAM_4: { get_param: ip_core }
+            $PARAM_5: { get_param: ext_dn_ip }
 
   5g_access_CP:
     type: OS::Neutron::Port
@@ -161,20 +128,3 @@ resources:
     properties:
       floatingip_id: { get_resource: 5g_core_extvCP }
       port_id: { get_resource: 5g_core_CP }
-
-  elk_CP:
-    type: OS::Neutron::Port
-    properties:
-      network: { get_param: elk_network }
-      port_security_enabled: false  
-
-  elk_extvCP:
-    type: OS::Neutron::FloatingIP
-    properties:
-      floating_network: public
-
-  elk_association:
-    type: OS::Neutron::FloatingIPAssociation
-    properties:
-      floatingip_id: { get_resource: elk_extvCP }
-      port_id: { get_resource: elk_CP }
