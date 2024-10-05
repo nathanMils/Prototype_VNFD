@@ -10,6 +10,7 @@ imports:
   - prototype_simple_df.yaml
   - prototype_v4_df.yaml
   - prototype_v5_df.yaml
+  - prototype_v6_df.yaml
 
 topology_template:
   inputs:
