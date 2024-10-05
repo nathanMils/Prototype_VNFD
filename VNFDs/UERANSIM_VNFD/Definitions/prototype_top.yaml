@@ -8,6 +8,8 @@ imports:
   - prototype_types.yaml
   - prototype_example_df.yaml
   - prototype_v5_df.yaml
+  - prototype_v6_df.yaml
+  - prototype_v6_elk_disabled_df.yaml
 
 topology_template:
   inputs:
