@@ -6,15 +6,17 @@ parameters:
     type: string
   image:
     type: string
-  elk_network:
-    type: string
+
   5g_network:
     type: string
   mysql_ip:
     type: string
   nrf_ip:
     type: string
-  external_network:
+  ip:
+    type: string
+
+  elk_network:
     type: string
   elk_ip:
     type: string
@@ -24,7 +26,8 @@ parameters:
     type: string
   id:
     type: string
-  ip:
+  
+  external_network:
     type: string
 
 resources:
@@ -37,35 +40,33 @@ resources:
       name: UDR
       networks:
         - port:
-            get_resource: elk_CP
-        - port:
             get_resource: 5g_CP
+        - port:
+            get_resource: elk_CP
       user_data_format: RAW
       user_data:
         str_replace:
           template: |
             #!/bin/bash
+            
             sudo useradd -m -s /bin/bash nathan
-            # Set a password for the new user
             echo "nathan:stupid" | sudo chpasswd
-            # Optionally, add the user to the sudoers file for administrative privileges
             echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
+
             ELK_IP=$PARAM_0
             MYSQL_IP=$PARAM_1
             NRF_IP=$PARAM_2
-
             echo "$ELK_IP elasticsearch" >> /etc/hosts
             echo "$ELK_IP logstash" >> /etc/hosts
             echo "$MYSQL_IP mysql" >> /etc/hosts
             echo "$NRF_IP oai-nrf" >> /etc/hosts
 
-            export PATH=$PATH:/opt/zeek/bin
-            # Exporting required vars
             export FILEBEAT_INTERNAL_PASSWORD=$PARAM_3
             export BEATS_SYSTEM_PASSWORD=$PARAM_4
             export VNF_TYPE="udr"
             export VNF_ID=$PARAM_5
-            export INTERFACE="ens4"
+
+            export PATH=$PATH:/opt/zeek/bin
 
             # Start the filebeat service
             filebeat &
@@ -73,7 +74,7 @@ resources:
             # Start the zeek service
             zeekctl deploy
 
-            # Starting containers and networks
+            # Starting udr
             TARGET_DIR=/opt/prototype_master
             docker compose -f $TARGET_DIR/prototype_compose/docker-compose-udr.yml up -d
 
@@ -84,13 +85,6 @@ resources:
             $PARAM_3: { get_param: filebeat_password }
             $PARAM_4: { get_param: beats_password }
             $PARAM_5: { get_param: id }
-      
-
-  elk_CP:
-    type: OS::Neutron::Port
-    properties:
-      network: { get_param: elk_network }
-      port_security_enabled: false
 
   5g_CP:
     type: OS::Neutron::Port
@@ -110,6 +104,12 @@ resources:
     properties:
       floatingip_id: { get_resource: 5g_extvCP }
       port_id: { get_resource: 5g_CP }
+
+  elk_CP:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: elk_network }
+      port_security_enabled: false
   
   elk_extvCP:
     type: OS::Neutron::FloatingIP
