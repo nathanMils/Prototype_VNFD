@@ -2,6 +2,7 @@
 
 set -eux
 
+##################################### UERANSIM Installation #####################################
 apt update
 apt upgrade
 
@@ -28,4 +29,7 @@ cp -r $SOURCE_DIR/ueransim $TARGET_DIR
 
 sudo chmod +x UERANSIM/build/nr-binder
 
-pip install selenium
+##################################### Traffic Generation Scripts #####################################
+# Install python dependencies
+pip install subprocess
+pip install selenium paho-mqtt
