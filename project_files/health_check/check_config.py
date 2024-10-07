@@ -53,20 +53,19 @@ def check_ip_in_response(response, vnf_name):
             # Check if there is any 'href' with an IP-like value
             for item in items:
                 if 'href' in item and item['href']:  # If href exists and is non-empty
-                    print(f"\033[0;32m{vnf_name}: Registered successfully with IP: {item['href']}\033[0m")
+                    logging.info(f"{vnf_name}: Registered successfully with IP: {item['href']}")
                     return True
-        print(f"\033[0;31m{vnf_name}: Error, no registration\033[0m")
+        logging.error(f"{vnf_name}: Error, no registration")
         return False
     except json.JSONDecodeError:
         logging.error(f"{vnf_name}: Invalid JSON response")
-        print(f"\033[0;31m{vnf_name}: Invalid JSON response\033[0m")
         return False
 
 def check_config_and_output_responses(nrf_ip):
     curl_cmd = generate_nrf_curl_cmd(nrf_ip)
 
-    logging.debug('\033[0;34mChecking if the NFs are configured\033[0m....')
-    logging.debug('\033[0;34mChecking if AMF, SMF and UPF registered with nrf core network\033[0m....')
+    logging.debug('Checking if the NFs are configured....')
+    logging.debug('Checking if AMF, SMF and UPF registered with nrf core network....')
 
     # Check each VNF
     for vnf in ["AMF", "SMF", "UPF", "AUSF", "UDM", "UDR"]:
