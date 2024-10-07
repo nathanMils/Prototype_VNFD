@@ -8,6 +8,9 @@ prototype_v4_minmal: c13c449f4c6123cbe3a90214f38f94ace2180c0eae7ff00eb28c95f12db
 prototype_v4_elk: f993f9a26c3eadaa175bf2bf369915b198d631ea9281b245b65d2e7bc3198cd5
 prototype_v5_minimal: 545ad76a479d08f8c21b75f162b51d51bfdf6c1ac0a8a30a1aba3a1d583abfb9
 prototype_v5_utils: 29beb21189912b9c15e203b3e3b40983d5ef81497433afec95e26de992d4de39
+prototype_v6_minimal: 45058285300decc7d37bd3448bf6e86fd0923c5b6048288073597b976f37dc4d
+prototype_v6_elk:
+prototype_v6_ueransim: 
 
 Prototype_v4_minimal: DIB_RELEASE=jammy disk-image-create vm ubuntu-minimal iptables prototype_v4_minimal filebeat zeek docker_compose ping cloud-init os-collect-config os-refresh-config os-apply-config heat-config heat-config-script heat-config-cfn-init -o prototype_v4_minimal.qcow2
 Prototype_v4_elk: DIB_RELEASE=jammy disk-image-create vm ubuntu-minimal iptables prototype_v4_elk docker_compose ping cloud-init os-collect-config os-refresh-config os-apply-config heat-config heat-config-script heat-config-cfn-init -o prototype_v4_elk.qcow2
