@@ -21,5 +21,6 @@ SOURCE_DIR=$(dirname $0)/../files
 
 mkdir -p $TARGET_DIR
 cp -r $SOURCE_DIR/elk_compose $TARGET_DIR
+cp -r $SOURCE_DIR/ueransim $TARGET_DIR
 
 sudo chmod +x $TARGET_DIR/elk_compose/setup/entrypoint.sh
