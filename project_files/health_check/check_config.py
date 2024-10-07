@@ -41,13 +41,15 @@ def run_cmd(cmd, silent=True):
                         stdout=subprocess.PIPE,
                         universal_newlines=True)
         result = res.stdout.strip()
-    except:
-        pass
+    except subprocess.CalledProcessError as e:
+        logging.error(f"Command failed with error: {e}")
     return result
 
 def check_ip_in_response(response, ip, vnf_name):
+    logging.debug(f"Response for {vnf_name}: {response}")
     try:
         data = json.loads(response)
+        logging.debug(f"Parsed JSON data for {vnf_name}: {data}")
         items = data.get('_links', {}).get('item', [])
         for item in items:
             if ip in item.get('href', ''):
@@ -56,6 +58,7 @@ def check_ip_in_response(response, ip, vnf_name):
         print(f"\033[0;31m{vnf_name}: Error\033[0m")
         return False
     except json.JSONDecodeError:
+        logging.error(f"{vnf_name}: Invalid JSON response")
         print(f"\033[0;31m{vnf_name}: Invalid JSON response\033[0m")
         return False
 
