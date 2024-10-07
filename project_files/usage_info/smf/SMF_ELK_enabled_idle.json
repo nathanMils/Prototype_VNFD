@@ -1,0 +1,38 @@
+{
+    "system": {
+      "cpu": "0.3%",
+      "memory": "22.5%",
+      "total_memory": "1963.7 MiB",
+      "used_memory": "442.4 MiB",
+      "free_memory": "832.9 MiB",
+      "buff_cache_memory": "688.4 MiB",
+      "available_memory": "1363.2 MiB"
+    },
+    "processes": {
+      "docker": {
+        "cpu": "0.3%",
+        "memory": "85.59 MiB",
+        "virt_memory": "1451.9 MiB",
+        "res_memory": "85.59 MiB",
+        "shr_memory": "59.96 MiB",
+        "time": "0:05.11"
+      },
+      "zeek": {
+        "cpu": "0.3%",
+        "memory": "240.88 MiB",
+        "virt_memory": "1308.04 MiB",
+        "res_memory": "240.88 MiB",
+        "shr_memory": "14.02 MiB",
+        "time": "0:05.19"
+      },
+      "filebeat": {
+        "cpu": "0.3%",
+        "memory": "127.99 MiB",
+        "virt_memory": "1933.28 MiB",
+        "res_memory": "127.99 MiB",
+        "shr_memory": "80.44 MiB",
+        "time": "0:03.81"
+      }
+    }
+  }
+  
