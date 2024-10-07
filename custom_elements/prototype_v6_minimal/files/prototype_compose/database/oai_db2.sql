@@ -314,6 +314,48 @@ INSERT INTO `SessionManagementSubscriptionData` (`ueid`, `servingPlmnid`, `singl
 ('208950000000031', '20895', '{\"sst\": 222, \"sd\": \"123\"}','{\"default\":{\"pduSessionTypes\":{ \"defaultSessionType\": \"IPV4\"},\"sscModes\": {\"defaultSscMode\": \"SSC_MODE_1\"},\"5gQosProfile\": {\"5qi\": 6,\"arp\":{\"priorityLevel\": 1,\"preemptCap\": \"NOT_PREEMPT\",\"preemptVuln\":\"NOT_PREEMPTABLE\"},\"priorityLevel\":1},\"sessionAmbr\":{\"uplink\":\"100Mbps\", \"downlink\":\"100Mbps\"},\"staticIpAddress\":[{\"ipv4Addr\": \"12.1.1.4\"}]}}');
 INSERT INTO `SessionManagementSubscriptionData` (`ueid`, `servingPlmnid`, `singleNssai`, `dnnConfigurations`) VALUES 
 ('208950000000032', '20895', '{\"sst\": 222, \"sd\": \"123\"}','{\"default\":{\"pduSessionTypes\":{ \"defaultSessionType\": \"IPV4\"},\"sscModes\": {\"defaultSscMode\": \"SSC_MODE_1\"},\"5gQosProfile\": {\"5qi\": 6,\"arp\":{\"priorityLevel\": 1,\"preemptCap\": \"NOT_PREEMPT\",\"preemptVuln\":\"NOT_PREEMPTABLE\"},\"priorityLevel\":1},\"sessionAmbr\":{\"uplink\":\"100Mbps\", \"downlink\":\"100Mbps\"}}}');
+-- Insert for UE with ueid 208950000000034
+INSERT INTO `SessionManagementSubscriptionData` 
+(`ueid`, `servingPlmnid`, `singleNssai`, `dnnConfigurations`) 
+VALUES 
+('208950000000034', '20895', 
+'{\"sst\": 222, \"sd\": \"123\"}', 
+'{\"default\":{\"pduSessionTypes\":{ \"defaultSessionType\": \"IPV4\"}, 
+\"sscModes\": {\"defaultSscMode\": \"SSC_MODE_1\"}, 
+\"5gQosProfile\": {\"5qi\": 6, 
+    \"arp\": {\"priorityLevel\": 1, \"preemptCap\": \"NOT_PREEMPT\", \"preemptVuln\": \"NOT_PREEMPTABLE\"}, 
+    \"priorityLevel\": 1}, 
+\"sessionAmbr\": {\"uplink\": \"100Mbps\", \"downlink\": \"100Mbps\"}, 
+\"staticIpAddress\": [{\"ipv4Addr\": \"12.1.1.5\"}]}}');
+
+-- Insert for UE with ueid 208950000000035
+INSERT INTO `SessionManagementSubscriptionData` 
+(`ueid`, `servingPlmnid`, `singleNssai`, `dnnConfigurations`) 
+VALUES 
+('208950000000035', '20895', 
+'{\"sst\": 222, \"sd\": \"123\"}', 
+'{\"default\":{\"pduSessionTypes\":{ \"defaultSessionType\": \"IPV4\"}, 
+\"sscModes\": {\"defaultSscMode\": \"SSC_MODE_1\"}, 
+\"5gQosProfile\": {\"5qi\": 6, 
+    \"arp\": {\"priorityLevel\": 1, \"preemptCap\": \"NOT_PREEMPT\", \"preemptVuln\": \"NOT_PREEMPTABLE\"}, 
+    \"priorityLevel\": 1}, 
+\"sessionAmbr\": {\"uplink\": \"100Mbps\", \"downlink\": \"100Mbps\"}, 
+\"staticIpAddress\": [{\"ipv4Addr\": \"12.1.1.6\"}]}}');
+
+-- Insert for UE with ueid 208950000000036
+INSERT INTO `SessionManagementSubscriptionData` 
+(`ueid`, `servingPlmnid`, `singleNssai`, `dnnConfigurations`) 
+VALUES 
+('208950000000036', '20895', 
+'{\"sst\": 222, \"sd\": \"123\"}', 
+'{\"default\":{\"pduSessionTypes\":{ \"defaultSessionType\": \"IPV4\"}, 
+\"sscModes\": {\"defaultSscMode\": \"SSC_MODE_1\"}, 
+\"5gQosProfile\": {\"5qi\": 6, 
+    \"arp\": {\"priorityLevel\": 1, \"preemptCap\": \"NOT_PREEMPT\", \"preemptVuln\": \"NOT_PREEMPTABLE\"}, 
+    \"priorityLevel\": 1}, 
+\"sessionAmbr\": {\"uplink\": \"100Mbps\", \"downlink\": \"100Mbps\"}, 
+\"staticIpAddress\": [{\"ipv4Addr\": \"12.1.1.7\"}]}}');
+
 -- --------------------------------------------------------
 
 --
