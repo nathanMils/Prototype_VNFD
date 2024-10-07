@@ -12,17 +12,8 @@ logging.basicConfig(
     format="[%(asctime)s] %(name)s:%(levelname)s: %(message)s"
 )
 
-nrf_ip = ""
-amf_ip = ""
-smf_ip = ""
-gpp_ip = "192.168.70.201"
-ausf_ip = ""
-udm_ip = ""
-udr_ip = ""
-
-def generate_nrf_curl_cmd():
-    # if not found, there is an exception here, but it is fine because then we have to update our scenarios
-    conf_file = 'conf/basic_vpp_nrf_config.yaml'
+def generate_nrf_curl_cmd(nrf_ip):
+    conf_file = './conf/basic_vpp_nrf_config.yaml'
     with open(conf_file) as f:
         y = yaml.safe_load(f)
         http_version = y.get('http_version', 1)
@@ -53,66 +44,47 @@ def run_cmd(cmd, silent=True):
         pass
     return result
 
-def check_config(file_name):
-    curl_cmd = generate_nrf_curl_cmd()
-    deployStatus = True
+def check_config_and_output_responses(nrf_ip):
+    curl_cmd = generate_nrf_curl_cmd(nrf_ip)
 
     logging.debug('\033[0;34m Checking if the NFs are configured\033[0m....')
     logging.debug('\033[0;34m Checking if AMF, SMF and UPF registered with nrf core network\033[0m....')
 
-    cmd = f'{curl_cmd}"AMF" | grep -o "{amf_ip}"'
-    amf_registration_nrf = run_cmd(cmd, False)
-    if amf_registration_nrf is not None:
-        print(amf_registration_nrf)
+    cmd = f'{curl_cmd}"AMF"'
+    amf_response = run_cmd(cmd, False)
+    if amf_response is not None:
+        print("AMF Response:", amf_response)
 
-    cmd = f'{curl_cmd}"SMF" | grep -o "{smf_ip}"'
-    smf_registration_nrf = run_cmd(cmd, False)
-    if smf_registration_nrf is not None:
-        print(smf_registration_nrf)
+    cmd = f'{curl_cmd}"SMF"'
+    smf_response = run_cmd(cmd, False)
+    if smf_response is not None:
+        print("SMF Response:", smf_response)
 
-    cmd = f'{curl_cmd}"UPF" | grep -o "{gpp_ip}"'
-    upf_registration_nrf = run_cmd(cmd, False)
-    if upf_registration_nrf is not None:
-        print(upf_registration_nrf)
+    cmd = f'{curl_cmd}"UPF"'
+    upf_response = run_cmd(cmd, False)
+    if upf_response is not None:
+        print("UPF Response:", upf_response)
 
     logging.debug('\033[0;34m Checking if AUSF, UDM and UDR registered with nrf core network\033[0m....')
 
-    cmd = f'{curl_cmd}"AUSF" | grep -o "{ausf_ip}"'
-    ausf_registration_nrf = run_cmd(cmd, False)
-    if ausf_registration_nrf is not None:
-        print(ausf_registration_nrf)
+    cmd = f'{curl_cmd}"AUSF"'
+    ausf_response = run_cmd(cmd, False)
+    if ausf_response is not None:
+        print("AUSF Response:", ausf_response)
 
-    cmd = f'{curl_cmd}"UDM" | grep -o "{udm_ip}"'
-    udm_registration_nrf = run_cmd(cmd, False)
-    if udm_registration_nrf is not None:
-        print(udm_registration_nrf)
-    cmd = f'{curl_cmd}"UDR" | grep -o "{udr_ip}"'
-    udr_registration_nrf = run_cmd(cmd, False)
-    if udr_registration_nrf is not None:
-        print(udr_registration_nrf)
-    
-    if amf_registration_nrf is None or smf_registration_nrf is None or upf_registration_nrf is None or \
-        ausf_registration_nrf is None or udm_registration_nrf is None or udr_registration_nrf is None:
-            logging.error('\033[0;31m Registration problem with NRF, check the reason manually\033[0m....')
-            deployStatus = False
-    else:
-        logging.debug('\033[0;32m AUSF, UDM, UDR, AMF, SMF and UPF are registered to NRF\033[0m....')
+    cmd = f'{curl_cmd}"UDM"'
+    udm_response = run_cmd(cmd, False)
+    if udm_response is not None:
+        print("UDM Response:", udm_response)
 
-    # logging.debug('\033[0;34m Checking if SMF is able to connect with UPF\033[0m....')
+    cmd = f'{curl_cmd}"UDR"'
+    udr_response = run_cmd(cmd, False)
+    if udr_response is not None:
+        print("UDR Response:", udr_response)
 
-    # cmd1 = 'docker logs oai-smf 2>&1 | grep "Received N4 ASSOCIATION SETUP RESPONSE from an UPF"'
-    # cmd2 = 'docker logs oai-smf 2>&1 | grep "Node ID Type FQDN: vpp-upf"'
-    # upf_logs1 = run_cmd(cmd1)
-    # upf_logs2 = run_cmd(cmd2)
-    # if upf_logs1 is None or upf_logs2 is None:
-    #     logging.error('\033[0;31m UPF did not answer to N4 Association request from SMF\033[0m....')
-    #     deployStatus = False
-    # else:
-    #     logging.debug('\033[0;32m UPF did answer to N4 Association request from SMF\033[0m....')
-    # cmd1 = 'docker logs oai-smf 2>&1 | grep "PFCP HEARTBEAT PROCEDURE"'
-    # upf_logs1 = run_cmd(cmd1)
-    # if upf_logs1 is None:
-    #     logging.error('\033[0;31m SMF is NOT receiving heartbeats from UPF\033[0m....')
-    #     deployStatus = False
-    # else:
-    #     logging.debug('\033[0;32m SMF is receiving heartbeats from UPF\033[0m....')
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Health check script for NRF")
+    parser.add_argument("--nrf_ip", required=True, help="NRF IP address")
+    args = parser.parse_args()
+
+    check_config_and_output_responses(args.nrf_ip)
