@@ -5,6 +5,7 @@ import time
 import logging
 import argparse
 import sys
+import json
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -44,6 +45,20 @@ def run_cmd(cmd, silent=True):
         pass
     return result
 
+def check_ip_in_response(response, ip, vnf_name):
+    try:
+        data = json.loads(response)
+        items = data.get('_links', {}).get('item', [])
+        for item in items:
+            if ip in item.get('href', ''):
+                print(f"\033[0;32m{vnf_name}: {ip}\033[0m")
+                return True
+        print(f"\033[0;31m{vnf_name}: Error\033[0m")
+        return False
+    except json.JSONDecodeError:
+        print(f"\033[0;31m{vnf_name}: Invalid JSON response\033[0m")
+        return False
+
 def check_config_and_output_responses(nrf_ip):
     curl_cmd = generate_nrf_curl_cmd(nrf_ip)
 
@@ -53,34 +68,34 @@ def check_config_and_output_responses(nrf_ip):
     cmd = f'{curl_cmd}"AMF"'
     amf_response = run_cmd(cmd, False)
     if amf_response is not None:
-        print("AMF Response:", amf_response)
+        check_ip_in_response(amf_response, nrf_ip, "AMF")
 
     cmd = f'{curl_cmd}"SMF"'
     smf_response = run_cmd(cmd, False)
     if smf_response is not None:
-        print("SMF Response:", smf_response)
+        check_ip_in_response(smf_response, nrf_ip, "SMF")
 
     cmd = f'{curl_cmd}"UPF"'
     upf_response = run_cmd(cmd, False)
     if upf_response is not None:
-        print("UPF Response:", upf_response)
+        check_ip_in_response(upf_response, nrf_ip, "UPF")
 
     logging.debug('\033[0;34m Checking if AUSF, UDM and UDR registered with nrf core network\033[0m....')
 
     cmd = f'{curl_cmd}"AUSF"'
     ausf_response = run_cmd(cmd, False)
     if ausf_response is not None:
-        print("AUSF Response:", ausf_response)
+        check_ip_in_response(ausf_response, nrf_ip, "AUSF")
 
     cmd = f'{curl_cmd}"UDM"'
     udm_response = run_cmd(cmd, False)
     if udm_response is not None:
-        print("UDM Response:", udm_response)
+        check_ip_in_response(udm_response, nrf_ip, "UDM")
 
     cmd = f'{curl_cmd}"UDR"'
     udr_response = run_cmd(cmd, False)
     if udr_response is not None:
-        print("UDR Response:", udr_response)
+        check_ip_in_response(udr_response, nrf_ip, "UDR")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Health check script for NRF")
