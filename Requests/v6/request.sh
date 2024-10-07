@@ -1,11 +1,12 @@
 #!/bin/bash
 
-if [ -z "$1" ]; then
-    echo "Usage: $0 <VNF>"
+if [ -z "$1" ] || [ -z "$2" ]; then
+    echo "Usage: $0 <VNF> --elk-enabled|--elk-disabled"
     exit 1
 fi
 
 VNF="$1"
+ELK_OPTION="$2"
 
 declare -A FILE_IDS
 FILE_IDS=(
@@ -43,6 +44,15 @@ fi
 
 cp "$JSON_FILE" "$TEMPLATE_FILE"
 sed -i "s/<VIM_ID>/$VIM_ID/g" "$TEMPLATE_FILE"
+
+if [ "$ELK_OPTION" == "--elk-enabled" ]; then
+    sed -i "s/<TYPE>/v6/g" "$TEMPLATE_FILE"
+elif [ "$ELK_OPTION" == "--elk-disabled" ]; then
+    sed -i "s/<TYPE>/v6_elk_disabled/g" "$TEMPLATE_FILE"
+else
+    echo "Error: Invalid option $ELK_OPTION"
+    exit 1
+fi
 
 # Use the ID in the openstack vnflcm create command
 openstack vnflcm create "$ID" --os-tacker-api-version 2

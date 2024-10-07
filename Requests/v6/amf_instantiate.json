@@ -1,5 +1,5 @@
 {
-  "flavourId":"v6",
+  "flavourId":"<TYPE>",
   "vimConnectionInfo": {
     "vim": {
       "id": "3cc2c4ff-525c-48b4-94c9-29247223322f",
