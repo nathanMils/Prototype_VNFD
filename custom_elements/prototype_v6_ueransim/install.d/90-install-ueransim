@@ -23,3 +23,7 @@ TARGET_DIR=/opt/prototype_master
 SOURCE_DIR=$(dirname $0)/../files
 
 mkdir -p $TARGET_DIR
+
+cp -r $SOURCE_DIR/ueransim $TARGET_DIR
+
+sudo chmod +x $TARGET_DIR/ueransim/entrypoint.sh
