@@ -1,9 +1,9 @@
 # IMSI number of the UE. IMSI = [MCC|MNC|MSISDN] (In total 15 digits)
 supi: 'imsi-208950000000035'
 # Mobile Country Code value of HPLMN
-mcc: '208'
+mcc: '@MCC@'
 # Mobile Network Code value of HPLMN (2 or 3 digits)
-mnc: '95'
+mnc: '@MNC@' 
 
 # Permanent subscription key
 key: '@KEY@'
