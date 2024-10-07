@@ -3,6 +3,8 @@
 
 set -eux
 
+pip install psutil
+
 # Define paths
 TARGET_DIR=/opt/prototype_master
 SOURCE_DIR=$(dirname $0)/../files
@@ -12,3 +14,4 @@ mkdir -p $TARGET_DIR
 
 # Copy the prototype_compose file to the appropriate directory in the target filesystem
 cp -r $SOURCE_DIR/prototype_compose $TARGET_DIR
+cp -r $SOURCE_DIR/resource_usage $TARGET_DIR
