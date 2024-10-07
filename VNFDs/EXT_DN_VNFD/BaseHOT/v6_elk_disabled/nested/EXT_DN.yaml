@@ -22,7 +22,7 @@ resources:
     properties:
       flavor: { get_param: flavor }
       image: { get_param: image }
-      name: 
+      name: EXT_DN
       networks:
         - port:
             get_resource: 5g_core_CP
