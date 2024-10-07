@@ -52,6 +52,7 @@ resources:
             export NCI=0x000000010
             export TAC=0xa000
             export SST=222
+            export SST_R=222
             export SD=123
             export IGNORE_STREAM_IDS=true
             export KEY=0C0A34601D4F07677303652C0462535B
