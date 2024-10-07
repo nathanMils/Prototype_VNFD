@@ -47,10 +47,29 @@ resources:
             export NGAP_IP=$PARAM_0
             export GTP_IP=$PARAM_1
             export NGAP_PEER_IP=$PARAM_2
+            export MCC=208
+            export MNC=95
+            export NCI=0x000000010
+            export TAC=0xa000
+            export SST=222
+            export SD=123
+            export IGNORE_STREAM_IDS=true
+            export KEY=0C0A34601D4F07677303652C0462535B
+            export OP=63bfa50ee6523365ff14c1f45f88737d
+            export OP_TYPE=OPC
+            export AMF_VALUE=8000
+            export PDU_TYPE=IPv4
+            export APN=default
+            export SST_0=222
+            export SD_0=123
+            export SST_C=222
+            export SD_C=123
+            export SST_D=222
+            export SD_D=123
 
             # Run UERANSIM
             sudo /opt/prototype_master/ueransim/entrypoint.sh
-            
+
           params:
             $PARAM_0: { get_param: ip }
             $PARAM_1: { get_param: ip_access }

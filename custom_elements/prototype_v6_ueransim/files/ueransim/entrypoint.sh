@@ -3,7 +3,7 @@
 set -euo pipefail
 
 CONFIG_DIR="/opt/ueransim"
-UERANSIM_DIR="/ueransim"
+UERANSIM_DIR="/UERANSIM/build"
 
 USE_FQDN=${USE_FQDN:-no}
 SST_R=${SST_R:-$SST}
