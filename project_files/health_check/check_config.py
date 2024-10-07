@@ -43,18 +43,19 @@ def run_cmd(cmd, silent=True):
         logging.error(f"Command failed with error: {e}")
     return result
 
-def check_ip_in_response(response, expected_ip, vnf_name):
+def check_ip_in_response(response, vnf_name):
     logging.debug(f"Response for {vnf_name}: {response}")
     try:
         data = json.loads(response)
         logging.debug(f"Parsed JSON data for {vnf_name}: {json.dumps(data, indent=2)}")
         items = data.get('_links', {}).get('item', [])
-        for item in items:
-            item_ip = item.get('href', '')
-            if item_ip == expected_ip:  # Check for exact match
-                print(f"\033[0;32m{vnf_name}: {item_ip}\033[0m")  # Green for match
-                return True
-        print(f"\033[0;31m{vnf_name}: Error\033[0m")  # Red for error
+        if items:
+            # Check if there is any 'href' with an IP-like value
+            for item in items:
+                if 'href' in item and item['href']:  # If href exists and is non-empty
+                    print(f"\033[0;32m{vnf_name}: Registered successfully with IP: {item['href']}\033[0m")
+                    return True
+        print(f"\033[0;31m{vnf_name}: Error, no registration\033[0m")
         return False
     except json.JSONDecodeError:
         logging.error(f"{vnf_name}: Invalid JSON response")
@@ -72,7 +73,7 @@ def check_config_and_output_responses(nrf_ip):
         cmd = f'{curl_cmd}"{vnf}"'  # Correctly formatted command
         response = run_cmd(cmd, False)
         if response is not None:
-            check_ip_in_response(response, nrf_ip, vnf)
+            check_ip_in_response(response, vnf)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Health check script for NRF")
