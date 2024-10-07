@@ -42,34 +42,75 @@ resources:
             echo "nathan:stupid" | sudo chpasswd
             echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
 
-            export GNB_IP_ADDRESS=$PARAM_0
-            export LINK_IP=$PARAM_0
-            export NGAP_IP=$PARAM_0
-            export GTP_IP=$PARAM_1
-            export NGAP_PEER_IP=$PARAM_2
-            export MCC=208
-            export MNC=95
-            export NCI=0x000000010
-            export TAC=0xa000
-            export SST=222
-            export SST_R=222
-            export SD=123
-            export IGNORE_STREAM_IDS=true
-            export KEY=0C0A34601D4F07677303652C0462535B
-            export OP=63bfa50ee6523365ff14c1f45f88737d
-            export OP_TYPE=OPC
-            export AMF_VALUE=8000
-            export PDU_TYPE=IPv4
-            export APN=default
-            export SST_0=222
-            export SD_0=123
-            export SST_C=222
-            export SD_C=123
-            export SST_D=222
-            export SD_D=123
+            GNB_IP_ADDRESS=$PARAM_0
+            LINK_IP=$PARAM_0
+            NGAP_IP=$PARAM_0
+            GTP_IP=$PARAM_1
+            NGAP_PEER_IP=$PARAM_2
+            MCC=208
+            MNC=95
+            NCI=0x000000010
+            TAC=0xa000
+            SST=222
+            SST_R=222
+            SD=123
+            IGNORE_STREAM_IDS=true
+            KEY=0C0A34601D4F07677303652C0462535B
+            OP=63bfa50ee6523365ff14c1f45f88737d
+            OP_TYPE=OPC
+            AMF_VALUE=8000
+            PDU_TYPE=IPv4
+            APN=default
+            SST_0=222
+            SD_0=123
+            SST_C=222
+            SD_C=123
+            SST_D=222
+            SD_D=123
 
             # Run UERANSIM
-            sudo /opt/prototype_master/ueransim/entrypoint.sh
+            CONFIG_DIR="/opt/prototype_master/ueransim"
+            UERANSIM_DIR="/UERANSIM/build"
+
+            USE_FQDN=${USE_FQDN:-no}
+            SST_R=${SST_R:-$SST}
+            SD_R=${SD_R:-$SD}
+
+            for c in ${CONFIG_DIR}/*.yaml; do
+                VARS=$(grep -oP '@[a-zA-Z0-9_]+@' ${c} | sort | uniq | xargs)
+                echo "Now setting these variables '${VARS}'"
+
+                EXPRESSIONS=""
+                for v in ${VARS}; do
+                    NEW_VAR=$(echo $v | sed -e "s#@##g")
+                    if [[ -z ${!NEW_VAR+x} ]]; then
+                        echo "Error: Environment variable '${NEW_VAR}' is not set." \
+                            "Config file '$(basename $c)' requires all of $VARS."
+                        exit 1
+                    fi
+                    EXPRESSIONS="${EXPRESSIONS};s|${v}|${!NEW_VAR}|g"
+                done
+                EXPRESSIONS="${EXPRESSIONS#';'}"
+
+                sed -i "${EXPRESSIONS}" ${c}
+            done
+            echo "Done setting the configuration"
+            echo "### Running ueransim ###"
+
+            echo "Running gnb"
+            $UERANSIM_DIR/nr-gnb -c $CONFIG_DIR/gnb_config.yaml &
+
+            sleep 1
+
+            run_ue() {
+                local ue_config=$1
+                echo "Running ue with config ${ue_config}"
+                $UERANSIM_DIR/nr-ue -c $CONFIG_DIR/${ue_config} &
+            }
+
+            run_ue "ue_1_config.yaml"
+            run_ue "ue_2_config.yaml"
+            run_ue "ue_3_config.yaml"
 
           params:
             $PARAM_0: { get_param: ip }
