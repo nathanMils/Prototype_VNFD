@@ -3,13 +3,23 @@ import json
 import time
 import argparse
 from collections import defaultdict
+import logging
+import os
+
+# Configure logging
+logging.basicConfig(
+    filename='resource_monitor.log',
+    level=logging.INFO,
+    format='%(asctime)s %(levelname)s:%(message)s'
+)
 
 # Define the target process names
-TARGET_PROCESSES = ['docker', 'zeek', 'filebeat']
+ALL_TARGET_PROCESSES = ['docker', 'zeek', 'filebeat']
 
-def get_process_info(process_name):
+def get_process_info(process_name, prev_io=None):
     """
     Retrieves CPU, memory, disk I/O, and (placeholder for network I/O) usage for all instances of a given process.
+    Optionally calculates per-interval disk I/O based on previous counts.
     """
     cpu = 0.0
     memory = 0.0
@@ -19,15 +29,31 @@ def get_process_info(process_name):
     network_recv = 0  # Placeholder as per-process network I/O is not directly available
 
     # Iterate over all running processes
-    for proc in psutil.process_iter(['name', 'cpu_percent', 'memory_percent', 'io_counters']):
+    for proc in psutil.process_iter(['pid', 'name', 'cpu_percent', 'memory_percent', 'io_counters']):
         try:
             if proc.info['name'] and proc.info['name'].lower() == process_name.lower():
                 cpu += proc.cpu_percent(interval=None)  # Non-blocking, already calculated
                 memory += proc.memory_percent()
                 if proc.info['io_counters']:
-                    disk_read += proc.info['io_counters'].read_bytes
-                    disk_write += proc.info['io_counters'].write_bytes
-                # Network I/O per process is not available via psutil
+                    pid = proc.info['pid']
+                    current_read = proc.info['io_counters'].read_bytes
+                    current_write = proc.info['io_counters'].write_bytes
+
+                    if prev_io and pid in prev_io:
+                        # Calculate per-interval disk I/O
+                        disk_read += current_read - prev_io[pid]['read_bytes']
+                        disk_write += current_write - prev_io[pid]['write_bytes']
+                    else:
+                        # First time seeing this process; cannot calculate difference
+                        disk_read += 0
+                        disk_write += 0
+
+                    # Update previous I/O counters
+                    if prev_io is not None:
+                        prev_io[pid] = {
+                            'read_bytes': current_read,
+                            'write_bytes': current_write
+                        }
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
             continue
 
@@ -66,7 +92,7 @@ def get_total_system_info():
         }
     }
 
-def initialize_aggregates():
+def initialize_aggregates(selected_processes):
     """
     Initializes data structures to accumulate resource usage data.
     """
@@ -96,6 +122,9 @@ def initialize_aggregates():
             }
         }
     }
+    # Initialize only selected processes
+    for proc in selected_processes:
+        aggregates["processes"][proc]  # This ensures the defaultdict initializes the entry
     return aggregates
 
 def accumulate_aggregates(aggregates, data):
@@ -156,64 +185,109 @@ def calculate_averages(aggregates, sample_count):
 
     return averaged_data
 
-def main():
-    # Parse command-line arguments for duration and interval
+def parse_arguments():
+    """
+    Parses command-line arguments to toggle process monitoring and specify output file.
+    """
     parser = argparse.ArgumentParser(description="Monitor resource usage of specific processes and the total system over time.")
     parser.add_argument('-d', '--duration', type=int, default=60, help='Total duration to monitor in seconds (default: 60)')
     parser.add_argument('-i', '--interval', type=int, default=5, help='Sampling interval in seconds (default: 5)')
-    args = parser.parse_args()
+    parser.add_argument('--elk-disabled', action='store_true', help='Disable monitoring of ELK stack processes (zeek and filebeat)')
+    parser.add_argument('--zeek-disabled', action='store_true', help='Disable monitoring of zeek process')
+    parser.add_argument('--filebeat-disabled', action='store_true', help='Disable monitoring of filebeat process')
+    parser.add_argument('-o', '--output', type=str, default='resource_usage.json', help='Output file path to save JSON data (default: resource_usage.json)')
+    return parser.parse_args()
+
+def main():
+    args = parse_arguments()
 
     duration = args.duration
     interval = args.interval
 
     if interval <= 0:
+        logging.error("Interval must be a positive integer.")
         print("Interval must be a positive integer.")
         return
     if duration <= 0:
+        logging.error("Duration must be a positive integer.")
         print("Duration must be a positive integer.")
         return
+
+    # Determine which processes to monitor based on flags
+    selected_processes = ['docker']  # docker is always monitored
+
+    if not args.elk_disabled:
+        if not args.zeek_disabled:
+            selected_processes.append('zeek')
+        if not args.filebeat_disabled:
+            selected_processes.append('filebeat')
 
     sample_count = duration // interval
     if sample_count == 0:
         sample_count = 1  # Ensure at least one sample
 
+    logging.info(f"Selected processes to monitor: {selected_processes}")
+    print(f"Selected processes to monitor: {selected_processes}")
+    logging.info(f"Starting resource monitoring for {duration} seconds with {interval}-second intervals.")
     print(f"Starting resource monitoring for {duration} seconds with {interval}-second intervals...")
-    aggregates = initialize_aggregates()
 
-    for _ in range(sample_count):
+    aggregates = initialize_aggregates(selected_processes)
+    prev_io = {proc: {} for proc in selected_processes}  # To track previous I/O counters per process
+
+    for sample in range(sample_count):
+        logging.info(f"Collecting sample {sample + 1}/{sample_count}...")
+        print(f"Collecting sample {sample + 1}/{sample_count}...")
         # Initialize CPU percent calculations
         psutil.cpu_percent(interval=None)
         for proc in psutil.process_iter(['name']):
             try:
                 proc.cpu_percent(interval=None)
             except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+                logging.warning(f"Process iteration error: PID={proc.pid}")
                 continue
 
         # Wait for the interval
         time.sleep(interval)
 
-        # Collect current data
-        process_data = {}
-        for proc_name in TARGET_PROCESSES:
-            process_data[proc_name] = get_process_info(proc_name)
+        try:
+            # Collect current data
+            process_data = {}
+            for proc_name in selected_processes:
+                process_data[proc_name] = get_process_info(proc_name, prev_io=prev_io[proc_name] if proc_name in prev_io else None)
+            
+            total_system_data = get_total_system_info()
+
+            data = {
+                "processes": process_data,
+                "total_system": total_system_data
+            }
+
+            # Accumulate data
+            accumulate_aggregates(aggregates, data)
+        except Exception as e:
+            logging.error(f"Error during data collection: {e}")
+            print(f"An error occurred during data collection: {e}")
+
+    try:
+        # Calculate averages
+        averaged_data = calculate_averages(aggregates, sample_count)
+
+        # Output the data as JSON
+        json_output = json.dumps(averaged_data, indent=4)
         
-        total_system_data = get_total_system_info()
+        # Write to external JSON file
+        output_file = args.output
+        with open(output_file, 'w') as f:
+            f.write(json_output)
+        logging.info(f"Averaged Resource Usage has been saved to {output_file}")
+        print(f"\nAveraged Resource Usage has been saved to {output_file}")
 
-        data = {
-            "processes": process_data,
-            "total_system": total_system_data
-        }
-
-        # Accumulate data
-        accumulate_aggregates(aggregates, data)
-
-    # Calculate averages
-    averaged_data = calculate_averages(aggregates, sample_count)
-
-    # Output the data as JSON
-    json_output = json.dumps(averaged_data, indent=4)
-    print("\nAveraged Resource Usage:")
-    print(json_output)
+        # Also print to console
+        print("\nAveraged Resource Usage:")
+        print(json_output)
+    except Exception as e:
+        logging.error(f"Error during averaging or output: {e}")
+        print(f"An error occurred during averaging or output: {e}")
 
 if __name__ == "__main__":
     main()

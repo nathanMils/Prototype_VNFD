@@ -10,7 +10,7 @@ apt install gcc
 apt install g++
 apt install libsctp-dev lksctp-tools
 apt install iproute2
-apt install cmake  # Install CMake using APT instead of Snap
+apt install cmake
 
 git clone https://github.com/aligungr/UERANSIM
 
@@ -26,4 +26,6 @@ mkdir -p $TARGET_DIR
 
 cp -r $SOURCE_DIR/ueransim $TARGET_DIR
 
-sudo chmod +x $TARGET_DIR/ueransim/entrypoint.sh
+sudo chmod +x UERANSIM/build/nr-binder
+
+pip install selenium
