@@ -45,4 +45,4 @@ UERANSIM (User Equipment and Radio Access Network Simulator) is a versatile tool
 These uses make UERANSIM an essential tool for advancing the development, testing, and deployment of 5G networks in Prototype Version 5.
 
 # Version 6: Updated Configuration options
-Added ELK enabled and disabled varients for benchmarking, updated UERANSIM update to create various traiffic types. I also added health checks and a more automated deployment variant.
+Added ELK enabled and disabled varients for benchmarking, updated UERANSIM update to create various traiffic types. I also added health checks and a more automated deployment variant. Lastly an extensive resource collection script.
