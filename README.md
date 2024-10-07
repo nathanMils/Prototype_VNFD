@@ -1,36 +1,73 @@
-# VNFD Prototype for Tacker
+# Project Overview
 
-This is designed to build a prototype Virtual Network Function Descriptor (VNFD) for Tacker, an OpenStack project for NFV orchestration.
+Welcome to the Python Project! This repository contains various elements and files essential for the project's development and deployment.
 
-## VNFD Structure
+## Directory Structure
 
-- `BaseHOT/`: Contains base Heat Orchestration Templates (HOT).
-- `Definitions/`: Contains TOSCA definitions and downloaded YAML files.
-- `Scripts/`: Contains shell scripts for configuring various components.
-- `TOSCA-Metadata/`: Contains the `TOSCA.meta` file with metadata about the VNFD package.
-- `UserData/`: Contains user data scripts and configurations.
+Here is an overview of the main directories and files in this project:
 
-## Other
-- `Requests/`: Contains JSON for tacker operations.
-- `PlantUML/`: Contains PlantUML diagrams for the VNFD and flavours.
+### Directories
 
-## Flavours
+- **custom_elements**
+    - Contains custom elements used in the project.
 
-- `Nginx Option/nginx_opt`: Intended to capture internal HTTP/HTTPS traffic between 5G network functions (Inline).
-- `Suricata Option/suricata_opt`: Intended to capture network level information from consumer traffic for UPF function (Inline)(Most generic).
-- `Zeek Option/zeek_opt`: Intended for a more reactive approach where inline is not possible or Network Function is unknown (Not Inline).
+- **Diagrams**
+    - Includes diagrams related to the project architecture and 5G ELK enabled NFV configuration.
 
-## Scripts
+- **docker**
+    - Contains Docker configurations and files for containerization.
 
-### `package.sh`
+- **project_files**
+    - General project files and resources.
 
-This script performs the following tasks:
-1. Calculates the SHA-256 hash of each script file in the `Scripts/` directory.
-2. Replaces the placeholder hash values in the `TOSCA-Metadata/TOSCA.meta` file.
-3. Downloads the required TOSCA definitions into the `Definitions/` directory.
-4. Zips the specified directories into a single VNFD package.
+- **Requests**
+    - Handles HTTP requests and related functionalities.
 
-### Usage
+- **VNFDs**
+    - Virtual Network Function Descriptors used in the project.
 
-```sh
-./package.sh
+### Files
+
+- **sha_vals.txt**
+    - Contains SHA values for the VNF images for verification purposes.
+
+
+## VNFDs Directory
+
+The VNFDs (Virtual Network Function Descriptors) directory contains various VNFs (Virtual Network Functions) used in the project. Below is a list of the VNFs included:
+
+- **ALL_IN_ONE_VNFD**
+    - A comprehensive VNFD that includes all necessary functions in one descriptor.
+
+- **AMF_VNFD**
+    - VNFD for the Access and Mobility Management Function.
+
+- **AUSF_VNFD**
+    - VNFD for the Authentication Server Function.
+
+- **ELK_VNFD**
+    - VNFD for the ELK stack (Elasticsearch, Logstash, Kibana).
+
+- **EXT_DN_VNFD**
+    - VNFD for the External Data Network.
+
+- **NRF_VNFD**
+    - VNFD for the Network Repository Function.
+
+- **SMF_VNFD**
+    - VNFD for the Session Management Function.
+
+- **SQL_VNFD**
+    - VNFD for the SQL database.
+
+- **UDM_VNFD**
+    - VNFD for the User Data Management function.
+
+- **UDR_VNFD**
+    - VNFD for the User Data Repository.
+
+- **UERANSIM_VNFD**
+    - VNFD for the UE and RAN Simulator.
+
+- **UPF_VNFD**
+    - VNFD for the User Plane Function.
