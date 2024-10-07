@@ -1,7 +1,5 @@
 import yaml
-import re
 import subprocess
-import time
 import logging
 import argparse
 import sys
@@ -49,7 +47,7 @@ def check_ip_in_response(response, ip, vnf_name):
     logging.debug(f"Response for {vnf_name}: {response}")
     try:
         data = json.loads(response)
-        logging.debug(f"Parsed JSON data for {vnf_name}: {data}")
+        logging.debug(f"Parsed JSON data for {vnf_name}: {json.dumps(data, indent=2)}")
         items = data.get('_links', {}).get('item', [])
         for item in items:
             if ip in item.get('href', ''):
@@ -65,8 +63,8 @@ def check_ip_in_response(response, ip, vnf_name):
 def check_config_and_output_responses(nrf_ip):
     curl_cmd = generate_nrf_curl_cmd(nrf_ip)
 
-    logging.debug('\033[0;34m Checking if the NFs are configured\033[0m....')
-    logging.debug('\033[0;34m Checking if AMF, SMF and UPF registered with nrf core network\033[0m....')
+    logging.debug('\033[0;34mChecking if the NFs are configured\033[0m....')
+    logging.debug('\033[0;34mChecking if AMF, SMF and UPF registered with nrf core network\033[0m....')
 
     cmd = f'{curl_cmd}"AMF"'
     amf_response = run_cmd(cmd, False)
@@ -83,7 +81,7 @@ def check_config_and_output_responses(nrf_ip):
     if upf_response is not None:
         check_ip_in_response(upf_response, nrf_ip, "UPF")
 
-    logging.debug('\033[0;34m Checking if AUSF, UDM and UDR registered with nrf core network\033[0m....')
+    logging.debug('\033[0;34mChecking if AUSF, UDM and UDR registered with nrf core network\033[0m....')
 
     cmd = f'{curl_cmd}"AUSF"'
     ausf_response = run_cmd(cmd, False)
