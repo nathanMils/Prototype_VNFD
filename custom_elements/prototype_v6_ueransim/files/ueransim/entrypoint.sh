@@ -38,7 +38,7 @@ sleep 1
 run_ue() {
     local ue_config=$1
     echo "Running ue with config ${ue_config}"
-    $UERANSIM_DIR/nr-ue -c $CONFIG_DIR/${ue_config}
+    $UERANSIM_DIR/nr-ue -c $CONFIG_DIR/${ue_config} &
 }
 
 run_ue "ue_1_config.yaml"
