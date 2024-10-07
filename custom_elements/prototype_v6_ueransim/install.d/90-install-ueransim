@@ -10,6 +10,7 @@ apt install gcc
 apt install g++
 apt install libsctp-dev lksctp-tools
 apt install iproute2
+apt install snapd  # Install snapd before using snap
 snap install cmake --classic
 
 git clone https://github.com/aligungr/UERANSIM
