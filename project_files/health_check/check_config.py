@@ -44,10 +44,8 @@ def run_cmd(cmd, silent=True):
     return result
 
 def check_ip_in_response(response, vnf_name):
-    logging.debug(f"Response for {vnf_name}: {response}")
     try:
         data = json.loads(response)
-        logging.debug(f"Parsed JSON data for {vnf_name}: {json.dumps(data, indent=2)}")
         items = data.get('_links', {}).get('item', [])
         if items:
             # Check if there is any 'href' with an IP-like value
