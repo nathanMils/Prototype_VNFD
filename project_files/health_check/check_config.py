@@ -25,8 +25,8 @@ def generate_nrf_curl_cmd(nrf_ip):
 
         cmd = 'curl -s -X GET '
         if http_version == 2:
-            cmd = cmd + '--http2-prior-knowledge '
-        cmd = cmd + f'http://{nrf_ip}:{nrf_port}/nnrf-nfm/v1/nf-instances?nf-type='
+            cmd += '--http2-prior-knowledge '
+        cmd += f'http://{nrf_ip}:{nrf_port}/nnrf-nfm/v1/nf-instances?nf-type='
         return cmd
     
 def run_cmd(cmd, silent=True):
@@ -35,25 +35,26 @@ def run_cmd(cmd, silent=True):
     result = None
     try:
         res = subprocess.run(cmd,
-                        shell=True, check=True,
-                        stdout=subprocess.PIPE,
-                        universal_newlines=True)
+                              shell=True, check=True,
+                              stdout=subprocess.PIPE,
+                              universal_newlines=True)
         result = res.stdout.strip()
     except subprocess.CalledProcessError as e:
         logging.error(f"Command failed with error: {e}")
     return result
 
-def check_ip_in_response(response, nrf_ip, vnf_name):
+def check_ip_in_response(response, expected_ip, vnf_name):
     logging.debug(f"Response for {vnf_name}: {response}")
     try:
         data = json.loads(response)
         logging.debug(f"Parsed JSON data for {vnf_name}: {json.dumps(data, indent=2)}")
         items = data.get('_links', {}).get('item', [])
         for item in items:
-            if nrf_ip in item.get('href', ''):
-                print(f"\033[0;32m{vnf_name}: {nrf_ip}\033[0m")
+            item_ip = item.get('href', '')
+            if item_ip == expected_ip:  # Check for exact match
+                print(f"\033[0;32m{vnf_name}: {item_ip}\033[0m")  # Green for match
                 return True
-        print(f"\033[0;31m{vnf_name}: Error\033[0m")
+        print(f"\033[0;31m{vnf_name}: Error\033[0m")  # Red for error
         return False
     except json.JSONDecodeError:
         logging.error(f"{vnf_name}: Invalid JSON response")
@@ -66,37 +67,12 @@ def check_config_and_output_responses(nrf_ip):
     logging.debug('\033[0;34mChecking if the NFs are configured\033[0m....')
     logging.debug('\033[0;34mChecking if AMF, SMF and UPF registered with nrf core network\033[0m....')
 
-    cmd = f'{curl_cmd}"AMF"'
-    amf_response = run_cmd(cmd, False)
-    if amf_response is not None:
-        check_ip_in_response(amf_response, nrf_ip, "AMF")
-
-    cmd = f'{curl_cmd}"SMF"'
-    smf_response = run_cmd(cmd, False)
-    if smf_response is not None:
-        check_ip_in_response(smf_response, nrf_ip, "SMF")
-
-    cmd = f'{curl_cmd}"UPF"'
-    upf_response = run_cmd(cmd, False)
-    if upf_response is not None:
-        check_ip_in_response(upf_response, nrf_ip, "UPF")
-
-    logging.debug('\033[0;34mChecking if AUSF, UDM and UDR registered with nrf core network\033[0m....')
-
-    cmd = f'{curl_cmd}"AUSF"'
-    ausf_response = run_cmd(cmd, False)
-    if ausf_response is not None:
-        check_ip_in_response(ausf_response, nrf_ip, "AUSF")
-
-    cmd = f'{curl_cmd}"UDM"'
-    udm_response = run_cmd(cmd, False)
-    if udm_response is not None:
-        check_ip_in_response(udm_response, nrf_ip, "UDM")
-
-    cmd = f'{curl_cmd}"UDR"'
-    udr_response = run_cmd(cmd, False)
-    if udr_response is not None:
-        check_ip_in_response(udr_response, nrf_ip, "UDR")
+    # Check each VNF
+    for vnf in ["AMF", "SMF", "UPF", "AUSF", "UDM", "UDR"]:
+        cmd = f'{curl_cmd}"{vnf}"'  # Correctly formatted command
+        response = run_cmd(cmd, False)
+        if response is not None:
+            check_ip_in_response(response, nrf_ip, vnf)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Health check script for NRF")
