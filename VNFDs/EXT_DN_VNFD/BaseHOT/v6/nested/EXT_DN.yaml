@@ -40,8 +40,9 @@ resources:
             export INTERFACE="ens3"
 
             # Starting external gateway
-            TARGET_DIR=/opt/prototype_master
-            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-extdn.yml up -d
+            # TARGET_DIR=/opt/prototype_master
+            # docker compose -f $TARGET_DIR/prototype_compose/docker-compose-extdn.yml up -d
+            docker run -d --privileged --init --name oai-ext-dn --network host --entrypoint /bin/bash oaisoftwarealliance/trf-gen-cn5g:latest -c "iptables -t nat -A POSTROUTING -o ${INTERFACE} -j MASQUERADE; ip route add 12.1.1.0/24 via ${IP_3} dev ${INTERFACE}; ip route; sleep infinity" -c "trap : SIGTERM SIGINT; sleep infinity & wait"
 
           params:
             $PARAM_0: { get_param: upf_ip_core }
