@@ -16,3 +16,5 @@ mkdir -p $TARGET_DIR
 # Copy the prototype_compose file to the appropriate directory in the target filesystem
 cp -r $SOURCE_DIR/prototype_compose $TARGET_DIR
 cp -r $SOURCE_DIR/resource_usage $TARGET_DIR
+
+sudo chmod $TARGET_DIR/resource_usage/resource_check.sh
