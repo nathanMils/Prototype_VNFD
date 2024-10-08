@@ -54,5 +54,10 @@ else
     exit 1
 fi
 
-# Use the ID in the openstack vnflcm create command
-openstack vnflcm create "$ID" --os-tacker-api-version 2
+echo "Creating VNF instance..."
+VNF_ID = (openstack vnflcm create "$ID" --os-tacker-api-version 2 -c ID -f value)
+
+echo "Instantiating VNF..."
+openstack vnflcm instantiate $ID ./template.json --os-tacker-api-version 2
+
+
