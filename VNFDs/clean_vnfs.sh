@@ -19,20 +19,23 @@ terminate_vnfs() {
 check_vnfs() {
     echo "Checking all VNFs until they are NOT_INSTANTIATED..."
 
+    # Infinite loop to keep checking until all VNFs are NOT_INSTANTIATED
     while true; do
         all_not_instantiated=true
 
+        # Get the list of VNFs and their states
         vnfs=$(openstack vnflcm list --os-tacker-api-version 2 -c ID -c Instantiation\ State -f value)
 
         if [ -n "$vnfs" ]; then
             echo "$vnfs" | while read -r vnf_id state; do
                 echo "VNF $vnf_id is in state: $state"
 
+                # Check if any VNF is not in the 'NOT_INSTANTIATED' state
                 if [ "$state" != "NOT_INSTANTIATED" ]; then
                     all_not_instantiated=false
                     echo "VNF $vnf_id is not yet in NOT_INSTANTIATED state."
                 else
-                    echo "Terminating VNF $vnf_id..."
+                    echo "VNF $vnf_id is in NOT_INSTANTIATED state. Proceeding to terminate..."
                     openstack vnflcm show --os-tacker-api-version 2 "$vnf_id"
                     openstack vnf package delete "$vnf_id"
                 fi
@@ -42,11 +45,13 @@ check_vnfs() {
             break
         fi
 
+        # If all VNFs are in the NOT_INSTANTIATED state, break the loop
         if [ "$all_not_instantiated" = true ]; then
-            echo "All VNFs are in NOT_INSTANTIATED state."
+            echo "All VNFs are now in the NOT_INSTANTIATED state."
             break
         fi
 
+        # Sleep for a few seconds before checking again
         echo "Waiting for VNFs to become NOT_INSTANTIATED..."
         sleep 10
     done
@@ -68,7 +73,7 @@ delete_vnfs() {
 }
 
 echo "Cleaning up VNFs..."
-terminate_vnfs
+#terminate_vnfs
 check_vnfs
 delete_vnfs
 echo "All VNFs have been removed."
