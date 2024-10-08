@@ -1,67 +1,23 @@
 #!/bin/bash
+set -e
 
-set -e  # Exit on error
+DIR="$(dirname "$(realpath "$0")")"
 
-# Function to calculate SHA-256 hash of a file
-calculate_sha256() {
-    local file_path=$1
-    sha256sum "$file_path" | awk '{ print $1 }'
-}
+meta_file_path="$DIR/TOSCA-Metadata/TOSCA.meta"
+template_file_path="$DIR/TOSCA-Metadata/TOSCA.template.meta"
+zip_file_path="$DIR/vnfd_package.zip"
 
-# Function to replace placeholders in TOSCA.template.meta
-replace_hashes_in_meta() {
-    local meta_file_path=$1
-    shift
-    local hashes=("$@")
+cp "$template_file_path" "$meta_file_path"
 
-    echo "Replacing hashes in $meta_file_path"
+echo "Packaging VNFD..."
+cd "$DIR" || exit
 
-    local content
-    content=$(<"$meta_file_path")
+zip -r "$zip_file_path" TOSCA-Metadata/TOSCA.meta Definitions/ BaseHOT/ UserData/
 
-    for hash_entry in "${hashes[@]}"; do
-        local script_name
-        local hash_value
-        script_name=$(echo "$hash_entry" | cut -d':' -f1)
-        hash_value=$(echo "$hash_entry" | cut -d':' -f2)
-        local placeholder="<${script_name^^}_HASH>"
-        echo "Replacing placeholder $placeholder with hash $hash_value"
-        content=$(echo "$content" | sed "s|$placeholder|$hash_value|g")
-    done
+echo "Creating VNF Package..."
+VNF_PACKAGE_ID=$(openstack vnf package create -c ID -f value)
 
-    echo "$content" > "$meta_file_path"
-}
+echo "Uploading VNFD package..."
+openstack vnf package upload --path "$zip_file_path" "$VNF_PACKAGE_ID"
 
-# Main script
-scripts_dir='Scripts'
-definitions_dir='Definitions'
-meta_file_path='TOSCA-Metadata/TOSCA.meta'
-tosca_version='v2.6.1'
-script_files=(
-    'configure_main.sh'
-    'configure_filebeat.sh'
-    'configure_network_function.sh'
-    'configure_nginx.sh'
-    'configure_suricata.sh'
-    'configure_zeek.sh'
-)
-
-# Copy TOSCA.template.meta to TOSCA.meta
-cp 'TOSCA-Metadata/TOSCA.template.meta' "$meta_file_path"
-
-hashes=()
-for script_file in "${script_files[@]}"; do
-    file_path="$scripts_dir/$script_file"
-    if [ -f "$file_path" ]; then
-        hash_value=$(calculate_sha256 "$file_path")
-        hashes+=("$script_file:$hash_value")
-    else
-        echo "File $file_path not found!"
-        exit 1
-    fi
-done
-
-replace_hashes_in_meta "$meta_file_path" "${hashes[@]}"
-
-# Zip final VNFD package
-zip -r vnfd_package.zip TOSCA-Metadata/TOSCA.meta Definitions/ BaseHOT/ Scripts/ UserData/
+echo "VNFD package uploaded successfully."

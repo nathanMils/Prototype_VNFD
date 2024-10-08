@@ -15,7 +15,7 @@ cd "$DIR" || exit
 zip -r "$zip_file_path" TOSCA-Metadata/TOSCA.meta Definitions/ BaseHOT/ UserData/
 
 echo "Creating VNF Package..."
-VNF_PACKAGE_ID=$(openstack vnf package create -c id -f value)
+VNF_PACKAGE_ID=$(openstack vnf package create -c ID -f value)
 
 echo "Uploading VNFD package..."
 openstack vnf package upload --path "$zip_file_path" "$VNF_PACKAGE_ID"
