@@ -32,7 +32,7 @@ if [ -z "$ID" ]; then
 fi
 
 # Set the VIM_ID variable
-VIM_ID="02a179d5-a0d2-4845-baa0-c2d4c8111ead"
+VIM_ID=$(openstack vim list -c ID -f value | head -n 1)
 
 JSON_FILE="${VNF}_instantiate.json"
 TEMPLATE_FILE="template.json"
