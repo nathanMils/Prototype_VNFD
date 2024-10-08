@@ -3,7 +3,8 @@
 
 set -eux
 
-pip install psutil
+# Install glances
+pip install glances[docker]
 
 # Define paths
 TARGET_DIR=/opt/prototype_master
@@ -14,4 +15,4 @@ mkdir -p $TARGET_DIR
 
 # Copy the prototype_compose file to the appropriate directory in the target filesystem
 cp -r $SOURCE_DIR/prototype_compose $TARGET_DIR
-cp -r $SOURCE_DIR/resource_usage $TARGET_DIR
+cp -r $SOURCE_DIR/glances $TARGET_DIR
