@@ -14,7 +14,7 @@ logging.basicConfig(
 )
 
 # Hardcoded Zapier webhook URL
-ZAPIER_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/YOUR_ZAPIER_HOOK_ID'
+ZAPIER_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/20350848/2mcrrua/'
 
 def send_to_zapier(data):
     """
@@ -40,8 +40,11 @@ def get_container_info(container_name, prev_io=None):
 
     try:
         container_info = os.popen(f"docker inspect -f '{{{{.State.Pid}}}}' {container_name}").read().strip()
+        if not container_info:
+            logging.error(f"Container '{container_name}' not found or not running.")
+            return None
+        
         pid = int(container_info)
-
         proc = psutil.Process(pid)
         cpu = proc.cpu_percent(interval=None)
         memory = proc.memory_percent()
@@ -211,7 +214,7 @@ def parse_arguments():
     parser.add_argument('-c', '--container', type=str, required=True, help='Name of the Docker container to monitor (required)')
     parser.add_argument('-d', '--duration', type=int, default=60, help='Total duration to monitor in seconds (default: 60)')
     parser.add_argument('-i', '--interval', type=int, default=5, help='Sampling interval in seconds (default: 5)')
-    parser.add_argument('-n', '--name', type=str, help='Custom name to include in the JSON output')
+    parser.add_argument('-n', '--name', type=str, help='Custom name to include in the JSON output (not sent to Zapier)')
     parser.add_argument('--elk-disabled', action='store_true', help='Disable monitoring of ELK stack processes (zeek and filebeat)')
     parser.add_argument('--zeek-disabled', action='store_true', help='Disable monitoring of zeek process')
     parser.add_argument('--filebeat-disabled', action='store_true', help='Disable monitoring of filebeat process')
@@ -273,13 +276,6 @@ def main():
             # Accumulate aggregates
             accumulate_aggregates(aggregates, current_data)
 
-            # Include custom name if provided
-            if args.name:
-                current_data['custom_name'] = args.name
-
-            # Send current data to Zapier
-            send_to_zapier(current_data)
-
             # Wait for the next interval
             time.sleep(interval)
 
@@ -290,10 +286,13 @@ def main():
     try:
         averaged_data = calculate_averages(aggregates, sample_count)
 
-        # Include custom name in averaged data if provided
-        if args.name:
-            averaged_data['custom_name'] = args.name
+        # Prepare final averaged data for Zapier without custom name
+        final_output_data = averaged_data.copy()
 
+        # Include custom name if provided
+        if args.name:
+            averaged_data["custom_name"] = args.name
+        
         json_output = json.dumps(averaged_data, indent=4)
 
         output_file = args.output
@@ -303,7 +302,7 @@ def main():
         print(f"\nAveraged Resource Usage has been saved to {output_file}")
 
         # Send averaged data to Zapier
-        send_to_zapier(averaged_data)
+        send_to_zapier(final_output_data)
 
         # Print to console
         print("\nAveraged Resource Usage:")
