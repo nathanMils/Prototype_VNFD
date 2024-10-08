@@ -3,4 +3,4 @@
 TIME=$1
 
 echo "Montioring the system for 5 minutes..."
-glances --docker --processes filebeat,zeek --time $TIME --export json
+timeout 300 glances --process-filter filebeat --process-filter zeek --export jsonfile --export-json-file output.json --docker -t 1
