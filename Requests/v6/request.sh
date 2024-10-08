@@ -32,7 +32,7 @@ if [ -z "$ID" ]; then
 fi
 
 # Set the VIM_ID variable
-VIM_ID=(openstack vim list -c ID -f value | head -n 1)
+VIM_ID=$(openstack vim list -c ID -f value | head -n 1)
 
 JSON_FILE="${VNF}_instantiate.json"
 TEMPLATE_FILE="template.json"
@@ -55,7 +55,7 @@ else
 fi
 
 echo "Creating VNF instance..."
-VNF_ID = (openstack vnflcm create "$ID" --os-tacker-api-version 2 -c ID -f value)
+VNF_ID=$(openstack vnflcm create "$ID" --os-tacker-api-version 2 -c ID -f value)
 
 echo "Waiting for 3 seconds before instantiating..."
 sleep 3
