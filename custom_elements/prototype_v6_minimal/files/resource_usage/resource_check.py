@@ -6,14 +6,12 @@ from collections import defaultdict
 import logging
 import os
 
-# Configure logging
 logging.basicConfig(
     filename='resource_monitor.log',
     level=logging.INFO,
     format='%(asctime)s %(levelname)s:%(message)s'
 )
 
-# Define the target process names
 ALL_TARGET_PROCESSES = ['docker', 'zeek', 'filebeat']
 
 def get_process_info(process_name, prev_io=None):

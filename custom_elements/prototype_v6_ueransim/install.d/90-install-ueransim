@@ -33,3 +33,10 @@ sudo chmod +x UERANSIM/build/nr-binder
 # Install python dependencies
 pip install subprocess
 pip install selenium paho-mqtt
+pip install selenium
+
+# Install firefox
+apt install firefox -y
+apt install firefox-geckodriver
+
+cp -r $SOURCE_DIR/traffic_generation $TARGET_DIR
