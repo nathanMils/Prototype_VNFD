@@ -1,5 +1,23 @@
 #!/bin/bash
-set -e  # Exit on error
-meta_file_path='TOSCA-Metadata/TOSCA.meta'
-cp 'TOSCA-Metadata/TOSCA.template.meta' "$meta_file_path"
-zip -r vnfd_package.zip TOSCA-Metadata/TOSCA.meta Definitions/ BaseHOT/ UserData/
+set -e
+
+DIR="$(dirname "$(realpath "$0")")"
+
+meta_file_path="$DIR/TOSCA-Metadata/TOSCA.meta"
+template_file_path="$DIR/TOSCA-Metadata/TOSCA.template.meta"
+zip_file_path="$DIR/vnfd_package.zip"
+
+cp "$template_file_path" "$meta_file_path"
+
+echo "Packaging VNFD..."
+cd "$DIR" || exit
+
+zip -r "$zip_file_path" TOSCA-Metadata/TOSCA.meta Definitions/ BaseHOT/ UserData/
+
+echo "Creating VNF Package..."
+VNF_PACKAGE_ID=$(openstack vnf package create -c id -f value)
+
+echo "Uploading VNFD package..."
+openstack vnf package upload --path "$zip_file_path" "$VNF_PACKAGE_ID"
+
+echo "VNFD package uploaded successfully."
