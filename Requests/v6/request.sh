@@ -57,6 +57,9 @@ fi
 echo "Creating VNF instance..."
 VNF_ID = (openstack vnflcm create "$ID" --os-tacker-api-version 2 -c ID -f value)
 
+echo "Waiting for 3 seconds before instantiating..."
+sleep 3
+
 echo "Instantiating VNF..."
 openstack vnflcm instantiate $ID ./template.json --os-tacker-api-version 2
 
