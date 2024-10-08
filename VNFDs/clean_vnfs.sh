@@ -3,7 +3,7 @@
 terminate_vnfs() {
     echo "Terminating all VNFs..."
     # openstack vnflcm list --os-tacker-api-version 2
-    vnf_ids=$(openstack vnf vnflcm list --os-tacker-api-version 2 -c ID -f value)
+    vnf_ids=$(openstack vnflcm list --os-tacker-api-version 2 -c ID -f value)
 
     if [ -n "$vnf_ids" ]; then
         echo "$vnf_ids" | while read -r vnf_id; do
@@ -54,7 +54,7 @@ check_vnfs() {
 
 delete_vnfs() {
     echo "Delete all VNFs..."
-    vnf_ids=$(openstack vnf vnflcm list --os-tacker-api-version 2 -c ID -f value)
+    vnf_ids=$(openstack vnflcm list --os-tacker-api-version 2 -c ID -f value)
 
     if [ -n "$vnf_ids" ]; then
         echo "$vnf_ids" | while read -r vnf_id; do
