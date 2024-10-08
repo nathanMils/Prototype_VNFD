@@ -5,9 +5,6 @@ import argparse
 from collections import defaultdict
 import logging
 import os
-import requests
-
-hook_url="https://hooks.zapier.com/hooks/catch/20350848/2mcrrua/"
 
 # Configure logging
 logging.basicConfig(
@@ -15,6 +12,21 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s %(levelname)s:%(message)s'
 )
+
+# Hardcoded Zapier webhook URL
+ZAPIER_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/YOUR_ZAPIER_HOOK_ID'
+
+def send_to_zapier(data):
+    """
+    Sends data to the hardcoded Zapier webhook URL using curl.
+    """
+    try:
+        json_data = json.dumps(data)
+        cmd = f"curl -X POST {ZAPIER_WEBHOOK_URL} -H 'Content-Type: application/json' -d '{json_data}'"
+        os.system(cmd)  # Execute the curl command
+        logging.info(f"Data sent to Zapier: {data}")
+    except Exception as e:
+        logging.error(f"Error sending data to Zapier: {e}")
 
 def get_container_info(container_name, prev_io=None):
     """
@@ -27,26 +39,28 @@ def get_container_info(container_name, prev_io=None):
     disk_write = 0
 
     try:
-        # Get the container's stats using docker stats
-        stats = json.loads(os.popen(f"docker stats --no-stream --format '{{{{json .}}}}' {container_name}").read().strip())
+        container_info = os.popen(f"docker inspect -f '{{{{.State.Pid}}}}' {container_name}").read().strip()
+        pid = int(container_info)
 
-        # Extract values
-        cpu = float(stats["CPUPerc"].replace('%', '').strip())
-        memory = float(stats["MemUsage"].split('/')[0].replace('MiB', '').strip())
-        disk_read = float(stats["BlockIO"].split(',')[0].split()[0])  # Assuming reading the first value (read)
-        disk_write = float(stats["BlockIO"].split(',')[1].split()[0])  # Assuming reading the second value (write)
-
-        # Update previous I/O counters
-        if prev_io:
-            disk_read -= prev_io['read_bytes']
-            disk_write -= prev_io['write_bytes']
-
-        # Save current I/O for next interval
-        prev_io = {
-            'read_bytes': disk_read,
-            'write_bytes': disk_write
-        }
-
+        proc = psutil.Process(pid)
+        cpu = proc.cpu_percent(interval=None)
+        memory = proc.memory_percent()
+        if proc.io_counters():
+            current_read = proc.io_counters().read_bytes
+            current_write = proc.io_counters().write_bytes
+            
+            if prev_io:
+                disk_read += current_read - prev_io['read_bytes']
+                disk_write += current_write - prev_io['write_bytes']
+            
+            if prev_io is not None:
+                prev_io.update({
+                    'read_bytes': current_read,
+                    'write_bytes': current_write
+                })
+    except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+        logging.error(f"Process with PID for container '{container_name}' not found or access denied.")
+        return None
     except Exception as e:
         logging.error(f"Error retrieving container info: {e}")
         return None
@@ -55,8 +69,8 @@ def get_container_info(container_name, prev_io=None):
         "cpu_percent": cpu,
         "memory_percent": memory,
         "disk_io": {
-            "read_bytes": max(disk_read, 0),  # Ensure no negative values
-            "write_bytes": max(disk_write, 0)  # Ensure no negative values
+            "read_bytes": disk_read,
+            "write_bytes": disk_write
         }
     }
 
@@ -73,24 +87,15 @@ def get_process_info(proc_name, prev_io=None):
     try:
         for proc in psutil.process_iter(['name', 'pid']):
             if proc.info['name'] == proc_name:
-                # Use cpu_times_percent() for more reliable CPU usage
-                cpu = proc.cpu_times_percent(interval=None).user + proc.cpu_times_percent(interval=None).system
+                cpu = proc.cpu_percent(interval=None)
                 memory = proc.memory_percent()
-                
                 if proc.io_counters():
                     current_read = proc.io_counters().read_bytes
                     current_write = proc.io_counters().write_bytes
 
                     if prev_io:
-                        # Calculate per-interval disk I/O
                         disk_read += current_read - prev_io['read_bytes']
                         disk_write += current_write - prev_io['write_bytes']
-                    else:
-                        # First time seeing this process; cannot calculate difference
-                        disk_read += 0
-                        disk_write += 0
-
-                    # Update previous I/O counters
                     if prev_io is not None:
                         prev_io.update({
                             'read_bytes': current_read,
@@ -105,11 +110,10 @@ def get_process_info(proc_name, prev_io=None):
         "cpu_percent": cpu,
         "memory_percent": memory,
         "disk_io": {
-            "read_bytes": max(disk_read, 0),  # Ensure no negative values
-            "write_bytes": max(disk_write, 0)  # Ensure no negative values
+            "read_bytes": disk_read,
+            "write_bytes": disk_write
         }
     }
-
 
 def get_total_system_info():
     """
@@ -150,9 +154,8 @@ def initialize_aggregates(selected_processes):
             }
         }
     }
-    # Initialize only selected processes
     for proc in selected_processes:
-        aggregates["processes"][proc]  # This ensures the defaultdict initializes the entry
+        aggregates["processes"][proc]  # Initialize entry for each process
     return aggregates
 
 def accumulate_aggregates(aggregates, data):
@@ -200,16 +203,19 @@ def calculate_averages(aggregates, sample_count):
 
     return averaged_data
 
-def send_to_zapier(data, webhook_url):
+def parse_arguments():
     """
-    Sends the JSON data to a Zapier webhook.
+    Parses command-line arguments to toggle process monitoring and specify output file.
     """
-    try:
-        response = requests.post(webhook_url, json=data)
-        response.raise_for_status()
-        logging.info("Data successfully sent to Zapier webhook.")
-    except requests.exceptions.RequestException as e:
-        logging.error(f"Error sending data to Zapier: {e}")
+    parser = argparse.ArgumentParser(description="Monitor resource usage of a Docker container by name and the total system over time.")
+    parser.add_argument('-c', '--container', type=str, required=True, help='Name of the Docker container to monitor (required)')
+    parser.add_argument('-d', '--duration', type=int, default=60, help='Total duration to monitor in seconds (default: 60)')
+    parser.add_argument('-i', '--interval', type=int, default=5, help='Sampling interval in seconds (default: 5)')
+    parser.add_argument('--elk-disabled', action='store_true', help='Disable monitoring of ELK stack processes (zeek and filebeat)')
+    parser.add_argument('--zeek-disabled', action='store_true', help='Disable monitoring of zeek process')
+    parser.add_argument('--filebeat-disabled', action='store_true', help='Disable monitoring of filebeat process')
+    parser.add_argument('-o', '--output', type=str, default='resource_usage.json', help='Output file path to save JSON data (default: resource_usage.json)')
+    return parser.parse_args()
 
 def main():
     args = parse_arguments()
@@ -226,7 +232,7 @@ def main():
         print("Duration must be a positive integer.")
         return
 
-    selected_processes = [args.container]
+    selected_processes = [args.container]  # Use the provided container name
 
     if not args.elk_disabled:
         if not args.zeek_disabled:
@@ -263,8 +269,13 @@ def main():
                     if filebeat_info is not None:
                         current_data["processes"]["filebeat"] = filebeat_info
             
+            # Accumulate aggregates
             accumulate_aggregates(aggregates, current_data)
 
+            # Send current data to Zapier
+            send_to_zapier(current_data)
+
+            # Wait for the next interval
             time.sleep(interval)
 
         except Exception as e:
@@ -274,41 +285,23 @@ def main():
     try:
         averaged_data = calculate_averages(aggregates, sample_count)
 
-        json_output = {
-            "name": args.name,
-            "data": averaged_data
-        }
+        json_output = json.dumps(averaged_data, indent=4)
 
         output_file = args.output
         with open(output_file, 'w') as f:
-            f.write(json.dumps(json_output, indent=4))
+            f.write(json_output)
         logging.info(f"Averaged Resource Usage has been saved to {output_file}")
         print(f"\nAveraged Resource Usage has been saved to {output_file}")
 
+        # Send averaged data to Zapier
+        send_to_zapier(averaged_data)
+
+        # Print to console
         print("\nAveraged Resource Usage:")
-        print(json.dumps(json_output, indent=4))
-
-        send_to_zapier(json_output, hook_url)
-
+        print(json_output)
     except Exception as e:
         logging.error(f"Error during averaging or output: {e}")
         print(f"An error occurred during averaging or output: {e}")
-
-def parse_arguments():
-    """
-    Parses command-line arguments to toggle process monitoring and specify output file.
-    """
-    parser = argparse.ArgumentParser(description="Monitor resource usage of a Docker container by name and the total system over time.")
-    parser.add_argument('-c', '--container', type=str, required=True, help='Name of the Docker container to monitor (required)')
-    parser.add_argument('-d', '--duration', type=int, default=60, help='Total duration to monitor in seconds (default: 60)')
-    parser.add_argument('-i', '--interval', type=int, default=5, help='Sampling interval in seconds (default: 5)')
-    parser.add_argument('-n', '--name', type=str, required=True, help='Name to include in the JSON data (required)')
-    parser.add_argument('--elk-disabled', action='store_true', help='Disable monitoring of ELK stack processes (zeek and filebeat)')
-    parser.add_argument('--zeek-disabled', action='store_true', help='Disable monitoring of zeek process')
-    parser.add_argument('--filebeat-disabled', action='store_true', help='Disable monitoring of filebeat process')
-    parser.add_argument('-o', '--output', type=str, default='resource_usage.json', help='Output file path to save JSON data (default: resource_usage.json)')
-    parser.add_argument('--zapier-webhook', type=str, help='Zapier webhook URL to send JSON data')
-    return parser.parse_args()
 
 if __name__ == "__main__":
     main()
