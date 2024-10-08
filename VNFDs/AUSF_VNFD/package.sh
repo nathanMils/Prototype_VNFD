@@ -23,6 +23,9 @@ zip -r "$zip_file_path" TOSCA-Metadata/TOSCA.meta Definitions/ BaseHOT/ UserData
 echo "Creating VNF Package..."
 VNF_PACKAGE_ID=$(openstack vnf package create -c ID -f value)
 
+echo "Waiting for 3 seconds before uploading..."
+sleep 3
+
 echo "Uploading VNFD package..."
 openstack vnf package upload --path "$zip_file_path" "$VNF_PACKAGE_ID"
 
