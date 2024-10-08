@@ -61,6 +61,6 @@ echo "Waiting for 3 seconds before instantiating..."
 sleep 3
 
 echo "Instantiating VNF..."
-openstack vnflcm instantiate $ID ./template.json --os-tacker-api-version 2
+openstack vnflcm instantiate $VNF_ID ./template.json --os-tacker-api-version 2
 
 
