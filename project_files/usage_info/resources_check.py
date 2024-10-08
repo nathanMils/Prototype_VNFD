@@ -288,8 +288,7 @@ def main():
         print("\nAveraged Resource Usage:")
         print(json.dumps(json_output, indent=4))
 
-        if args.zapier_webhook:
-            send_to_zapier(json_output, args.zapier_webhook)
+        send_to_zapier(json_output, hook_url)
 
     except Exception as e:
         logging.error(f"Error during averaging or output: {e}")
