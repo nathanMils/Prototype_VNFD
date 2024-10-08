@@ -36,6 +36,7 @@ pip install selenium paho-mqtt
 pip install selenium
 
 # Install firefox
+apt install xdg-utils
 apt install firefox -y
 apt install firefox-geckodriver
 
