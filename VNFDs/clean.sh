@@ -8,7 +8,8 @@ delete_vnf_descriptors() {
     if [ -n "$vnfd_ids" ]; then
         echo "$vnfd_ids" | while read -r vnfd_id; do
             echo "Disabling and Deleting VNFD $vnfd_id..."
-            openstack vnf package disable "$vnfd_id"
+            openstack vnf package update --operational-state DISABLED "$vnfd_id"
+            openstack vnf package delete "$vnfd_id"
         done
         echo "All VNF Descriptors deleted."
     else
