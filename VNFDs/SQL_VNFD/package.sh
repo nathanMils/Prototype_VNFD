@@ -10,6 +10,12 @@ zip_file_path="$DIR/vnfd_package.zip"
 cp "$template_file_path" "$meta_file_path"
 
 echo "Packaging VNFD..."
+
+if [ -f "$zip_file_path" ]; then
+    echo "Removing existing VNFD package zip file..."
+    rm "$zip_file_path"
+fi
+
 cd "$DIR" || exit
 
 zip -r "$zip_file_path" TOSCA-Metadata/TOSCA.meta Definitions/ BaseHOT/ UserData/
