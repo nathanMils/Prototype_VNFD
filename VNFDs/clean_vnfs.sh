@@ -11,6 +11,8 @@ terminate_vnfs() {
             openstack vnflcm terminate --os-tacker-api-version 2 "$vnf_id"
         done
         echo "All VNFs termination requests sent."
+        echo "Waiting for VNFs to transition to NOT_INSTANTIATED state..."
+        sleep 30  # Adjust this time as necessary for your environment
     else
         echo "No VNFs found."
     fi
