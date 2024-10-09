@@ -25,10 +25,15 @@ def get_container_info(container_name):
         container = client.containers.get(container_name)
         
         stats = container.stats(stream=False)
-        
+
         cpu_usage = stats['cpu_stats']['cpu_usage']['total_usage']
         system_cpu_usage = stats['cpu_stats']['system_cpu_usage']
-        number_of_cores = len(stats['cpu_stats']['cpu_usage']['percpu_usage'])
+
+        # Check for 'percpu_usage' existence
+        if 'percpu_usage' in stats['cpu_stats']['cpu_usage']:
+            number_of_cores = len(stats['cpu_stats']['cpu_usage']['percpu_usage'])
+        else:
+            number_of_cores = 1  # Default to 1 if not available
 
         if system_cpu_usage > 0:
             cpu_percent = (cpu_usage / system_cpu_usage) * number_of_cores * 100
@@ -42,6 +47,9 @@ def get_container_info(container_name):
         return None
     except docker.errors.APIError as e:
         logging.error(f"Error accessing Docker API: {e}")
+        return None
+    except KeyError as e:
+        logging.error(f"KeyError: {e} - Check the structure of the stats returned.")
         return None
 
     return {
@@ -59,7 +67,7 @@ def get_process_info(proc_name):
     try:
         for proc in psutil.process_iter(['name', 'pid']):
             if proc.info['name'] == proc_name:
-                cpu = proc.cpu_percent(interval=None, percpu=False)
+                cpu = proc.cpu_percent(interval=None)
                 memory = proc.memory_percent()
                 break
     except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
@@ -169,7 +177,7 @@ def parse_arguments():
     parser.add_argument('-i', '--interval', type=int, default=5, help='Sampling interval in seconds (default: 5)')
     parser.add_argument('-n', '--name', type=str, help='Custom name to include in the JSON output (not sent to Zapier)')
     parser.add_argument('--elk-disabled', action='store_true', help='Disable monitoring of ELK stack processes (zeek and filebeat)')
-    parser.add_argument('-o', '--output', type=str, required=True, help='Output file for the averaged data (required)')
+    parser.add_argument('-o', '--output', type=str, default='averaged_data.json', help='Output file for the averaged data (default: averaged_data.json)')
 
     return parser.parse_args()
 
