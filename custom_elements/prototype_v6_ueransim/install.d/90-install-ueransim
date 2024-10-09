@@ -19,6 +19,8 @@ cd UERANSIM
 make
 cd ..
 
+sudo chmod +x /UERANSIM/build/nr-binder
+
 # Define paths
 TARGET_DIR=/opt/prototype_master
 SOURCE_DIR=$(dirname $0)/../files
@@ -27,17 +29,8 @@ mkdir -p $TARGET_DIR
 
 cp -r $SOURCE_DIR/ueransim $TARGET_DIR
 
-sudo chmod +x UERANSIM/build/nr-binder
+
 
 ##################################### Traffic Generation Scripts #####################################
-# Install python dependencies
-pip install subprocess
-pip install selenium paho-mqtt
-pip install selenium
 
-# Install firefox
-apt install xdg-utils
-apt install firefox -y
-apt install firefox-geckodriver
-
-cp -r $SOURCE_DIR/traffic_generation $TARGET_DIR
+cp -r $SOURCE_DIR/socks_server $TARGET_DIR
