@@ -18,7 +18,7 @@ if [ "$OPT" != "idle" ] && [ "$OPT" != "load" ]; then
 fi
 
 if [ "$OPT" == "idle" ]; then
-    python3 resources_check.py -c $VNF -d 300 -i 60 -n "$VNF idle"
+    python3 resources_check.py -c $VNF -d 300 -i 5 -n "$VNF idle"
 elif [ "$OPT" == "load" ]; then
-    python3 resources_check.py -c $VNF -d 600 -i 60 -n "$VNF Load"
+    python3 resources_check.py -c $VNF -d 600 -i 5 -n "$VNF Load"
 fi

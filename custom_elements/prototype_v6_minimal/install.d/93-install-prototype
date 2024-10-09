@@ -4,6 +4,7 @@
 set -eux
 
 pip install psutil
+pip install docker
 
 # Define paths
 TARGET_DIR=/opt/prototype_master
