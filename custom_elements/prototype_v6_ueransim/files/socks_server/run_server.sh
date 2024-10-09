@@ -6,4 +6,4 @@ fi
 
 HOST_PORT=$1
 CONTAINER_NAME=$2
-docker run -d -p "$HOST_PORT":1080 -v /opt/prototype_master/socks_server/sockd.conf:/etc/sockd.conf --name "$CONTAINER_NAME" vimagick/dante
+docker run -d -p "$HOST_PORT":1080 -v /opt/prototype_master/socks_server/sockd.conf:/etc/dante/sockd.conf --name "$CONTAINER_NAME" vimagick/dante
