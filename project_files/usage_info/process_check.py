@@ -205,16 +205,9 @@ def main():
             if container_info is not None:
                 current_data["processes"][args.container] = container_info
             
-            if not args.elk_disabled:
-                if "zeek" in selected_processes:
-                    zeek_info = get_process_info("zeek")
-                    if zeek_info is not None:
-                        current_data["processes"]["zeek"] = zeek_info
+                zeek_info = get_process_info("apache2")
+                current_data["processes"]["apache2"] = zeek_info
                 
-                if "filebeat" in selected_processes:
-                    filebeat_info = get_process_info("filebeat")
-                    if filebeat_info is not None:
-                        current_data["processes"]["filebeat"] = filebeat_info
             
             accumulate_aggregates(aggregates, current_data)
 
