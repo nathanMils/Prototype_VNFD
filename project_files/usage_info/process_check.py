@@ -25,10 +25,15 @@ def get_container_info(container_name):
         container = client.containers.get(container_name)
         
         stats = container.stats(stream=False)
-        
+
         cpu_usage = stats['cpu_stats']['cpu_usage']['total_usage']
         system_cpu_usage = stats['cpu_stats']['system_cpu_usage']
-        number_of_cores = len(stats['cpu_stats']['cpu_usage']['percpu_usage'])
+
+        # Check for 'percpu_usage' existence
+        if 'percpu_usage' in stats['cpu_stats']['cpu_usage']:
+            number_of_cores = len(stats['cpu_stats']['cpu_usage']['percpu_usage'])
+        else:
+            number_of_cores = 1  # Default to 1 if not available
 
         if system_cpu_usage > 0:
             cpu_percent = (cpu_usage / system_cpu_usage) * number_of_cores * 100
@@ -43,11 +48,15 @@ def get_container_info(container_name):
     except docker.errors.APIError as e:
         logging.error(f"Error accessing Docker API: {e}")
         return None
+    except KeyError as e:
+        logging.error(f"KeyError: {e} - Check the structure of the stats returned.")
+        return None
 
     return {
         "cpu_percent": cpu_percent,
         "memory_percent": memory_percent,
     }
+
 
 def get_process_info(proc_name):
     """
