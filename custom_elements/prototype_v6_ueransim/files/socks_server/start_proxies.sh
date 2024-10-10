@@ -3,7 +3,7 @@
 TEMPLATE_CONFIG=/opt/prototype_master/socks_server/sockd.template.conf
 CONFIG_DIR=/opt/prototype_master/socks_server/configs
 
-matching_interfaces=$(ip -o link show | awk -F': ' '{print $2}' | grep -E '^uetunsim[0-9]+$')
+matching_interfaces=$(ip -o link show | awk -F': ' '{print $2}' | grep -E '^uesimtun[0-9]+$')
 
 for interface in $matching_interfaces; do
     NUMERIC_PART=$(echo "$interface" | grep -o '[0-9]\+')
@@ -23,7 +23,7 @@ echo "Starting SOCKS proxies..."
 for interface in $matching_interfaces; do
     CONTAINER_NAME="socks_proxy_$interface"
     
-    docker run -d -p --network host -v $CONFIG_DIR/sockd.$interface.conf:/etc/dante/sockd.conf --name "$CONTAINER_NAME" vimagick/dante
+    docker run -d --network host -v $CONFIG_DIR/sockd.$interface.conf:/etc/dante/sockd.conf --name "$CONTAINER_NAME" vimagick/dante
 done
 
 for interface in $matching_interfaces; do
