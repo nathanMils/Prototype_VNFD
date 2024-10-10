@@ -1,11 +1,12 @@
 #!/bin/bash
 
-if [ -z "$1" ]; then
-    echo "Usage: $0 <VNF>"
+if [ -z "$1" ] || [ -z "$2" ]; then
+    echo "Usage: $0 <VNF> --elk-enabled|--elk-disabled"
     exit 1
 fi
 
 VNF="$1"
+ELK_OPTION="$2"
 
 declare -A FILE_IDS
 FILE_IDS=(
@@ -31,7 +32,7 @@ if [ -z "$ID" ]; then
 fi
 
 # Set the VIM_ID variable
-VIM_ID="cbbc3129-3bb9-423c-be81-86708f12bab6"
+VIM_ID=$(openstack vim list -c ID -f value | head -n 1)
 
 JSON_FILE="${VNF}_instantiate.json"
 TEMPLATE_FILE="template.json"
@@ -44,5 +45,22 @@ fi
 cp "$JSON_FILE" "$TEMPLATE_FILE"
 sed -i "s/<VIM_ID>/$VIM_ID/g" "$TEMPLATE_FILE"
 
-# Use the ID in the openstack vnflcm create command
-openstack vnflcm create "$ID" --os-tacker-api-version 2
+if [ "$ELK_OPTION" == "--elk-enabled" ]; then
+    sed -i "s/<TYPE>/v6/g" "$TEMPLATE_FILE"
+elif [ "$ELK_OPTION" == "--elk-disabled" ]; then
+    sed -i "s/<TYPE>/v6_elk_disabled/g" "$TEMPLATE_FILE"
+else
+    echo "Error: Invalid option $ELK_OPTION"
+    exit 1
+fi
+
+echo "Creating VNF instance..."
+VNF_ID=$(openstack vnflcm create "$ID" --os-tacker-api-version 2 -c ID -f value)
+
+echo "Waiting for 3 seconds before instantiating..."
+sleep 3
+
+echo "Instantiating VNF..."
+openstack vnflcm instantiate $VNF_ID ./template.json --os-tacker-api-version 2
+
+

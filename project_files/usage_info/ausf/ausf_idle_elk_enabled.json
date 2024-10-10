@@ -1,0 +1,39 @@
+"processes": {
+"oai-ausf": {
+"cpu_percent": 0.0,
+"memory_percent": 0.77,
+"disk_io": {
+"read_bytes": 0,
+"write_bytes": 0
+
+}
+
+"zeek": {
+"cpu_percent": 0.1,
+"memory_percent": 12.24,
+"disk_io": {
+"read_bytes": 0,
+"write_bytes": 0
+
+"filebeat": {
+"cpu_percent": 0.22,
+"memory_percent": 7.12,
+"disk_io": {
+"read_bytes": 0,
+"write_bytes": 0
+
+"total_system": {
+"cpu_percent": 4.9,
+"memory_percent": 31.43,
+"disk_io": {
+"read_bytes": 484853930,
+"write_bytes": 579118762
+}
+}
+}
+}
+}
+}
+}
+}
+

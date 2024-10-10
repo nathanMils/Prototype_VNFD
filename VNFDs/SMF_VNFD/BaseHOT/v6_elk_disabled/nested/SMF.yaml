@@ -77,9 +77,3 @@ resources:
     properties:
       floatingip_id: { get_resource: 5g_extvCP }
       port_id: { get_resource: 5g_CP }
-
-  elk_CP:
-    type: OS::Neutron::Port
-    properties:
-      network: { get_param: elk_network }
-      port_security_enabled: false

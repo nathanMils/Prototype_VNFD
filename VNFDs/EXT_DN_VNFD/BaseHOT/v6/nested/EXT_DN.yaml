@@ -22,7 +22,7 @@ resources:
     properties:
       flavor: { get_param: flavor }
       image: { get_param: image }
-      name: 
+      name: EXT_DN
       networks:
         - port:
             get_resource: 5g_core_CP
@@ -36,13 +36,32 @@ resources:
             echo "nathan:stupid" | sudo chpasswd
             echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
 
-            export IP_3=$PARAM_0
-            export INTERFACE="ens3"
+            IP_3=$PARAM_0
+            INTERFACE="ens3"
 
-            # Starting external gateway
-            TARGET_DIR=/opt/prototype_master
-            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-extdn.yml up -d
+            # Add a MASQUERADE rule
+            if sudo iptables -t nat -A POSTROUTING -o $INTERFACE -j MASQUERADE; then
+                echo "MASQUERADE rule added successfully."
+            else
+                echo "Failed to add MASQUERADE rule." >&2
+                exit 1
+            fi
 
+            # Add a route
+            if sudo ip route add 12.1.1.0/24 via $IP_3 dev $INTERFACE; then
+                echo "Route added successfully."
+            else
+                echo "Failed to add route." >&2
+                exit 1
+            fi
+
+            # Allow forwarding on the interface
+            if sudo iptables -A FORWARD -i $INTERFACE -o $INTERFACE -j ACCEPT; then
+                echo "Forwarding rule added successfully."
+            else
+                echo "Failed to add forwarding rule." >&2
+                exit 1
+            fi
           params:
             $PARAM_0: { get_param: upf_ip_core }
 

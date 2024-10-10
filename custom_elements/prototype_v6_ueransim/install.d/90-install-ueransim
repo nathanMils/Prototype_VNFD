@@ -2,6 +2,7 @@
 
 set -eux
 
+##################################### UERANSIM Installation #####################################
 apt update
 apt upgrade
 
@@ -10,7 +11,7 @@ apt install gcc
 apt install g++
 apt install libsctp-dev lksctp-tools
 apt install iproute2
-snap install cmake --classic
+apt install cmake
 
 git clone https://github.com/aligungr/UERANSIM
 
@@ -18,8 +19,18 @@ cd UERANSIM
 make
 cd ..
 
+sudo chmod +x /UERANSIM/build/nr-binder
+
 # Define paths
 TARGET_DIR=/opt/prototype_master
 SOURCE_DIR=$(dirname $0)/../files
 
 mkdir -p $TARGET_DIR
+
+cp -r $SOURCE_DIR/ueransim $TARGET_DIR
+
+
+
+##################################### Traffic Generation Scripts #####################################
+
+cp -r $SOURCE_DIR/socks_server $TARGET_DIR
