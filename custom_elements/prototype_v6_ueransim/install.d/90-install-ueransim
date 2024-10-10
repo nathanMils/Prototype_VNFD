@@ -35,3 +35,7 @@ cp -r $SOURCE_DIR/ueransim $TARGET_DIR
 
 cp -r $SOURCE_DIR/socks_server $TARGET_DIR
 sudo chmod +x $TARGET_DIR/socks_server/start_proxies.sh
+
+##################################### Ostinato Installation #####################################
+apt install ostinato
+
