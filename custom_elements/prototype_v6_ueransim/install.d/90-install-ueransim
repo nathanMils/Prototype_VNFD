@@ -31,6 +31,7 @@ cp -r $SOURCE_DIR/ueransim $TARGET_DIR
 
 
 
-##################################### Traffic Generation Scripts #####################################
+##################################### SOCKS Proxy #####################################
 
 cp -r $SOURCE_DIR/socks_server $TARGET_DIR
+sudo chmod +x $TARGET_DIR/socks_server/start_proxies.sh
