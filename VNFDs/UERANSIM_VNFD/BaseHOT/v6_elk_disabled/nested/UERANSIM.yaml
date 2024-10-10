@@ -111,6 +111,9 @@ resources:
             run_ue "ue_1_config.yaml"
             run_ue "ue_2_config.yaml"
             run_ue "ue_3_config.yaml"
+
+            sleep 120
+            sudo /opt/prototype_master/socks_server/start_proxies.sh
           params:
             $PARAM_0: { get_param: ip }
             $PARAM_1: { get_param: ip_access }
