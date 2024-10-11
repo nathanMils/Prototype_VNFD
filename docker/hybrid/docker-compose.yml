@@ -93,6 +93,9 @@ services:
         ELASTIC_VERSION: ${ELASTIC_VERSION}
     volumes:
       - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
+      - kibana-data:/usr/share/kibana/data:z
+
+
     ports:
       - 5601:5601
     environment:
