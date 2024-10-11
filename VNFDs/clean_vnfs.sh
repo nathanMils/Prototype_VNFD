@@ -24,10 +24,11 @@ check_vnfs() {
     while true; do
         all_not_instantiated=true
 
-        vnfs=$(openstack vnflcm list --os-tacker-api-version 2 -c ID -c Instantiation\ State -f value)
+        vnfs=$(openstack vnflcm list --os-tacker-api-version 2 -c ID -f value)
 
         if [ -n "$vnfs" ]; then
-            echo "$vnfs" | while read -r vnf_id state; do
+            echo "$vnfs" | while read -r vnf_id; do
+                state=$(openstack vnflcm show --os-tacker-api-version 2 -f value -c Instantiation\ State "$vnf_id")
                 echo "VNF $vnf_id is in state: $state"
 
                 if [ "$state" != "NOT_INSTANTIATED" ]; then
@@ -45,10 +46,10 @@ check_vnfs() {
             return
         fi
 
-        # Wait before checking again
         sleep 10
     done
 }
+
 
 delete_vnfs() {
     echo "Deleting all VNFs..."
