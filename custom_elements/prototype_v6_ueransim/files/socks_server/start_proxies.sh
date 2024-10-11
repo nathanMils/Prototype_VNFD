@@ -22,8 +22,8 @@ docker pull vimagick/dante
 echo "Starting SOCKS proxies..."
 for interface in $matching_interfaces; do
     CONTAINER_NAME="socks_proxy_$interface"
-    
-    docker run -d --network host -v $CONFIG_DIR/sockd.$interface.conf:/etc/dante/sockd.conf --name "$CONTAINER_NAME" vimagick/dante
+    cp $CONFIG_DIR/sockd.$interface.conf $CONFIG_DIR/sockd.conf
+    docker run -d --network host -v $CONFIG_DIR/sockd.conf:/etc/dante/sockd.conf --name "$CONTAINER_NAME" vimagick/dante
 done
 
 for interface in $matching_interfaces; do

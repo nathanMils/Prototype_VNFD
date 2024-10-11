@@ -113,7 +113,11 @@ resources:
             run_ue "ue_3_config.yaml"
 
             sleep 120
+            echo "Running Socks Proxy Script"
             sudo /opt/prototype_master/socks_server/start_proxies.sh
+
+            echo "Running Ostinato Drone"
+            sudo drone -p 2222 &
           params:
             $PARAM_0: { get_param: ip }
             $PARAM_1: { get_param: ip_access }
