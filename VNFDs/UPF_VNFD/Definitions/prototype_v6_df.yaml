@@ -79,9 +79,9 @@ topology_template:
                 target_performance_parameters:
                   entry_schema: test
             virtual_memory:
-              virtual_mem_size: 2 GB
+              virtual_mem_size: 4 GB
             virtual_cpu:
-              num_virtual_cpu: 2
+              num_virtual_cpu: 6
             virtual_local_storage:
               - size_of_storage: 10 GB
     
