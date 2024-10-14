@@ -64,7 +64,7 @@ topology_template:
           version: '1'
           checksum:
             algorithm: sha-256
-            hash: d3d1e5991d8f111b90e582f8c1176d55bc59a5e1bb49842c92c768851736febe
+            hash: 425e9b69d7658e831a50b1e4c82a9aff0b0db6c0e51533058e6b30bc5130fe96
           container_format: bare
           disk_format: qcow2
           min_disk: 10 GB
