@@ -36,3 +36,6 @@ services:
       timeout: 5s
       retries: 5
     network_mode: "host"
+    resources:
+        limits:
+          cpus: "4"
