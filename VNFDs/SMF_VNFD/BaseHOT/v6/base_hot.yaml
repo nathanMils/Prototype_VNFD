@@ -16,6 +16,7 @@ resources:
       3GPP_ip: { get_param: [ nfv, input, nfs, upf, ip ] } 
       mysql_ip: { get_param: [ nfv, input, nfs, mysql, ip ] }
       nrf_ip: { get_param: [ nfv, input, nfs, nrf, ip ] }
+      udm_ip: { get_param: [ nfv, input, nfs, udm, ip ] }
       ip: { get_param: [ nfv, input, nfs, smf, ip ] }
       
       elk_network: { get_param: [ nfv, input, networks, elk_net, id ] }

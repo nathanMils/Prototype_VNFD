@@ -13,6 +13,8 @@ parameters:
     type: string
   nrf_ip:
     type: string
+  udm_ip:
+    type: string
   3GPP_ip:
     type: string
   ip:
@@ -45,10 +47,12 @@ resources:
 
             MYSQL_IP=$PARAM_0
             NRF_IP=$PARAM_1
+            UDM_IP=$PARAM_2
             echo "$MYSQL_IP mysql" >> /etc/hosts
             echo "$NRF_IP oai-nrf" >> /etc/hosts
+            echo "$UDM_IP oai-udm" >> /etc/hosts
             
-            export GPP_NETWORK=$PARAM_2
+            export GPP_NETWORK=$PARAM_3
 
             # Starting smf
             TARGET_DIR=/opt/prototype_master
@@ -57,7 +61,8 @@ resources:
           params:
             $PARAM_0: { get_param: mysql_ip }
             $PARAM_1: { get_param: nrf_ip }
-            $PARAM_2: { get_param: 3GPP_ip }
+            $PARAM_2: { get_param: udm_ip }
+            $PARAM_3: { get_param: 3GPP_ip }
       
   5g_CP:
     type: OS::Neutron::Port
