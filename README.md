@@ -70,3 +70,21 @@ The VNFDs (Virtual Network Function Descriptors) directory contains various VNFs
 
 - **UPF_VNFD**
     - VNFD for the User Plane Function.
+
+## NF + Zeek + filebeat intergration: Prototype V1 Concept
+![NF + Zeek + filebeat intergration: PrototypeV1 Concept](Diagrams/prototype_v1.png)
+- NRF issue was causing issues with SMF/UPF discoverability
+
+## NF + Zeek + filebeat intergration: Prototype V2+ Concept
+![NF + Zeek + filebeat intergration: PrototypeV2 Concept](Diagrams/prototype_v2.png)
+- NRF issue was addressed using docker network host
+
+## V6 5G Core Network + DFR: Prototype V6+ Configuration
+![V6 5G Core Network + DFR: Prototype V6+ Configuration](Diagrams/V6_Config.png)
+
+## V6 5G Core Network + DFR: High Level View
+![V6 5G Core Network + DFR: High Level View](Diagrams/V6_Config_HL.png)
+
+## RAN and UE Simulation: Ostinato + UERANSIM
+![RAN and UE Simulation: Ostinato + UERANSIM](Diagrams/RAN_UE_Simulation.png)
+
