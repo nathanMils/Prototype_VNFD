@@ -1,0 +1,47 @@
+heat_template_version: 2013-05-23
+description: 'ELK Network Base HOT for Sample VNF'
+
+parameters:
+  cidr_ipv4:
+    type: string
+  cidr_ipv6:
+    type: string
+
+resources:
+  5g_access_VL1:
+    type: OS::Neutron::Net
+    properties:
+      name: 5G_access_net
+
+  5g_access_VL1_subnet_ipv4:
+    type: OS::Neutron::Subnet
+    properties:
+      ip_version: 4
+      network:
+        get_resource: 5g_access_VL1
+      cidr: { get_param: cidr_ipv4 }
+      dns_nameservers:
+        - 8.8.8.8   # Primary Google Public DNS
+        - 8.8.4.4   # Secondary Google Public DNS
+
+  5g_access_VL1_subnet_ipv6:
+    type: OS::Neutron::Subnet
+    properties:
+      ip_version: 6
+      network:
+        get_resource: 5g_access_VL1
+      cidr: { get_param: cidr_ipv6 }
+      dns_nameservers:
+        - 2001:4860:4860::8888  # Google Public DNS IPv6 Primary
+        - 2001:4860:4860::8844  # Google Public DNS IPv6 Secondary
+
+outputs:
+  5g_access_net:
+    description: The ID of the 5G network
+    value: { get_resource: 5g_access_VL1 }
+  5g_access_subnet_ipv4:
+    description: The ID of the Ipv4 subnet
+    value: { get_resource: 5g_access_VL1_subnet_ipv4 }
+  5g_access_subnet_ipv6:
+    description: The ID of the Ipv6 subnet
+    value: { get_resource: 5g_access_VL1_subnet_ipv6 }

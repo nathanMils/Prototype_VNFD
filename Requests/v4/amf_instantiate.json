@@ -1,0 +1,62 @@
+{
+  "flavourId":"v4",
+  "vimConnectionInfo": {
+    "vim": {
+      "id": "3cc2c4ff-525c-48b4-94c9-29247223322f",
+      "vimId": "<VIM_ID>",
+      "vimType": "openstack"
+    }
+  },
+  "additionalParams": {
+    "lcm-operation-user-data": "./UserData/lcm_user_data.py",
+    "lcm-operation-user-data-class": "StandardUserData",
+    "nfv": {
+      "input": {
+        "elk-0": {
+          "ip": "10.6.0.3",
+          "filebeat_password": "filebeatNathan",
+          "beats_password": "beatsNathan"
+        },
+        "nfs-0": {
+          "mysql": {
+            "ip": "10.5.0.3",
+            "id": "00000000-0000-0000-0000-000000000001"
+          },
+          "nrf": {
+            "ip": "10.5.0.4",
+            "id": "00000000-0000-0000-0000-000000000002"
+          },
+          "udr": {
+            "id": "00000000-0000-0000-0000-000000000003"
+          },
+          "udm": {
+            "id": "00000000-0000-0000-0000-000000000004"
+          },
+          "ausf": {
+            "id": "00000000-0000-0000-0000-000000000005"
+          },
+          "amf": {
+            "id": "00000000-0000-0000-0000-000000000006"
+          },
+          "smf": {
+            "id": "00000000-0000-0000-0000-000000000007"
+          },
+          "upf": {
+            "id": "00000000-0000-0000-0000-000000000008"
+          }
+        },
+        "networks-0": {
+          "elk_net": {
+              "id": "ELK_net"
+          },
+          "5g_net": {
+              "id": "5G_net"
+          },
+          "external": {
+              "id": "public"
+          }
+        }
+      }
+    }
+  }
+}

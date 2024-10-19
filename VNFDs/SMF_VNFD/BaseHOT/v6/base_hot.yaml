@@ -1,0 +1,31 @@
+heat_template_version: 2013-05-23
+description: 'Simple SMF Base HOT VNF'
+
+parameters:
+  nfv:
+    type: json
+
+resources:
+  SMF:
+    type: SMF.yaml
+    properties:
+      flavor: { get_param: [ nfv, VDU, SMF, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, SMF, vcImageId ] }
+
+      5g_network: { get_param: [ nfv, input, networks, 5g_net, id ] }
+      3GPP_ip: { get_param: [ nfv, input, nfs, upf, ip ] } 
+      mysql_ip: { get_param: [ nfv, input, nfs, mysql, ip ] }
+      nrf_ip: { get_param: [ nfv, input, nfs, nrf, ip ] }
+      udm_ip: { get_param: [ nfv, input, nfs, udm, ip ] }
+      ip: { get_param: [ nfv, input, nfs, smf, ip ] }
+      
+      elk_network: { get_param: [ nfv, input, networks, elk_net, id ] }
+      elk_ip: { get_param: [ nfv, input, elk, ip ] }
+      filebeat_password: { get_param: [ nfv, input, elk, filebeat_password ] }
+      beats_password: { get_param: [ nfv, input, elk, beats_password ] }
+      id: { get_param: [ nfv, input, nfs, smf, id ] }
+
+      external_network: { get_param: [ nfv, input, networks, external, id ] }
+      
+
+outputs: {}

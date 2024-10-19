@@ -1,0 +1,51 @@
+{
+    "fields": {
+      "digest": "daf0886e330d7c47382632cde106b897f83bac46e2eac0882f333c473af3c523",
+      "source": "weird",
+      "vnf": "nrf",
+      "id": 12345
+    },
+    "input": {
+      "type": "log"
+    },
+    "agent": {
+      "ephemeral_id": "d4f05665-010e-4d42-a1eb-d33315ef95e5",
+      "id": "970dfbd7-49ed-4802-a444-bd4dd8d5e32b",
+      "name": "filebeat",
+      "type": "filebeat",
+      "version": "8.15.0"
+    },
+    "log": {
+      "offset": 0,
+      "file": {
+        "path": "/usr/local/zeek/logs/weird.log"
+      }
+    },
+    "message": "{\"ts\":1726735998.350054,\"uid\":\"C11v1yG0lD6UJyHQf\",\"id.orig_h\":\"172.20.0.3\",\"id.orig_p\":33442,\"id.resp_h\":\"172.21.0.3\",\"id.resp_p\":80,\"name\":\"bad_TCP_checksum\",\"notice\":false,\"peer\":\"zeek\",\"source\":\"TCP\"}",
+    "@version": "1",
+    "@timestamp": "2024-09-19T10:11:26.055Z",
+    "event": {
+      "original": "{\"ts\":1726735998.350054,\"uid\":\"C11v1yG0lD6UJyHQf\",\"id.orig_h\":\"172.20.0.3\",\"id.orig_p\":33442,\"id.resp_h\":\"172.21.0.3\",\"id.resp_p\":80,\"name\":\"bad_TCP_checksum\",\"notice\":false,\"peer\":\"zeek\",\"source\":\"TCP\"}"
+    },
+    "ecs": {
+      "version": "8.0.0"
+    },
+    "tags": [
+      "beats_input_codec_plain_applied"
+    ],
+    "zeek": {
+      "notice": false,
+      "id.orig_h": "172.20.0.3",
+      "uid": "C11v1yG0lD6UJyHQf",
+      "peer": "zeek",
+      "source": "TCP",
+      "name": "bad_TCP_checksum",
+      "id.orig_p": 33442,
+      "ts": 1726735998.350054,
+      "id.resp_h": "172.21.0.3",
+      "id.resp_p": 80
+    },
+    "host": {
+      "name": "filebeat"
+    }
+  }

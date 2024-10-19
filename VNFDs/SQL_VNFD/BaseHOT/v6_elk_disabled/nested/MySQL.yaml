@@ -1,0 +1,57 @@
+heat_template_version: 2013-05-23
+description: 'MySQL DB HOT for Sample VNF'
+
+parameters:
+  flavor:
+    type: string
+  image:
+    type: string
+
+  5g_network:
+    type: string
+  ip:
+    type: string
+
+  external_network:
+    type: string
+resources:
+
+  MySQL:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      name: MySQL
+      networks:
+        - port:
+            get_resource: 5g_CP
+      user_data_format: RAW
+      user_data: |
+        #!/bin/bash
+
+        sudo useradd -m -s /bin/bash nathan
+        echo "nathan:stupid" | sudo chpasswd
+        echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
+
+        # Starting mysql container
+        TARGET_DIR=/opt/prototype_master
+        docker compose -f $TARGET_DIR/prototype_compose/docker-compose-mysql.yml up -d
+
+  5g_CP:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: 5g_network }
+      port_security_enabled: false
+      fixed_ips:
+        - ip_address: { get_param: ip }
+
+  5g_extvCP:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: public
+
+  5g_association:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: { get_resource: 5g_extvCP }
+      port_id: { get_resource: 5g_CP }

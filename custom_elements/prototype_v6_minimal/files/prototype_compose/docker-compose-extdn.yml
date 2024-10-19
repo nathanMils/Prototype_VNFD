@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+
+  oai-ext-dn:
+        privileged: true
+        init: true
+        container_name: "oai-ext-dn"
+        image: oaisoftwarealliance/trf-gen-cn5g:latest
+        entrypoint: /bin/bash -c \
+              "iptables -t nat -A POSTROUTING -o ${INTERFACE} -j MASQUERADE;"\
+              "ip route add 12.1.1.0/24 via ${IP_3} dev ${INTERFACE}; ip route; sleep infinity"
+        command: ["/bin/bash", "-c", "trap : SIGTERM SIGINT; sleep infinity & wait"]
+        healthcheck:
+            test: /bin/bash -c "iptables -L -t nat | grep MASQUERADE"
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        network_mode: "host"
+# public_net_core:
+#     ipv4_address: 192.168.73.135

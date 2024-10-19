@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+
+  oai-udm:
+    container_name: "oai-udm"
+    image: oaisoftwarealliance/oai-udm:v2.0.1
+    volumes:
+        - ./nf/conf/basic_nrf_config.yaml:/openair-udm/etc/config.yaml
+    environment:
+        - TZ=Europe/Paris
+    depends_on:
+        - zeek
+    privileged: true
+    network_mode: "host"

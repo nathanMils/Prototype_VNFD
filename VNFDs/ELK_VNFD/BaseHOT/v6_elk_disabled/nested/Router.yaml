@@ -1,0 +1,78 @@
+heat_template_version: 2013-05-23
+description: 'ELK Router HOT for Sample VNF'
+
+parameters:
+  5g_subnet_ipv4:
+    type: string
+  5g_subnet_ipv6:
+    type: string
+  5g_core_subnet_ipv4:
+    type: string
+  5g_core_subnet_ipv6:
+    type: string
+  5g_access_subnet_ipv4:
+    type: string
+  5g_access_subnet_ipv6:
+    type: string
+  external_net:
+    type: string
+
+resources:
+  router:
+    type: OS::Neutron::Router
+    properties:
+      name: main_router
+      admin_state_up: true
+      external_gateway_info:
+        network: { get_param: external_net }
+        enable_snat: true
+
+  5g_router_interface_ipv4:
+    type: OS::Neutron::RouterInterface
+    depends_on:
+      - router
+    properties:
+      router: { get_resource: router }
+      subnet: { get_param: 5g_subnet_ipv4 }
+  
+  5g_router_interface_ipv6:
+    type: OS::Neutron::RouterInterface
+    depends_on:
+      - router
+    properties:
+      router: { get_resource: router }
+      subnet: { get_param: 5g_subnet_ipv6 }
+
+  5g_core_router_interface_ipv4:
+    type: OS::Neutron::RouterInterface
+    depends_on:
+      - router
+    properties:
+      router: { get_resource: router }
+      subnet: { get_param: 5g_core_subnet_ipv4 }
+  
+  5g_core_router_interface_ipv6:
+    type: OS::Neutron::RouterInterface
+    depends_on:
+      - router
+    properties:
+      router: { get_resource: router }
+      subnet: { get_param: 5g_core_subnet_ipv6 }
+
+  5g_access_router_interface_ipv4:
+    type: OS::Neutron::RouterInterface
+    depends_on:
+      - router
+    properties:
+      router: { get_resource: router }
+      subnet: { get_param: 5g_access_subnet_ipv4 }
+  
+  5g_access_router_interface_ipv6:
+    type: OS::Neutron::RouterInterface
+    depends_on:
+      - router
+    properties:
+      router: { get_resource: router }
+      subnet: { get_param: 5g_access_subnet_ipv6 }
+
+

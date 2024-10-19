@@ -1,0 +1,27 @@
+heat_template_version: 2013-05-23
+description: 'Simple UPF Base HOT VNF'
+
+parameters:
+  nfv:
+    type: json
+
+resources:
+  UPF:
+    type: UPF.yaml
+    properties:
+      flavor: { get_param: [ nfv, VDU, UPF, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, UPF, vcImageId ] }
+
+      5g_network: { get_param: [ nfv, input, networks, 5g_net, id ] }
+      5g_core_network: { get_param: [ nfv, input, networks, 5g_core_net, id ] }
+      5g_access_network: { get_param: [ nfv, input, networks, 5g_access_net, id ] }
+      ip: { get_param: [ nfv, input, nfs, upf, ip ] }
+      ip_core: { get_param: [ nfv, input, nfs, upf, ip_core ] }
+      ip_access: { get_param: [ nfv, input, nfs, upf, ip_access ] }
+      ext_dn_ip: { get_param: [ nfv, input, nfs, ext_dn, ip ] }
+      mysql_ip: { get_param: [ nfv, input, nfs, mysql, ip ] }
+      nrf_ip: { get_param: [ nfv, input, nfs, nrf, ip ] }
+
+      external_network: { get_param: [ nfv, input, networks, external, id ] }
+
+outputs: {}

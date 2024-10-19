@@ -1,0 +1,49 @@
+{
+    "fields": {
+      "digest": "a469c84a1fb58c636b34f58f3819e43bce21636b1d1ebfc72315c3dba4e6acf6",
+      "source": "notice",
+      "vnf": "nrf",
+      "id": 12345
+    },
+    "input": {
+      "type": "log"
+    },
+    "agent": {
+      "name": "filebeat",
+      "ephemeral_id": "d4f05665-010e-4d42-a1eb-d33315ef95e5",
+      "id": "970dfbd7-49ed-4802-a444-bd4dd8d5e32b",
+      "type": "filebeat",
+      "version": "8.15.0"
+    },
+    "log": {
+      "offset": 400,
+      "file": {
+        "path": "/usr/local/zeek/logs/notice.log"
+      }
+    },
+    "message": "{\"ts\":1726742547.820293,\"note\":\"CaptureLoss::Too_Little_Traffic\",\"msg\":\"Only observed 0 TCP ACKs and was expecting at least 1.\",\"actions\":[\"Notice::ACTION_LOG\"],\"email_dest\":[],\"suppress_for\":3600.0}",
+    "@version": "1",
+    "@timestamp": "2024-09-19T10:42:37.916Z",
+    "event": {
+      "original": "{\"ts\":1726742547.820293,\"note\":\"CaptureLoss::Too_Little_Traffic\",\"msg\":\"Only observed 0 TCP ACKs and was expecting at least 1.\",\"actions\":[\"Notice::ACTION_LOG\"],\"email_dest\":[],\"suppress_for\":3600.0}"
+    },
+    "ecs": {
+      "version": "8.0.0"
+    },
+    "tags": [
+      "beats_input_codec_plain_applied"
+    ],
+    "zeek": {
+      "email_dest": [],
+      "suppress_for": 3600,
+      "note": "CaptureLoss::Too_Little_Traffic",
+      "msg": "Only observed 0 TCP ACKs and was expecting at least 1.",
+      "ts": 1726742547.820293,
+      "actions": [
+        "Notice::ACTION_LOG"
+      ]
+    },
+    "host": {
+      "name": "filebeat"
+    }
+  }

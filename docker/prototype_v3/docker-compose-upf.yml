@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+
+  oai-upf:
+    container_name: "oai-upf"
+    image: oaisoftwarealliance/oai-upf:2024-june
+    volumes:
+        - ./nf/conf/basic_nrf_config.yaml:/openair-upf/etc/config.yaml
+    environment:
+        - TZ=Europe/Paris
+    depends_on:
+        - zeek
+    cap_add:
+        - NET_ADMIN
+        - SYS_ADMIN
+    cap_drop:
+        - ALL
+    privileged: true
+    network_mode: "host"

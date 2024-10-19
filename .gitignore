@@ -61,10 +61,6 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
-# Flask stuff:
-instance/
-.webassets-cache
-
 # Scrapy stuff:
 .scrapy
 
@@ -93,7 +89,6 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
 .venv
 env/
 venv/
@@ -126,5 +121,10 @@ dmypy.json
 cython_debug/
 
 # Project Files
-vnfd_package.zip
-TOSCA-Metadata/TOSCA.meta
+**/vnfd_package.zip
+**/TOSCA.meta
+**/template.json
+Files/images/simple_gateway.qcow2
+custom_elements/elk/files/images.tar
+
+*/*-images.tar

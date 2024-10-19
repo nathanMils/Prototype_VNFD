@@ -1,0 +1,67 @@
+{
+    "fields": {
+      "digest": "2202b09e671ed016663ca1db0000584b898d5b592187a20927d378370d077815",
+      "source": "stats",
+      "vnf": "nrf",
+      "id": 12345
+    },
+    "input": {
+      "type": "log"
+    },
+    "agent": {
+      "name": "filebeat",
+      "ephemeral_id": "d4f05665-010e-4d42-a1eb-d33315ef95e5",
+      "id": "970dfbd7-49ed-4802-a444-bd4dd8d5e32b",
+      "type": "filebeat",
+      "version": "8.15.0"
+    },
+    "log": {
+      "offset": 2868,
+      "file": {
+        "path": "/usr/local/zeek/logs/stats.log"
+      }
+    },
+    "message": "{\"ts\":1726742487.822336,\"peer\":\"zeek\",\"mem\":271,\"pkts_proc\":0,\"bytes_recv\":0,\"pkts_dropped\":0,\"pkts_link\":0,\"pkt_lag\":0.0004229545593261719,\"events_proc\":340,\"events_queued\":340,\"active_tcp_conns\":0,\"active_udp_conns\":0,\"active_icmp_conns\":0,\"tcp_conns\":0,\"udp_conns\":0,\"icmp_conns\":0,\"timers\":1659,\"active_timers\":43,\"files\":0,\"active_files\":0,\"dns_requests\":0,\"active_dns_requests\":0,\"reassem_tcp_size\":0,\"reassem_file_size\":0,\"reassem_frag_size\":0,\"reassem_unknown_size\":0}",
+    "@version": "1",
+    "@timestamp": "2024-09-19T10:41:30.984Z",
+    "event": {
+      "original": "{\"ts\":1726742487.822336,\"peer\":\"zeek\",\"mem\":271,\"pkts_proc\":0,\"bytes_recv\":0,\"pkts_dropped\":0,\"pkts_link\":0,\"pkt_lag\":0.0004229545593261719,\"events_proc\":340,\"events_queued\":340,\"active_tcp_conns\":0,\"active_udp_conns\":0,\"active_icmp_conns\":0,\"tcp_conns\":0,\"udp_conns\":0,\"icmp_conns\":0,\"timers\":1659,\"active_timers\":43,\"files\":0,\"active_files\":0,\"dns_requests\":0,\"active_dns_requests\":0,\"reassem_tcp_size\":0,\"reassem_file_size\":0,\"reassem_frag_size\":0,\"reassem_unknown_size\":0}"
+    },
+    "ecs": {
+      "version": "8.0.0"
+    },
+    "tags": [
+      "beats_input_codec_plain_applied"
+    ],
+    "zeek": {
+      "events_proc": 340,
+      "pkts_proc": 0,
+      "reassem_frag_size": 0,
+      "active_icmp_conns": 0,
+      "pkts_dropped": 0,
+      "active_udp_conns": 0,
+      "icmp_conns": 0,
+      "events_queued": 340,
+      "udp_conns": 0,
+      "timers": 1659,
+      "files": 0,
+      "reassem_tcp_size": 0,
+      "mem": 271,
+      "tcp_conns": 0,
+      "peer": "zeek",
+      "active_timers": 43,
+      "ts": 1726742487.822336,
+      "reassem_unknown_size": 0,
+      "bytes_recv": 0,
+      "active_files": 0,
+      "pkt_lag": 0.0004229545593261719,
+      "active_dns_requests": 0,
+      "active_tcp_conns": 0,
+      "reassem_file_size": 0,
+      "dns_requests": 0,
+      "pkts_link": 0
+    },
+    "host": {
+      "name": "filebeat"
+    }
+  }

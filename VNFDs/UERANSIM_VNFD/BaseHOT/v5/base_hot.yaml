@@ -1,0 +1,21 @@
+heat_template_version: 2013-05-23
+description: 'Simple MySQL Base HOT VNF'
+
+parameters:
+  nfv:
+    type: json
+
+resources:
+  UERANSIM:
+    type: UERANSIM.yaml
+    properties:
+      flavor: { get_param: [ nfv, VDU, UERANSIM, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, UERANSIM, vcImageId ] }
+      5g_network: { get_param: [ nfv, input, networks, 5g_net, id ] }
+      5g_access_network: { get_param: [ nfv, input, networks, 5g_access_net, id ] }
+      external_network: { get_param: [ nfv, input, networks, external, id ] }
+      ip: { get_param: [ nfv, input, nfs, ueransim, ip ] }
+      ip_access: { get_param: [ nfv, input, nfs, ueransim, ip_access ] }
+      amf_ip: { get_param: [ nfv, input, nfs, amf, ip ] }
+
+outputs: {}

@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+
+  vpp-upf:
+        privileged: true
+        container_name: "vpp-upf"
+        image: oaisoftwarealliance/oai-upf-vpp:v2.0.1
+        environment:
+            - IF_1_IP=192.168.70.201
+            - IF_1_TYPE=N4
+            - IF_2_IP=192.168.72.201
+            - IF_2_TYPE=N3
+            - IF_2_NWI=access.oai.org
+            - IF_3_IP=192.168.73.201
+            - IF_3_TYPE=N6
+            - IF_3_IP_REMOTE=192.168.73.135 # EXT-DN IP Address
+            - IF_3_NWI=internet.oai.org
+            - NAME=VPP-UPF
+            - MNC=95
+            - MCC=208
+            - REALM=3gppnetwork.org
+            - VPP_MAIN_CORE=0
+            - VPP_CORE_WORKER=1
+#           - VPP_PLUGIN_PATH=/usr/lib64/vpp_plugins/                # RHEL7
+            - VPP_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/vpp_plugins/ # Ubntu18.04
+            - SNSSAI_SD=123
+            - SNSSAI_SST=222
+            - DNN=default
+            - REGISTER_NRF=yes
+            - NRF_IP_ADDR=192.168.70.130
+            #changes for HTTP2
+            - NRF_PORT=8080
+            - HTTP_VERSION=2
+        depends_on:
+            - zeek
+        healthcheck:
+            test: /bin/bash -c "pgrep vpp"
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        network_mode: "host"

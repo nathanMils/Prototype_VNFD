@@ -1,0 +1,85 @@
+heat_template_version: 2013-05-23
+description: 'EXT DN HOT for Sample VNF'
+
+parameters:
+  flavor:
+    type: string
+  image:
+    type: string
+  5g_core_network:
+    type: string
+  external_network:
+    type: string
+  ip: 
+    type: string
+  upf_ip_core:
+    type: string
+
+resources:
+
+  EXT_DN:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      name: EXT_DN
+      networks:
+        - port:
+            get_resource: 5g_core_CP
+      user_data_format: RAW
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+
+            sudo useradd -m -s /bin/bash nathan
+            echo "nathan:stupid" | sudo chpasswd
+            echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
+
+            IP_3=$PARAM_0
+            INTERFACE="ens3"
+
+            # Add a MASQUERADE rule
+            if sudo iptables -t nat -A POSTROUTING -o $INTERFACE -j MASQUERADE; then
+                echo "MASQUERADE rule added successfully."
+            else
+                echo "Failed to add MASQUERADE rule." >&2
+                exit 1
+            fi
+
+            # Add a route
+            if sudo ip route add 12.1.1.0/24 via $IP_3 dev $INTERFACE; then
+                echo "Route added successfully."
+            else
+                echo "Failed to add route." >&2
+                exit 1
+            fi
+
+            # Allow forwarding on the interface
+            if sudo iptables -A FORWARD -i $INTERFACE -o $INTERFACE -j ACCEPT; then
+                echo "Forwarding rule added successfully."
+            else
+                echo "Failed to add forwarding rule." >&2
+                exit 1
+            fi
+          params:
+            $PARAM_0: { get_param: upf_ip_core }
+
+  5g_core_CP:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: 5g_core_network }
+      port_security_enabled: false
+      fixed_ips:
+        - ip_address: { get_param: ip }
+
+  5g_core_extvCP:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: public
+
+  5g_access_association:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: { get_resource: 5g_core_extvCP }
+      port_id: { get_resource: 5g_core_CP }

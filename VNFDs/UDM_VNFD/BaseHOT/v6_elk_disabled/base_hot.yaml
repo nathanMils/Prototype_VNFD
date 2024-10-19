@@ -1,0 +1,23 @@
+heat_template_version: 2013-05-23
+description: 'Simple UDM Base HOT VNF'
+
+parameters:
+  nfv:
+    type: json
+
+resources:
+  UDM:
+    type: UDM.yaml
+    properties:
+      flavor: { get_param: [ nfv, VDU, UDM, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, UDM, vcImageId ] }
+
+      5g_network: { get_param: [ nfv, input, networks, 5g_net, id ] }
+      mysql_ip: { get_param: [ nfv, input, nfs, mysql, ip ] }
+      nrf_ip: { get_param: [ nfv, input, nfs, nrf, ip ] }
+      udr_ip: { get_param: [ nfv, input, nfs, udr, ip ] }
+      ip: { get_param: [ nfv, input, nfs, udm, ip ] }
+      
+      external_network: { get_param: [ nfv, input, networks, external, id ] }
+
+outputs: {}

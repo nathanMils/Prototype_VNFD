@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -eux
+
+curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-8.15.0-amd64.deb
+sudo dpkg -i filebeat-8.15.0-amd64.deb
+
+SOURCE_DIR=$(dirname $0)/../files
+# Copy the filebeat config to the target system
+cp $SOURCE_DIR/filebeat.yml /etc/filebeat/filebeat.yml

@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+    mysql:
+      container_name: "mysql"
+      image: mysql:8.0
+      ports:
+          - "3306:3306"
+      volumes:
+          - ./database/oai_db2.sql:/docker-entrypoint-initdb.d/oai_db.sql
+          - ./healthscripts/mysql-healthcheck2.sh:/tmp/mysql-healthcheck.sh
+      environment:
+          - TZ=Europe/Paris
+          - MYSQL_DATABASE=oai_db
+          - MYSQL_USER=test
+          - MYSQL_PASSWORD=test
+          - MYSQL_ROOT_PASSWORD=linux
+      healthcheck:
+          test: /bin/bash -c "/tmp/mysql-healthcheck.sh"
+          interval: 10s
+          timeout: 5s
+          retries: 30
+# public_net:
+#     ipv4_address: 192.168.70.131

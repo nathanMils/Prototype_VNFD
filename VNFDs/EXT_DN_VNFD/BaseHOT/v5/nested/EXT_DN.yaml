@@ -1,0 +1,68 @@
+heat_template_version: 2013-05-23
+description: 'EXT DN HOT for Sample VNF'
+
+parameters:
+  flavor:
+    type: string
+  image:
+    type: string
+  5g_core_network:
+    type: string
+  external_network:
+    type: string
+  ip: 
+    type: string
+  upf_ip_core:
+    type: string
+
+resources:
+
+  EXT_DN:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      name: 
+      networks:
+        - port:
+            get_resource: 5g_core_CP
+      user_data_format: RAW
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+            sudo useradd -m -s /bin/bash nathan
+            # Set a password for the new user
+            echo "nathan:stupid" | sudo chpasswd
+            # Optionally, add the user to the sudoers file for administrative privileges
+            echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
+
+            # Exporting required vars
+            export IP_3=$PARAM_0
+            export INTERFACE="ens3"
+
+            # Starting containers and networks
+            TARGET_DIR=/opt/prototype_master
+            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-extdn.yml up -d
+
+          params:
+            $PARAM_0: { get_param: upf_ip_core }
+
+  5g_core_CP:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: 5g_core_network }
+      port_security_enabled: false
+      fixed_ips:
+        - ip_address: { get_param: ip }
+
+  5g_core_extvCP:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: public
+
+  5g_access_association:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: { get_resource: 5g_core_extvCP }
+      port_id: { get_resource: 5g_core_CP }

@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+
+  zeek:
+    build: 
+      context: zeek
+    privileged: true
+    command: sh /entrypoint.sh
+    container_name: zeek
+    volumes:
+      - ./zeek_logs:/usr/local/zeek/logs
+    environment:
+        - INTERFACE=${INTERFACE}
+    cap_add:
+      - NET_ADMIN
+    network_mode: "host"
+
+  oai-udr:
+    container_name: "oai-udr"
+    build:
+      context: oai-udr
+    volumes:
+        - ./oai-udr/conf/basic_nrf_config.yaml:/openair-udr/etc/config.yaml
+    environment:
+        - TZ=Europe/Paris
+    depends_on:
+        - zeek
+    privileged: true
+    network_mode: "host"
+
+  filebeat:
+    build:
+      context: filebeat/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    container_name: filebeat
+    user: root
+    command:
+      - -e
+      - --strict.perms=false
+    volumes:
+      - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro,Z
+      - ./zeek_logs:/usr/local/zeek/logs
+      - type: bind
+        source: /var/lib/docker/containers
+        target: /var/lib/docker/containers
+        read_only: true
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        read_only: true
+    environment:
+      FILEBEAT_INTERNAL_PASSWORD: ${FILEBEAT_INTERNAL_PASSWORD:-}
+      BEATS_SYSTEM_PASSWORD: ${BEATS_SYSTEM_PASSWORD:-}

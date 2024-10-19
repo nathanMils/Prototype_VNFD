@@ -1,0 +1,42 @@
+heat_template_version: 2013-05-23
+description: 'ELK Base HOT for Sample VNF'
+
+parameters:
+  nfv:
+    type: json
+
+resources:
+  5g_net:
+    type: 5G_net.yaml
+    properties:
+      cidr_ipv4: { get_param: [ nfv, input, networks, 5g_net, cidr_ipv4 ] }
+      cidr_ipv6: { get_param: [ nfv, input, networks, 5g_net, cidr_ipv6 ] }
+
+  5g_core_net:
+    type: 5G_core_net.yaml
+    properties:
+      cidr_ipv4: { get_param: [ nfv, input, networks, 5g_core_net, cidr_ipv4 ] }
+      cidr_ipv6: { get_param: [ nfv, input, networks, 5g_core_net, cidr_ipv6 ] }
+
+  5g_access_net:
+    type: 5G_access_net.yaml
+    properties:
+      cidr_ipv4: { get_param: [ nfv, input, networks, 5g_access_net, cidr_ipv4 ] }
+      cidr_ipv6: { get_param: [ nfv, input, networks, 5g_access_net, cidr_ipv6 ] }
+
+  router:
+    type: Router.yaml
+    depends_on:
+      - 5g_net
+      - 5g_core_net
+      - 5g_access_net
+    properties:
+      5g_subnet_ipv4: { get_attr: [ 5g_net, 5g_subnet_ipv4 ] }
+      5g_subnet_ipv6: { get_attr: [ 5g_net, 5g_subnet_ipv6 ] }
+      5g_core_subnet_ipv4: { get_attr: [ 5g_core_net, 5g_core_subnet_ipv4 ] }
+      5g_core_subnet_ipv6: { get_attr: [ 5g_core_net, 5g_core_subnet_ipv6 ] }
+      5g_access_subnet_ipv4: { get_attr: [ 5g_access_net, 5g_access_subnet_ipv4 ] }
+      5g_access_subnet_ipv6: { get_attr: [ 5g_access_net, 5g_access_subnet_ipv6 ] }
+      external_net: { get_param: [ nfv, input, networks, external, id ]}
+
+outputs: {}

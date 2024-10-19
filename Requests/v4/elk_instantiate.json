@@ -1,0 +1,43 @@
+{
+    "flavourId":"simple",
+    "vimConnectionInfo": {
+      "vim": {
+        "id": "3cc2c4ff-525c-48b4-94c9-29247223322f",
+        "vimId": "<VIM_ID>",
+        "vimType": "openstack"
+      }
+    },
+    "additionalParams": {
+      "lcm-operation-user-data": "./UserData/lcm_user_data.py",
+      "lcm-operation-user-data-class": "StandardUserData",
+      "nfv": {
+        "input": {
+          "elk-0": {
+            "ip": "10.6.0.3",
+            "elastic_password": "elasticness",
+            "logstash_password": "in_the_logging_days",
+            "kibana_password": "kibanaNana",
+            "filebeat_password": "filebeatNathan",
+            "beats_password": "beatsNathan"
+          },
+          "nfs-0": {},
+          "networks": {
+            "elk_net": {
+                "id": "ELK_net",
+                "cidr_ipv4": "10.6.0.0/26",
+                "cidr_ipv6": "2001:db8:abcd:002::/64"
+            },
+            "5g_net": {
+                "id": "5G_net",
+                "cidr_ipv4": "10.5.0.0/26",
+                "cidr_ipv6": "2001:db8:abcd:001::/64"
+            },
+            "external": {
+                "id": "public",
+                "external_gateway": "172.24.4.10"
+            }
+          }
+        }
+      }
+    }
+  }

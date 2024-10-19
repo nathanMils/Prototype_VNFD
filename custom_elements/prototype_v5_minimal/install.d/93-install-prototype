@@ -1,0 +1,14 @@
+#!/bin/bash
+# Copy necessary files from the element's files directory into the appropriate locations in the target filesystem.
+
+set -eux
+
+# Define paths
+TARGET_DIR=/opt/prototype_master
+SOURCE_DIR=$(dirname $0)/../files
+
+# Create necessary directories in the target filesystem
+mkdir -p $TARGET_DIR
+
+# Copy the prototype_compose file to the appropriate directory in the target filesystem
+cp -r $SOURCE_DIR/prototype_compose $TARGET_DIR

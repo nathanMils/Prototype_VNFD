@@ -1,0 +1,39 @@
+#!/bin/bash
+
+set -e
+
+echo "Starting Zeek installation script..."
+
+# Add Zeek's repository and key for Ubuntu 22.04
+echo 'Adding Zeek repository...'
+echo 'deb http://download.opensuse.org/repositories/security:/zeek/xUbuntu_22.04/ /' | tee /etc/apt/sources.list.d/security:zeek.list
+
+echo 'Adding Zeek repository key...'
+curl -fsSL https://download.opensuse.org/repositories/security:/zeek/xUbuntu_22.04/Release.key | gpg --dearmor | tee /etc/apt/trusted.gpg.d/security_zeek.gpg > /dev/null
+
+echo 'Updating package list...'
+apt update
+
+# Install Zeek 7.0.1
+echo 'Installing Zeek...'
+apt install -y zeek
+
+# Add Zeek to PATH
+echo 'Adding Zeek to PATH...'
+echo 'export PATH=$PATH:/opt/zeek/bin' >> ~/.bashrc
+source ~/.bashrc
+
+echo "Zeek installation completed."
+
+echo "Copying configurations into Zeek"
+
+TARGET_DIR=/opt/zeek
+SOURCE_DIR=$(dirname $0)/../files
+
+cp $SOURCE_DIR/networks.cfg $TARGET_DIR/etc
+cp $SOURCE_DIR/node.cfg $TARGET_DIR/etc
+cp $SOURCE_DIR/zeekctl.cfg $TARGET_DIR/etc
+cp $SOURCE_DIR/zkg/config $TARGET_DIR/etc/zkg/config
+cp $SOURCE_DIR/local.zeek $TARGET_DIR/share/zeek/site/local.zeek
+
+echo "Configurations Complete"

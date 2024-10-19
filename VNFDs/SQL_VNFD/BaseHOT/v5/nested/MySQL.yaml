@@ -1,0 +1,116 @@
+heat_template_version: 2013-05-23
+description: 'MySQL DB HOT for Sample VNF'
+
+parameters:
+  flavor:
+    type: string
+  image:
+    type: string
+  ip:
+    type: string
+  elk_network:
+    type: string
+  5g_network:
+    type: string
+  external_network:
+    type: string
+  elk_ip:
+    type: string
+  filebeat_password:
+    type: string
+  beats_password:
+    type: string
+  id:
+    type: string
+
+resources:
+
+  MySQL:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: flavor }
+      image: { get_param: image }
+      name: MySQL
+      networks:
+        - port:
+            get_resource: elk_CP
+        - port:
+            get_resource: 5g_CP
+      user_data_format: RAW
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+            sudo useradd -m -s /bin/bash nathan
+            # Set a password for the new user
+            echo "nathan:stupid" | sudo chpasswd
+            # Optionally, add the user to the sudoers file for administrative privileges
+            echo "nathan ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
+            ELK_IP=$PARAM_0
+
+            echo "$ELK_IP elasticsearch" >> /etc/hosts
+            echo "$ELK_IP logstash" >> /etc/hosts
+            export PATH=$PATH:/opt/zeek/bin
+            # Exporting required vars
+            export FILEBEAT_INTERNAL_PASSWORD=$PARAM_1
+            export BEATS_SYSTEM_PASSWORD=$PARAM_2
+            export VNF_TYPE="mysql"
+            export VNF_ID=$PARAM_3
+            export INTERFACE="ens4"
+
+            # Start the filebeat service
+            filebeat &
+
+            # Start the zeek service
+            zeekctl deploy
+
+            # Starting containers and networks
+            TARGET_DIR=/opt/prototype_master
+            docker compose -f $TARGET_DIR/prototype_compose/docker-compose-mysql.yml up -d
+            
+          params:
+            $PARAM_0: { get_param: elk_ip }
+            $PARAM_1: { get_param: filebeat_password }
+            $PARAM_2: { get_param: beats_password }
+            $PARAM_3: { get_param: id }
+
+  elk_CP:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: elk_network }
+      port_security_enabled: false
+
+  5g_CP:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_param: 5g_network }
+      port_security_enabled: false
+      fixed_ips:
+        - ip_address: { get_param: ip }
+
+  5g_extvCP:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: public
+
+  5g_association:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: { get_resource: 5g_extvCP }
+      port_id: { get_resource: 5g_CP }
+  
+  elk_extvCP:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: public
+
+  elk_association:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: { get_resource: elk_extvCP }
+      port_id: { get_resource: elk_CP }
+
+outputs:
+  MySQL_IP:
+    description: IPv4 address of the 5g_CP port
+    value: { get_attr: [ 5g_CP, fixed_ips, 0, ip_address ] }

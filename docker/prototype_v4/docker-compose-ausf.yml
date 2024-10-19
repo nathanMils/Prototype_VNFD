@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+
+  oai-ausf:
+    container_name: "oai-ausf"
+    image: oaisoftwarealliance/oai-ausf:v2.0.1
+    volumes:
+        - ./nf/conf/basic_vpp_nrf_config.yaml:/openair-ausf/etc/config.yaml
+    environment:
+        - TZ=Europe/Paris
+    depends_on:
+        - zeek
+    privileged: true
+    network_mode: "host"

@@ -1,0 +1,197 @@
+tosca_definitions_version: tosca_simple_yaml_1_2
+
+description: Simple deployment flavour for Sample VNF
+
+imports:
+  - etsi_nfv_sol001_common_types.yaml
+  - etsi_nfv_sol001_vnfd_types.yaml
+  - prototype_types.yaml
+
+topology_template:
+  inputs:
+    descriptor_id:
+      type: string
+    descriptor_version:
+      type: string
+    provider:
+      type: string
+    product_name:
+      type: string
+    software_version:
+      type: string
+    vnfm_info:
+      type: list
+      entry_schema:
+        type: string
+    flavour_id:
+      type: string
+    flavour_description:
+      type: string
+
+  substitution_mappings:
+    node_type: company.provider.VNF
+    properties:
+      flavour_id: simple
+
+  node_templates:
+    VNF:
+      type: company.provider.VNF
+      properties:
+        flavour_description: Development configuration
+      interfaces:
+        Vnflcm:
+          instantiate_start: []
+          instantiate_end: []
+          terminate_start: []
+          terminate_end: []
+          modify_information_start: []
+          modify_information_end: []
+          heal_start: []
+          heal_end: []
+          scale_start: []
+          scale_end: []
+
+    ELK:
+      type: tosca.nodes.nfv.Vdu.Compute
+      properties:
+        name: ELK
+        description: ELK compute node
+        vdu_profile:
+          min_number_of_instances: 1
+          max_number_of_instances: 1
+        sw_image_data:
+          name: prototype_master
+          version: '1'
+          checksum:
+            algorithm: sha-256
+            hash: f23a89e3648ebbfbe6626974cf7c1c2d1ae2b2f25d6c3dfca587baa6e7f64844
+          container_format: bare
+          disk_format: qcow2
+          min_disk: 10 GB
+          size: 10 GB
+      capabilities:
+        virtual_compute:
+          properties:
+            requested_additional_capabilities:
+              properties:
+                requested_additional_capability_name: elk_basic
+                support_mandatory: true
+                target_performance_parameters:
+                  entry_schema: test
+            virtual_memory:
+              virtual_mem_size: 4 GB
+            virtual_cpu:
+              num_virtual_cpu: 4
+            virtual_local_storage:
+              - size_of_storage: 60 GB
+
+    CP1:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 4
+      requirements:
+        - virtual_binding: ELK
+        - virtual_link: elkVL1
+
+    extCP1:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: elkVL1
+
+    elkVL1:
+      type: tosca.nodes.nfv.VnfVirtualLink
+      properties:
+        connectivity_type:
+          layer_protocols: [ ipv4 ]
+        description: elk network
+        vl_profile:
+          max_bitrate_requirements:
+            root: 1048576
+            leaf: 1048576
+          min_bitrate_requirements:
+            root: 1048576
+            leaf: 1048576
+          virtual_link_protocol_data:
+            - associated_layer_protocol: ipv4
+              l3_protocol_data:
+                ip_version: ipv4
+                cidr: 10.6.0.0/24
+
+    5gVL1:
+      type: tosca.nodes.nfv.VnfVirtualLink
+      properties:
+        connectivity_type:
+          layer_protocols: [ ipv4 ]
+        description: 5G network
+        vl_profile:
+          max_bitrate_requirements:
+            root: 1048576
+            leaf: 1048576
+          min_bitrate_requirements:
+            root: 1048576
+            leaf: 1048576
+          virtual_link_protocol_data:
+            - associated_layer_protocol: ipv4
+              l3_protocol_data:
+                ip_version: ipv4
+                cidr: 10.5.0.0/24
+
+  policies:
+    - scaling_aspects:
+        type: tosca.policies.nfv.ScalingAspects
+        properties:
+          aspects:
+            ELK_scale:
+              name: ELK_scale
+              description: ELK scaling aspect
+              max_scale_level: 1
+              step_deltas:
+                - delta_1
+
+    - initial_delta:
+        type: tosca.policies.nfv.VduInitialDelta
+        properties:
+          initial_delta:
+            number_of_instances: 1
+        targets: [ ELK ]
+
+    - scaling_aspect_deltas:
+        type: tosca.policies.nfv.VduScalingAspectDeltas
+        properties:
+          aspect: ELK_scale
+          deltas:
+            delta_1:
+              number_of_instances: 1
+        targets: [ ELK ]
+
+    - instantiation_levels:
+        type: tosca.policies.nfv.InstantiationLevels
+        properties:
+          levels:
+            instantiation_level_1:
+              description: Only size
+              scale_info:
+                ELK_scale:
+                  scale_level: 0
+          default_level: instantiation_level_1
+
+    - ELK_instantiation_levels:
+        type: tosca.policies.nfv.VduInstantiationLevels
+        properties:
+          levels:
+            instantiation_level_1:
+              number_of_instances: 1
+        targets: [ ELK ]
+
+    - elkVL1_instantiation_levels:
+        type: tosca.policies.nfv.VirtualLinkInstantiationLevels
+        properties:
+          levels:
+            instantiation_level_1:
+              bitrate_requirements:
+                root: 1048576
+                leaf: 1048576
+        targets: [ elkVL1, 5gVL1 ]

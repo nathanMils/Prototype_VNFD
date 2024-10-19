@@ -1,0 +1,931 @@
+tosca_definitions_version: tosca_simple_yaml_1_2
+
+description: Simple deployment flavour for Sample VNF
+
+imports:
+  - etsi_nfv_sol001_common_types.yaml
+  - etsi_nfv_sol001_vnfd_types.yaml
+  - prototype_types.yaml
+
+topology_template:
+  inputs:
+    descriptor_id:
+      type: string
+    descriptor_version:
+      type: string
+    provider:
+      type: string
+    product_name:
+      type: string
+    software_version:
+      type: string
+    vnfm_info:
+      type: list
+      entry_schema:
+        type: string
+    flavour_id:
+      type: string
+    flavour_description:
+      type: string
+
+  substitution_mappings:
+    node_type: company.provider.VNF
+    properties:
+      flavour_id: v5
+
+  node_templates:
+    VNF:
+      type: company.provider.VNF
+      properties:
+        flavour_description: Development configuration
+      interfaces:
+        Vnflcm:
+          instantiate_start: []
+          instantiate_end: []
+          terminate_start: []
+          terminate_end: []
+          modify_information_start: []
+          modify_information_end: []
+          heal_start: []
+          heal_end: []
+          scale_start: []
+          scale_end: []
+
+    UERANSIM:
+      type: tosca.nodes.nfv.Vdu.Compute
+      properties:
+        name: UERANSIM
+        description: UERANSIM compute node
+        vdu_profile:
+          min_number_of_instances: 1
+          max_number_of_instances: 1
+        sw_image_data:
+          name: prototype_v5_utils
+          version: '1'
+          checksum:
+            algorithm: sha-256
+            hash: 6294fdf9b0741cc76fff82f9812f2892ea11e0f82e6149762c0f255acaee64ce
+          container_format: bare
+          disk_format: qcow2
+          min_disk: 20 GB
+          size: 20 GB
+      capabilities:
+        virtual_compute:
+          properties:
+            requested_additional_capabilities:
+              properties:
+                requested_additional_capability_name: ueransim_basic
+                support_mandatory: true
+                target_performance_parameters:
+                  entry_schema: test
+            virtual_memory:
+              virtual_mem_size: 4 GB
+            virtual_cpu:
+              num_virtual_cpu: 3
+            virtual_local_storage:
+              - size_of_storage: 20 GB
+    
+    UERANSIM_CP1:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 4
+      requirements:
+        - virtual_binding: UERANSIM
+        - virtual_link: 5gVL1
+
+    UERANSIM_CP2:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 5
+      requirements:
+        - virtual_binding: UERANSIM
+        - virtual_link: 5g_access_VL1
+
+    UERANSIM_extCP1:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+
+
+    UERANSIM_extCP2:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+
+    UERANSIM_extCP3:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: 5g_core_VL1
+
+    UERANSIM_extCP4:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: 5g_access_VL1
+
+    SMF:
+      type: tosca.nodes.nfv.Vdu.Compute
+      properties:
+        name: SMF
+        description: SMF compute node
+        vdu_profile:
+          min_number_of_instances: 1
+          max_number_of_instances: 1
+        sw_image_data:
+          name: prototype_v5_minimal
+          version: '1'
+          checksum:
+            algorithm: sha-256
+            hash: 20a61317464f868e8f4f8fb0911f95722179726fda4cc08e8f2691e9051a94eb
+          container_format: bare
+          disk_format: qcow2
+          min_disk: 10 GB
+          size: 10 GB
+      capabilities:
+        virtual_compute:
+          properties:
+            requested_additional_capabilities:
+              properties:
+                requested_additional_capability_name: nf_basic
+                support_mandatory: true
+                target_performance_parameters:
+                  entry_schema: test
+            virtual_memory:
+              virtual_mem_size: 2 GB
+            virtual_cpu:
+              num_virtual_cpu: 2
+            virtual_local_storage:
+              - size_of_storage: 10 GB
+    
+    SMF_CP1:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 4
+      requirements:
+        - virtual_binding: SMF
+        - virtual_link: elkVL1
+
+    SMF_CP2:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 5
+      requirements:
+        - virtual_binding: SMF
+        - virtual_link: 5gVL1
+
+    SMF_extCP1:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: elkVL1
+
+    SMF_extCP2:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: 5gVL1
+
+    AMF:
+      type: tosca.nodes.nfv.Vdu.Compute
+      properties:
+        name: AMF
+        description: AMF compute node
+        vdu_profile:
+          min_number_of_instances: 1
+          max_number_of_instances: 1
+        sw_image_data:
+          name: prototype_v5_minimal
+          version: '1'
+          checksum:
+            algorithm: sha-256
+            hash: 20a61317464f868e8f4f8fb0911f95722179726fda4cc08e8f2691e9051a94eb
+          container_format: bare
+          disk_format: qcow2
+          min_disk: 10 GB
+          size: 10 GB
+      capabilities:
+        virtual_compute:
+          properties:
+            requested_additional_capabilities:
+              properties:
+                requested_additional_capability_name: nf_basic
+                support_mandatory: true
+                target_performance_parameters:
+                  entry_schema: test
+            virtual_memory:
+              virtual_mem_size: 2 GB
+            virtual_cpu:
+              num_virtual_cpu: 2
+            virtual_local_storage:
+              - size_of_storage: 10 GB
+    
+    AMF_CP1:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 4
+      requirements:
+        - virtual_binding: AMF
+        - virtual_link: elkVL1
+
+    AMF_CP2:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 5
+      requirements:
+        - virtual_binding: AMF
+        - virtual_link: 5gVL1
+
+    AMF_extCP1:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: elkVL1
+
+    AMF_extCP2:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: 5gVL1
+
+    UPF:
+      type: tosca.nodes.nfv.Vdu.Compute
+      properties:
+        name: UPF
+        description: UPF compute node
+        vdu_profile:
+          min_number_of_instances: 1
+          max_number_of_instances: 1
+        sw_image_data:
+          name: prototype_v5_minimal
+          version: '1'
+          checksum:
+            algorithm: sha-256
+            hash: 20a61317464f868e8f4f8fb0911f95722179726fda4cc08e8f2691e9051a94eb
+          container_format: bare
+          disk_format: qcow2
+          min_disk: 10 GB
+          size: 10 GB
+      capabilities:
+        virtual_compute:
+          properties:
+            requested_additional_capabilities:
+              properties:
+                requested_additional_capability_name: nf_basic
+                support_mandatory: true
+                target_performance_parameters:
+                  entry_schema: test
+            virtual_memory:
+              virtual_mem_size: 2 GB
+            virtual_cpu:
+              num_virtual_cpu: 2
+            virtual_local_storage:
+              - size_of_storage: 10 GB
+    
+    UPF_CP1:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 4
+      requirements:
+        - virtual_binding: UPF
+        - virtual_link: elkVL1
+
+    UPF_CP2:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 5
+      requirements:
+        - virtual_binding: UPF
+        - virtual_link: 5gVL1
+
+    UPF_CP3:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 6
+      requirements:
+        - virtual_binding: UPF
+        - virtual_link: 5g_core_VL1
+
+    UPF_CP4:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 7
+      requirements:
+        - virtual_binding: UPF
+        - virtual_link: 5g_access_VL1
+
+    UPF_extCP1:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: elkVL1
+
+    UPF_extCP2:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: 5gVL1
+
+    UPF_extCP3:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: 5g_core_VL1
+
+    UPF_extCP4:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: 5g_access_VL1
+
+    EXT_DN:
+      type: tosca.nodes.nfv.Vdu.Compute
+      properties:
+        name: EXT_DN
+        description: EXT_DN compute node
+        vdu_profile:
+          min_number_of_instances: 1
+          max_number_of_instances: 1
+        sw_image_data:
+          name: prototype_v5_minimal
+          version: '1'
+          checksum:
+            algorithm: sha-256
+            hash: 20a61317464f868e8f4f8fb0911f95722179726fda4cc08e8f2691e9051a94eb
+          container_format: bare
+          disk_format: qcow2
+          min_disk: 10 GB
+          size: 10 GB
+      capabilities:
+        virtual_compute:
+          properties:
+            requested_additional_capabilities:
+              properties:
+                requested_additional_capability_name: nf_basic
+                support_mandatory: true
+                target_performance_parameters:
+                  entry_schema: test
+            virtual_memory:
+              virtual_mem_size: 2 GB
+            virtual_cpu:
+              num_virtual_cpu: 2
+            virtual_local_storage:
+              - size_of_storage: 10 GB
+    
+    EXT_DN_CP1:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 4
+      requirements:
+        - virtual_binding: EXT_DN
+        - virtual_link: elk_VL1
+
+    EXT_DN_CP2:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 5
+      requirements:
+        - virtual_binding: EXT_DN
+        - virtual_link: 5g_core_VL1
+
+    EXT_DN_extCP1:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: elkVL1
+
+    EXT_DN_extCP2:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: 5g_core_VL1
+
+    AUSF:
+      type: tosca.nodes.nfv.Vdu.Compute
+      properties:
+        name: AUSF
+        description: AUSF compute node
+        vdu_profile:
+          min_number_of_instances: 1
+          max_number_of_instances: 1
+        sw_image_data:
+          name: prototype_v5_minimal
+          version: '1'
+          checksum:
+            algorithm: sha-256
+            hash: 20a61317464f868e8f4f8fb0911f95722179726fda4cc08e8f2691e9051a94eb
+          container_format: bare
+          disk_format: qcow2
+          min_disk: 10 GB
+          size: 10 GB
+      capabilities:
+        virtual_compute:
+          properties:
+            requested_additional_capabilities:
+              properties:
+                requested_additional_capability_name: nf_basic
+                support_mandatory: true
+                target_performance_parameters:
+                  entry_schema: test
+            virtual_memory:
+              virtual_mem_size: 2 GB
+            virtual_cpu:
+              num_virtual_cpu: 2
+            virtual_local_storage:
+              - size_of_storage: 10 GB
+    
+    AUSF_CP1:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 4
+      requirements:
+        - virtual_binding: AUSF
+        - virtual_link: elkVL1
+
+    AUSF_CP2:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 5
+      requirements:
+        - virtual_binding: AUSF
+        - virtual_link: 5gVL1
+
+    AUSF_extCP1:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: elkVL1
+
+    AUSF_extCP2:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: 5gVL1
+
+    UDM:
+      type: tosca.nodes.nfv.Vdu.Compute
+      properties:
+        name: UDM
+        description: UDM compute node
+        vdu_profile:
+          min_number_of_instances: 1
+          max_number_of_instances: 1
+        sw_image_data:
+          name: prototype_v5_minimal
+          version: '1'
+          checksum:
+            algorithm: sha-256
+            hash: 20a61317464f868e8f4f8fb0911f95722179726fda4cc08e8f2691e9051a94eb
+          container_format: bare
+          disk_format: qcow2
+          min_disk: 10 GB
+          size: 10 GB
+      capabilities:
+        virtual_compute:
+          properties:
+            requested_additional_capabilities:
+              properties:
+                requested_additional_capability_name: nf_basic
+                support_mandatory: true
+                target_performance_parameters:
+                  entry_schema: test
+            virtual_memory:
+              virtual_mem_size: 2 GB
+            virtual_cpu:
+              num_virtual_cpu: 2
+            virtual_local_storage:
+              - size_of_storage: 10 GB
+    
+    UDM_CP1:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 4
+      requirements:
+        - virtual_binding: UDM
+        - virtual_link: elkVL1
+
+    UDM_CP2:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 5
+      requirements:
+        - virtual_binding: UDM
+        - virtual_link: 5gVL1
+
+    UDM_extCP1:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: elkVL1
+
+    UDM_extCP2:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: 5gVL1
+
+    UDR:
+      type: tosca.nodes.nfv.Vdu.Compute
+      properties:
+        name: UDR
+        description: UDR compute node
+        vdu_profile:
+          min_number_of_instances: 1
+          max_number_of_instances: 1
+        sw_image_data:
+          name: prototype_v5_minimal
+          version: '1'
+          checksum:
+            algorithm: sha-256
+            hash: 20a61317464f868e8f4f8fb0911f95722179726fda4cc08e8f2691e9051a94eb
+          container_format: bare
+          disk_format: qcow2
+          min_disk: 10 GB
+          size: 10 GB
+      capabilities:
+        virtual_compute:
+          properties:
+            requested_additional_capabilities:
+              properties:
+                requested_additional_capability_name: nf_basic
+                support_mandatory: true
+                target_performance_parameters:
+                  entry_schema: test
+            virtual_memory:
+              virtual_mem_size: 2 GB
+            virtual_cpu:
+              num_virtual_cpu: 2
+            virtual_local_storage:
+              - size_of_storage: 10 GB
+    
+    UDR_CP1:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 4
+      requirements:
+        - virtual_binding: UDR
+        - virtual_link: elkVL1
+
+    UDR_CP2:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 5
+      requirements:
+        - virtual_binding: UDR
+        - virtual_link: 5gVL1
+
+    UDR_extCP1:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: elkVL1
+
+    UDR_extCP2:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: 5gVL1
+    
+    NRF:
+      type: tosca.nodes.nfv.Vdu.Compute
+      properties:
+        name: NRF
+        description: NRF compute node
+        vdu_profile:
+          min_number_of_instances: 1
+          max_number_of_instances: 1
+        sw_image_data:
+          name: prototype_v5_minimal
+          version: '1'
+          checksum:
+            algorithm: sha-256
+            hash: 20a61317464f868e8f4f8fb0911f95722179726fda4cc08e8f2691e9051a94eb
+          container_format: bare
+          disk_format: qcow2
+          min_disk: 10 GB
+          size: 10 GB
+      capabilities:
+        virtual_compute:
+          properties:
+            requested_additional_capabilities:
+              properties:
+                requested_additional_capability_name: nf_basic
+                support_mandatory: true
+                target_performance_parameters:
+                  entry_schema: test
+            virtual_memory:
+              virtual_mem_size: 2 GB
+            virtual_cpu:
+              num_virtual_cpu: 2
+            virtual_local_storage:
+              - size_of_storage: 10 GB
+    
+    NRF_CP1:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 4
+      requirements:
+        - virtual_binding: NRF
+        - virtual_link: elkVL1
+
+    NRF_CP2:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 5
+      requirements:
+        - virtual_binding: NRF
+        - virtual_link: 5gVL1
+
+    NRF_extCP1:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: elkVL1
+
+    MySQL:
+      type: tosca.nodes.nfv.Vdu.Compute
+      properties:
+        name: MySQL
+        description: MySQL compute node
+        vdu_profile:
+          min_number_of_instances: 1
+          max_number_of_instances: 1
+        sw_image_data:
+          name: prototype_v5_minimal
+          version: '1'
+          checksum:
+            algorithm: sha-256
+            hash: 20a61317464f868e8f4f8fb0911f95722179726fda4cc08e8f2691e9051a94eb
+          container_format: bare
+          disk_format: qcow2
+          min_disk: 10 GB
+          size: 10 GB
+      capabilities:
+        virtual_compute:
+          properties:
+            requested_additional_capabilities:
+              properties:
+                requested_additional_capability_name: nf_basic
+                support_mandatory: true
+                target_performance_parameters:
+                  entry_schema: test
+            virtual_memory:
+              virtual_mem_size: 2 GB
+            virtual_cpu:
+              num_virtual_cpu: 2
+            virtual_local_storage:
+              - size_of_storage: 10 GB
+    
+    MySQL_CP1:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 4
+      requirements:
+        - virtual_binding: MySQL
+        - virtual_link: elkVL1
+
+    MySQL_CP2:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 5
+      requirements:
+        - virtual_binding: MySQL
+        - virtual_link: 5gVL1
+
+    MySQL_extCP1:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: elkVL1
+
+    MySQL_extCP2:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: 5gVL1
+
+    ELK:
+      type: tosca.nodes.nfv.Vdu.Compute
+      properties:
+        name: ELK
+        description: ELK compute node
+        vdu_profile:
+          min_number_of_instances: 1
+          max_number_of_instances: 1
+        sw_image_data:
+          name: prototype_v5_utils
+          version: '1'
+          checksum:
+            algorithm: sha-256
+            hash: 6294fdf9b0741cc76fff82f9812f2892ea11e0f82e6149762c0f255acaee64ce
+          container_format: bare
+          disk_format: qcow2
+          min_disk: 10 GB
+          size: 10 GB
+      capabilities:
+        virtual_compute:
+          properties:
+            requested_additional_capabilities:
+              properties:
+                requested_additional_capability_name: elk_basic
+                support_mandatory: true
+                target_performance_parameters:
+                  entry_schema: test
+            virtual_memory:
+              virtual_mem_size: 4 GB
+            virtual_cpu:
+              num_virtual_cpu: 4
+            virtual_local_storage:
+              - size_of_storage: 60 GB
+
+    ELK_CP1:
+      type: tosca.nodes.nfv.VduCp
+      properties:
+        layer_protocols: [ ipv4 ]
+        order: 4
+      requirements:
+        - virtual_binding: ELK
+        - virtual_link: elkVL1
+
+    ELK_extCP1:
+      type: tosca.nodes.nfv.VnfExtCp
+      properties:
+        layer_protocols: [ ipv4 ]
+      requirements:
+        - internal_virtual_link: elkVL1
+
+    elkVL1:
+      type: tosca.nodes.nfv.VnfVirtualLink
+      properties:
+        connectivity_type:
+          layer_protocols: [ ipv4 ]
+        description: elk network
+        vl_profile:
+          max_bitrate_requirements:
+            root: 1048576
+            leaf: 1048576
+          min_bitrate_requirements:
+            root: 1048576
+            leaf: 1048576
+          virtual_link_protocol_data:
+            - associated_layer_protocol: ipv4
+              l3_protocol_data:
+                ip_version: ipv4
+                cidr: 10.6.0.0/24
+
+    5gVL1:
+      type: tosca.nodes.nfv.VnfVirtualLink
+      properties:
+        connectivity_type:
+          layer_protocols: [ ipv4 ]
+        description: 5G network
+        vl_profile:
+          max_bitrate_requirements:
+            root: 1048576
+            leaf: 1048576
+          min_bitrate_requirements:
+            root: 1048576
+            leaf: 1048576
+          virtual_link_protocol_data:
+            - associated_layer_protocol: ipv4
+              l3_protocol_data:
+                ip_version: ipv4
+                cidr: 10.5.0.0/24
+
+    5g_core_VL1:
+      type: tosca.nodes.nfv.VnfVirtualLink
+      properties:
+        connectivity_type:
+          layer_protocols: [ ipv4 ]
+        description: 5G Core network
+        vl_profile:
+          max_bitrate_requirements:
+            root: 1048576
+            leaf: 1048576
+          min_bitrate_requirements:
+            root: 1048576
+            leaf: 1048576
+          virtual_link_protocol_data:
+            - associated_layer_protocol: ipv4
+              l3_protocol_data:
+                ip_version: ipv4
+                cidr: 10.7.0.0/24
+
+    5g_access_VL1:
+      type: tosca.nodes.nfv.VnfVirtualLink
+      properties:
+        connectivity_type:
+          layer_protocols: [ ipv4 ]
+        description: 5G Access network
+        vl_profile:
+          max_bitrate_requirements:
+            root: 1048576
+            leaf: 1048576
+          min_bitrate_requirements:
+            root: 1048576
+            leaf: 1048576
+          virtual_link_protocol_data:
+            - associated_layer_protocol: ipv4
+              l3_protocol_data:
+                ip_version: ipv4
+                cidr: 10.8.0.0/24
+
+  policies:
+    - scaling_aspects:
+        type: tosca.policies.nfv.ScalingAspects
+        properties:
+          aspects:
+            main_scale:
+              name: main_scale
+              description: main scaling aspect
+              max_scale_level: 1
+              step_deltas:
+                - delta_1
+
+    - initial_delta:
+        type: tosca.policies.nfv.VduInitialDelta
+        properties:
+          initial_delta:
+            number_of_instances: 1
+        targets: [ ELK, MySQL, NRF, UDR, UDM, AUSF, EXT_DN, UPF, AMF, SMF, UERANSIM ]
+
+    - scaling_aspect_deltas:
+        type: tosca.policies.nfv.VduScalingAspectDeltas
+        properties:
+          aspect: main_scale
+          deltas:
+            delta_1:
+              number_of_instances: 1
+        targets: [ ELK, MySQL, NRF, UDR, UDM, AUSF, EXT_DN, UPF, AMF, SMF, UERANSIM ]
+
+    - instantiation_levels:
+        type: tosca.policies.nfv.InstantiationLevels
+        properties:
+          levels:
+            instantiation_level_1:
+              description: Only size
+              scale_info:
+                main_scale:
+                  scale_level: 0
+          default_level: instantiation_level_1
+
+    - main_instantiation_levels:
+        type: tosca.policies.nfv.VduInstantiationLevels
+        properties:
+          levels:
+            instantiation_level_1:
+              number_of_instances: 1
+        targets: [ ELK, MySQL, NRF, UDR, UDM, AUSF, EXT_DN, UPF, AMF, SMF, UERANSIM ]
+
+    - elkVL1_instantiation_levels:
+        type: tosca.policies.nfv.VirtualLinkInstantiationLevels
+        properties:
+          levels:
+            instantiation_level_1:
+              bitrate_requirements:
+                root: 1048576
+                leaf: 1048576
+        targets: [ elkVL1, 5gVL1, 5g_core_VL1, 5g_access_VL1 ]

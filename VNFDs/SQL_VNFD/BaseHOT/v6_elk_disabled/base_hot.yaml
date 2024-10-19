@@ -1,0 +1,20 @@
+heat_template_version: 2013-05-23
+description: 'Simple MySQL Base HOT VNF'
+
+parameters:
+  nfv:
+    type: json
+
+resources:
+  MySQL:
+    type: MySQL.yaml
+    properties:
+      flavor: { get_param: [ nfv, VDU, MySQL, computeFlavourId ] }
+      image: { get_param: [ nfv, VDU, MySQL, vcImageId ] }
+
+      5g_network: { get_param: [ nfv, input, networks, 5g_net, id ] }
+      ip: { get_param: [ nfv, input, nfs, mysql, ip ] }
+
+      external_network: { get_param: [ nfv, input, networks, external, id ] }
+
+outputs: {}

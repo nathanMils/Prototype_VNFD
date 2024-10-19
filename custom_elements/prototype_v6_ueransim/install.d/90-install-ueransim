@@ -1,0 +1,41 @@
+#!/bin/bash
+
+set -eux
+
+##################################### UERANSIM Installation #####################################
+apt update
+apt upgrade
+
+apt install make
+apt install gcc
+apt install g++
+apt install libsctp-dev lksctp-tools
+apt install iproute2
+apt install cmake
+
+git clone https://github.com/aligungr/UERANSIM
+
+cd UERANSIM
+make
+cd ..
+
+sudo chmod +x /UERANSIM/build/nr-binder
+
+# Define paths
+TARGET_DIR=/opt/prototype_master
+SOURCE_DIR=$(dirname $0)/../files
+
+mkdir -p $TARGET_DIR
+
+cp -r $SOURCE_DIR/ueransim $TARGET_DIR
+
+
+
+##################################### SOCKS Proxy #####################################
+
+cp -r $SOURCE_DIR/socks_server $TARGET_DIR
+sudo chmod +x $TARGET_DIR/socks_server/start_proxies.sh
+
+##################################### Ostinato Installation #####################################
+apt install ostinato
+

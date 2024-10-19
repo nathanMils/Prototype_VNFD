@@ -1,0 +1,42 @@
+{
+    "fields": {
+      "digest": "<DIGEST OF MESSAGE FIELD>",
+      "source": "<ZEEK LOG TYPE>",
+      "vnf": "<VNF TYPE>",
+      "id": "<VNF ID>"
+    },
+    "input": {
+      "type": "log"
+    },
+    "agent": {
+      "ephemeral_id": "d4f05665-010e-4d42-a1eb-d33315ef95e5",
+      "name": "filebeat",
+      "version": "8.15.0",
+      "type": "filebeat",
+      "id": "970dfbd7-49ed-4802-a444-bd4dd8d5e32b"
+    },
+    "log": {
+      "offset": 2502,
+      "file": {
+        "path": "/usr/local/zeek/logs/conn.log"
+      }
+    },
+    "message": "<ZEEK LOG MESSAGE in JSON>",
+    "@version": "1",
+    "@timestamp": "2024-09-19T10:26:16.979Z",
+    "event": {
+      "original": "<ZEEK LOG MESSAGE in JSON COPY>"
+    },
+    "ecs": {
+      "version": "8.0.0"
+    },
+    "tags": [
+      "beats_input_codec_plain_applied"
+    ],
+    "zeek": {
+        "JSON ZEEK LOG": "There will be many fields here"
+    },
+    "host": {
+      "name": "filebeat"
+    }
+  }
