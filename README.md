@@ -9,13 +9,13 @@ Here is an overview of the main directories and files in this project:
 ### Directories
 
 - **custom_elements**
-    - Contains custom elements used in the project.
+    - Contains custom elements used in conjunction with disk image builder.
 
 - **Diagrams**
     - Includes diagrams related to the project architecture and 5G ELK enabled NFV configuration.
 
 - **docker**
-    - Contains Docker configurations and files for containerization.
+    - Contains Docker configurations for vnf's and ELK
 
 - **project_files**
     - General project files and resources.
@@ -25,11 +25,6 @@ Here is an overview of the main directories and files in this project:
 
 - **VNFDs**
     - Virtual Network Function Descriptors used in the project.
-
-### Files
-
-- **sha_vals.txt**
-    - Contains SHA values for the VNF images for verification purposes.
 
 ## VNFDs Directory
 
