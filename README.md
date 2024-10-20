@@ -1,7 +1,5 @@
 # Project Overview
 
-Welcome to the Python Project! This repository contains various elements and files essential for the project's development and deployment.
-
 ## Directory Structure
 
 Here is an overview of the main directories and files in this project:
