@@ -190,12 +190,9 @@ processors:
 monitoring:
   enabled: true
   elasticsearch:
-    hosts: [ https://elasticsearch:9200 ]
+    hosts: [ http://elasticsearch:9200 ]
     username: beats_system
     password: ${BEATS_SYSTEM_PASSWORD}
-    ssl.certificate_authorities: ["/etc/pki/filebeat/ca.crt"]
-    ssl.certificate: "/etc/pki/filebeat/filebeat.crt"
-    ssl.key: "/etc/pki/filebeat/filebeat.key"
 
 # output.elasticsearch:
 #   hosts: [ http://elasticsearch:9200 ]
