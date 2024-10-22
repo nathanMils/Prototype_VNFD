@@ -40,9 +40,57 @@ UERANSIM (User Equipment and Radio Access Network Simulator) is a versatile tool
 
 - **Interoperability Testing**: UERANSIM can be used to verify the interoperability of different network components from various vendors, ensuring seamless integration and operation.
 
-- **Educational Purposes**: UERANSIM serves as a valuable educational tool for learning about 5G network architecture, protocols, and operations.
 
 These uses make UERANSIM an essential tool for advancing the development, testing, and deployment of 5G networks in Prototype Version 5.
 
 # Version 6: Updated Configuration options
-Added ELK enabled and disabled varients for benchmarking, updated UERANSIM update to create various traiffic types. I also added health checks and a more automated deployment variant. Lastly an extensive resource collection script.
+Added ELK enabled and disabled varients for benchmarking, updated UERANSIM update to create various traiffic types. I also added health checks and a more automated deployment variant. Lastly an extensive resource collection script. 
+
+## Added Ostinato
+Ostinato is a powerful network traffic generator and analyzer that consists of two main components: the Ostinato Drone and the Ostinato Controller.
+
+### Ostinato Drone
+
+The Ostinato Drone is a lightweight, high-performance traffic generator that runs on network devices. It is responsible for generating and capturing network traffic based on the instructions received from the Ostinato Controller. Key features of the Ostinato Drone include:
+
+- **High Performance**: Capable of generating traffic at high speeds, making it suitable for performance testing and benchmarking.
+- **Flexibility**: Supports a wide range of network protocols and traffic patterns, allowing for comprehensive testing scenarios.
+- **Scalability**: Multiple drones can be deployed across different network segments to simulate large-scale network environments.
+
+### Ostinato Controller
+
+The Ostinato Controller is a graphical user interface (GUI) application that allows users to configure and manage the Ostinato Drones. It provides an intuitive interface for creating and managing traffic generation scenarios. Key features of the Ostinato Controller include:
+
+- **User-Friendly Interface**: Easy-to-use GUI for configuring traffic generation parameters and monitoring traffic in real-time.
+- **Comprehensive Traffic Configuration**: Supports detailed configuration of packet headers, payloads, and traffic patterns.
+- **Real-Time Monitoring**: Provides real-time statistics and analysis of generated traffic, helping users to quickly identify and troubleshoot issues.
+
+These components make Ostinato a versatile and powerful tool for network testing, performance evaluation, and troubleshooting in Prototype Version 6.
+
+## Added mutual HTTPS between Filebeat and Logstash
+To enhance security and ensure data integrity, mutual HTTPS has been implemented between Filebeat and Logstash. This setup involves the following key aspects:
+
+- **Mutual Authentication**: Both Filebeat and Logstash authenticate each other using SSL/TLS certificates, ensuring that data is exchanged only between trusted entities.
+
+- **Data Encryption**: All data transmitted between Filebeat and Logstash is encrypted, protecting it from eavesdropping and tampering during transit.
+
+- **Certificate Management**: Proper management of SSL/TLS certificates is crucial. This includes generating, distributing, and renewing certificates to maintain a secure communication channel.
+
+- **Configuration**: Both Filebeat and Logstash need to be configured to use the appropriate certificates and keys for mutual HTTPS. This involves updating their respective configuration files to specify the paths to the certificate and key files.
+
+Implementing mutual HTTPS between Filebeat and Logstash significantly enhances the security of the data pipeline, ensuring that logs are transmitted securely and reliably in Prototype Version 6.
+
+## Added Data at Rest Encryption using DM-Crypt
+To further enhance the security of the system, data at rest encryption has been implemented using DM-Crypt. This ensures that all data stored on disk is encrypted, providing an additional layer of protection against unauthorized access. Key aspects of this implementation include:
+
+- **Docker Volume Encryption**: DM-Crypt provides full disk encryption, ensuring that all data on the disk is encrypted, including system files, user data, and swap space.
+
+- **Transparent Encryption**: The encryption and decryption processes are transparent to applications and users, meaning that no changes are required to existing applications to benefit from the encryption.
+
+- **Performance Considerations**: While encryption adds some overhead, DM-Crypt is designed to minimize performance impact, leveraging hardware acceleration where available.
+
+- **Key Management**: Proper key management is crucial for maintaining the security of encrypted data. This includes securely storing encryption keys and implementing key rotation policies.
+
+- **Configuration**: Setting up DM-Crypt involves configuring the system to use encrypted partitions. This typically includes updating the system's boot configuration and ensuring that the necessary encryption modules are loaded.
+
+Implementing data at rest encryption using DM-Crypt significantly enhances the security of the system, ensuring that sensitive data is protected even if the physical storage media is compromised in Prototype Version 6.

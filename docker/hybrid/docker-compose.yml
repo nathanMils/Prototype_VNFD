@@ -181,7 +181,6 @@ services:
       - --strict.perms=false
     volumes:
       - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro,Z
-      - ./filebeat/config/hasher.js:/usr/nathan_helper/hasher.js:ro,Z
       - ./filebeat/certs:/etc/pki/filebeat:ro,Z
       - ./gateway/zeek_logs:/usr/local/zeek/logs
       - type: bind
