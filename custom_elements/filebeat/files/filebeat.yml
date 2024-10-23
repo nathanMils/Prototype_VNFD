@@ -62,6 +62,15 @@ filebeat.inputs:
   - type: log
     enabled: true
     paths:
+      - /opt/zeek/logs/current/dpd.log
+    fields:
+      source: dpd
+      vnf: ${VNF_TYPE}
+      id: ${VNF_ID}
+
+  - type: log
+    enabled: true
+    paths:
       - /opt/zeek/logs/current/software.log
     fields:
       source: software
