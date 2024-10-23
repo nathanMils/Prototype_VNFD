@@ -95,15 +95,6 @@ filebeat.inputs:
       vnf: ${VNF_TYPE}
       id: ${VNF_ID}
 
-  - type: log
-    enabled: true
-    paths:
-      - /opt/zeek/logs/current/reporter.log
-    fields:
-      source: reporter
-      vnf: ${VNF_TYPE}
-      id: ${VNF_ID}
-
 processors:
   - decode_json_fields:
       fields: ["message"]
