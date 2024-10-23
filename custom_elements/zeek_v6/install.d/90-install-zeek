@@ -30,7 +30,7 @@ apt install -y build-essential libnghttp2-dev libbrotli-dev cmake
 
 echo "Installing zkg http2 package..."
 zkg refresh
-zkg install -y zeek/mitrecnd/bro-http2
+zkg install zeek/mitrecnd/bro-http2
 
 echo "Finished installing http2 monitoring dependencies."
 
