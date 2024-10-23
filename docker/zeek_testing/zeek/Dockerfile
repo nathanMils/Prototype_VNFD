@@ -19,8 +19,15 @@ RUN apt-get update && apt-get install -y \
     iproute2 \
     libjemalloc2 \
     libjemalloc-dev \
+    build-essential \
+    libnghttp2-dev \
+    libbrotli-dev \
+    cmake \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+RUN zkg refresh && \
+    echo "y" | zkg install zeek/mitrecnd/bro-http2
 
 # Install Zeek
 RUN echo "Starting Zeek installation script..." && \
