@@ -53,6 +53,15 @@ filebeat.inputs:
   - type: log
     enabled: true
     paths:
+      - /opt/zeek/logs/current/http2.log
+    fields:
+      source: http2
+      vnf: ${VNF_TYPE}
+      id: ${VNF_ID}
+
+  - type: log
+    enabled: true
+    paths:
       - /opt/zeek/logs/current/software.log
     fields:
       source: software

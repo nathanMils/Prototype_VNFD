@@ -15,6 +15,8 @@ redef digest_salt = "Please change this value.";
 # Enable logging of memory, packet and lag statistics.
 @load misc/stats
 
+@load http2
+
 # For TCP scan detection, we recommend installing the package from
 # 'https://github.com/ncsa/bro-simple-scan'. E.g., by installing it via
 #

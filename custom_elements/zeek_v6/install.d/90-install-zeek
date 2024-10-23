@@ -25,6 +25,14 @@ source ~/.bashrc
 
 echo "Zeek installation completed."
 
+echo "Installing http2 monitoring dependencies..."
+apt install -y build-essential libnghttp2-dev libbrotli-dev cmake
+
+echo "Installing zkg http2 package..."
+zkg install -y zeek/mitrecnd/bro-http2
+
+echo "Finished installing http2 monitoring dependencies."
+
 echo "Copying configurations into Zeek"
 
 TARGET_DIR=/opt/zeek
