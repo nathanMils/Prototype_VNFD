@@ -20,8 +20,8 @@ apt install -y zeek
 
 # Add Zeek to PATH
 echo 'Adding Zeek to PATH...'
-echo 'export PATH=$PATH:/opt/zeek/bin' >> ~/.bashrc
-source ~/.bashrc
+
+export PATH=$PATH:/opt/zeek/bin
 
 echo "Zeek installation completed."
 
