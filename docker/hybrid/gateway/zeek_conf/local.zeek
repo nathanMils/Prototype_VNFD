@@ -49,6 +49,8 @@ redef digest_salt = "Please change this value.";
 # running on live traffic.  Enable it cautiously.
 @load protocols/http/detect-webapps
 
+@load protocols/http/var-extraction-uri
+
 # This script detects DNS results pointing toward your Site::local_nets
 # where the name is not part of your local DNS zone and is being hosted
 # externally.  Requires that the Site::local_zones variable is defined.
@@ -121,3 +123,5 @@ redef digest_salt = "Please change this value.";
 # @load packages
 
 @load policy/tuning/json-logs.zeek
+
+redef Site::local_nets += { 172.19.0.0/16 };
