@@ -94,3 +94,6 @@ To further enhance the security of the system, data at rest encryption has been 
 - **Configuration**: Setting up DM-Crypt involves configuring the system to use encrypted partitions. This typically includes updating the system's boot configuration and ensuring that the necessary encryption modules are loaded.
 
 Implementing data at rest encryption using DM-Crypt significantly enhances the security of the system, ensuring that sensitive data is protected even if the physical storage media is compromised in Prototype Version 6.
+
+## Added HTTP/2 log analysis
+I am too tired to add more details
