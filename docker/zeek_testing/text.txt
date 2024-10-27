@@ -1,0 +1,1 @@
+MALLOC_CONF="prof:true,prof_prefix:jeprof.out,prof_final:true,lg_prof_interval:28" zeek -C -i eth0 &

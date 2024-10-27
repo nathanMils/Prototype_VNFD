@@ -240,6 +240,9 @@ output.logstash:
   hosts: ["logstash:5044"]
   username: filebeat_internal
   password: ${FILEBEAT_INTERNAL_PASSWORD}
+  ssl.certificate_authorities: ["/etc/pki/filebeat/ca.crt"]
+  ssl.certificate: "/etc/pki/filebeat/filebeat.crt"
+  ssl.key: "/etc/pki/filebeat/filebeat.key"
 
 ## HTTP endpoint for health checking
 ## https://www.elastic.co/guide/en/beats/filebeat/current/http-endpoint.html

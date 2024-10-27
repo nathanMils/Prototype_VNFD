@@ -11,3 +11,9 @@ mkdir -p $TARGET_DIR
 cp -r $SOURCE_DIR/elk_compose $TARGET_DIR
 
 sudo chmod +x $TARGET_DIR/elk_compose/setup/entrypoint.sh
+
+mkdir -p /etc/pki/logstash
+
+cp $SOURCE_DIR/cert/logstash.crt /etc/pki/logstash/
+cp $SOURCE_DIR/cert/logstash.key /etc/pki/logstash/
+cp $SOURCE_DIR/cert/ca.crt /etc/pki/logstash/

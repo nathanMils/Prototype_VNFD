@@ -20,10 +20,19 @@ apt install -y zeek
 
 # Add Zeek to PATH
 echo 'Adding Zeek to PATH...'
-echo 'export PATH=$PATH:/opt/zeek/bin' >> ~/.bashrc
-source ~/.bashrc
+
+export PATH=$PATH:/opt/zeek/bin
 
 echo "Zeek installation completed."
+
+echo "Installing http2 monitoring dependencies..."
+apt install -y build-essential libnghttp2-dev libbrotli-dev cmake
+
+echo "Installing zkg http2 package..."
+zkg refresh
+zkg install zeek/mitrecnd/bro-http2
+
+echo "Finished installing http2 monitoring dependencies."
 
 echo "Copying configurations into Zeek"
 

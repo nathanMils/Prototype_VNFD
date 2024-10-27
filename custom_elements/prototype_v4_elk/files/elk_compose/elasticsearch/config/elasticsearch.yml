@@ -10,3 +10,8 @@ network.host: 0.0.0.0
 #
 xpack.license.self_generated.type: trial
 xpack.security.enabled: true
+xpack.security.http.ssl.enabled: true
+xpack.security.http.ssl.key: "/etc/pki/elasticsearch/elasticsearch.key"  # Path to your private key
+xpack.security.http.ssl.certificate: "/etc/pki/elasticsearch/elasticsearch.crt"  # Path to your certificate
+xpack.security.http.ssl.certificate_authorities: ["/etc/pki/elasticsearch/ca.crt"]  # Path to your CA certificate
+xpack.security.http.ssl.verification_mode: full 
