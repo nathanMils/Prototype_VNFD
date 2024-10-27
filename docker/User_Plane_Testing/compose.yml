@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  instance1:
+    build:
+      context: instance
+    networks:
+      internal:
+        ipv4_address: 172.22.0.3
+
+  zeek_apache:
+    build:
+      context: zeek
+    privileged: true
+    volumes:
+      - ./zeek/config:/opt/zeek/etc
+      - ./zeek/local/local.zeek:/opt/zeek/share/zeek/site/local.zeek
+      - ./zeek/script/custom_http_script.zeek:/opt/zeek/share/zeek/policy/custom_http_script.zeek
+      - ./images:/opt/nathan/images
+    networks:
+      internal:
+        ipv4_address: 172.22.0.4
+
+networks:
+  internal:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.22.0.0/16
