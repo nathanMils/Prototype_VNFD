@@ -21,11 +21,11 @@
         "path": "/usr/local/zeek/logs/conn.log"
       }
     },
-    "message": "<ZEEK LOG MESSAGE in JSON>",
+    "message": "<ZEEK LOG IN JSON>",
     "@version": "1",
     "@timestamp": "2024-09-19T10:26:16.979Z",
     "event": {
-      "original": "<ZEEK LOG MESSAGE in JSON COPY>"
+      "original": "<ZEEK LOG IN JSON>"
     },
     "ecs": {
       "version": "8.0.0"

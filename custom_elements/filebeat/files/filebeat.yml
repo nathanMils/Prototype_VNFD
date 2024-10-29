@@ -4,6 +4,42 @@
 
 name: filebeat
 
+filebeat.config:
+  modules:
+    path: ${path.config}/modules.d/*.yml
+    reload.enabled: false
+
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      hints.enabled: true
+      hints.default_config:
+        type: container
+        paths:
+          - /var/lib/docker/containers/${data.container.id}/*-json.log
+      templates:
+          config:
+            - condition:
+              # Use this to specify by container name
+              equals:
+                docker.container.name: ${CONTAINER_NAME}
+            - module: elasticsearch
+              server:
+                input:
+                  type: container
+                  paths:
+                    - /var/lib/docker/containers/${data.container.id}/*-json.log
+                  fields:
+                    source: application
+                    vnf: ${VNF_TYPE}
+                    id: ${VNF_ID}
+              processors:
+                - drop_event:
+                    when:
+                      not:
+                        regexp:
+                          message: '^\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{6}\] \[\w+\] \[\w+(\s*\w*)*\] \[(debug|info|warn|error|start)\] .*$|^\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{6}\] \[\w+\] \[\w+(\s*\w*)*\] \[(debug|info|warn|error|start)\] .*'
+
 filebeat.inputs:
   - type: log
     enabled: true
@@ -99,6 +135,10 @@ processors:
   - decode_json_fields:
       fields: ["message"]
       target: "zeek"
+    when:
+      not:
+        equals:
+          source: application
   # SHA 256 hash proccessor
   - script:
       lang: javascript
