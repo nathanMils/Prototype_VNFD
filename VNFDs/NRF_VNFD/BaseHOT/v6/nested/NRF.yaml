@@ -61,6 +61,7 @@ resources:
             export BEATS_SYSTEM_PASSWORD=$PARAM_3
             export VNF_TYPE="nrf"
             export VNF_ID=$PARAM_4
+            export CONTAINER_NAME="oai-nrf"
 
             export PATH=$PATH:/opt/zeek/bin
 

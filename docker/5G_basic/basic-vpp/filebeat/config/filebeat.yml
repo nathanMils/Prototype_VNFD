@@ -11,6 +11,8 @@ filebeat.config:
 
 filebeat.autodiscover:
   providers:
+    # The Docker autodiscover provider automatically retrieves logs from Docker
+    # containers as they start and stop.
     - type: docker
       hints.enabled: true
       hints.default_config:
@@ -20,133 +22,31 @@ filebeat.autodiscover:
       templates:
           config:
             - condition:
-              # Use this to specify by container name
-              equals:
-                docker.container.name: ${CONTAINER_NAME}
+                # Use this to specify by container name
+                equals:
+                  docker.container.name: oai-nrf
             - module: elasticsearch
               server:
                 input:
                   type: container
                   paths:
                     - /var/lib/docker/containers/${data.container.id}/*-json.log
-                  fields:
-                    source: application
-                    vnf: ${VNF_TYPE}
-                    id: ${VNF_ID}
-              processors:
-                - drop_event:
-                    when:
-                      not:
-                        regexp:
-                          message: '^\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{6}\] \[\w+\] \[\w+(\s*\w*)*\] \[(debug|info|warn|error|start)\] .*$|^\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{6}\] \[\w+\] \[\w+(\s*\w*)*\] \[(debug|info|warn|error|start)\] .*'
-                - dissect:
-                    tokenizer: '[%{timestamp}] [%{module}] [%{submodule}] [%{level}] %{message}'
-                    field: "message"
-                    target_prefix: "network_function"
-
-                - convert:
-                    fields:
-                      - {from: "network_function.timestamp", to: "network_function.timestamp", type: "date"}
-
-filebeat.inputs:
-  - type: log
-    enabled: true
-    paths:
-      - /opt/zeek/logs/current/conn.log
-    fields:
-      source: connection
-      vnf: ${VNF_TYPE}
-      id: ${VNF_ID}
-
-  - type: log
-    enabled: true
-    paths:
-      - /opt/zeek/logs/current/stats.log
-    fields:
-      source: stats
-      vnf: ${VNF_TYPE}
-      id: ${VNF_ID}
-
-  - type: log
-    enabled: true
-    paths:
-      - /opt/zeek/logs/current/notice.log
-    fields:
-      source: notice
-      vnf: ${VNF_TYPE}
-      id: ${VNF_ID}
-
-  - type: log
-    enabled: true
-    paths:
-      - /opt/zeek/logs/current/weird.log
-    fields:
-      source: weird
-      vnf: ${VNF_TYPE}
-      id: ${VNF_ID}
-
-  - type: log
-    enabled: true
-    paths:
-      - /opt/zeek/logs/current/http.log
-    fields:
-      source: http
-      vnf: ${VNF_TYPE}
-      id: ${VNF_ID}
-
-  - type: log
-    enabled: true
-    paths:
-      - /opt/zeek/logs/current/http2.log
-    fields:
-      source: http2
-      vnf: ${VNF_TYPE}
-      id: ${VNF_ID}
-
-  - type: log
-    enabled: true
-    paths:
-      - /opt/zeek/logs/current/dpd.log
-    fields:
-      source: dpd
-      vnf: ${VNF_TYPE}
-      id: ${VNF_ID}
-
-  - type: log
-    enabled: true
-    paths:
-      - /opt/zeek/logs/current/software.log
-    fields:
-      source: software
-      vnf: ${VNF_TYPE}
-      id: ${VNF_ID}
-
-  - type: log
-    enabled: true
-    paths:
-      - /opt/zeek/logs/current/ssl.log
-    fields:
-      source: ssl
-      vnf: ${VNF_TYPE}
-      id: ${VNF_ID}
-
-  - type: log
-    enabled: true
-    paths:
-      - /opt/zeek/logs/current/dns.log
-    fields:
-      source: dns
-      vnf: ${VNF_TYPE}
-      id: ${VNF_ID}
+                  processors:
+                    - add_fields:
+                        target: ''
+                        fields:
+                          source: application
+                          vnf: nrf
+                          id: 12345678
 
 processors:
-  - decode_json_fields:
-      fields: ["message"]
-      target: "zeek"
-    when:
-      not:
-        equals:
-          source: application
+  # - decode_json_fields:
+  #     fields: ["message"]
+  #     target: "zeek"
+  #   when:
+  #     not:
+  #       equals:
+  #         source: application
   # SHA 256 hash proccessor
   - script:
       lang: javascript

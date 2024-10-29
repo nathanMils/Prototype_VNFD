@@ -56,6 +56,7 @@ resources:
             export BEATS_SYSTEM_PASSWORD=$PARAM_2
             export VNF_TYPE="mysql"
             export VNF_ID=$PARAM_3
+            export CONTAINER_NAME="mysql"
 
             export PATH=$PATH:/opt/zeek/bin
             
