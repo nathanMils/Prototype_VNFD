@@ -4,49 +4,40 @@
 
 name: filebeat
 
-filebeat.config:
-  modules:
-    path: ${path.config}/modules.d/*.yml
-    reload.enabled: false
-
 filebeat.autodiscover:
   providers:
-    # The Docker autodiscover provider automatically retrieves logs from Docker
-    # containers as they start and stop.
     - type: docker
       hints.enabled: true
       hints.default_config:
         type: container
         paths:
           - /var/lib/docker/containers/${data.container.id}/*-json.log
-      templates:
-          config:
-            - condition:
-                # Use this to specify by container name
-                equals:
-                  docker.container.name: oai-nrf
-            - module: elasticsearch
-              server:
-                input:
-                  type: container
-                  paths:
-                    - /var/lib/docker/containers/${data.container.id}/*-json.log
-                  processors:
-                    - add_fields:
-                        target: ''
-                        fields:
-                          source: application
-                          vnf: nrf
-                          id: 12345678
+        fields:
+          source: application
+          vnf: nrf
+          id: 1234567
+        processors:
+          - drop_event:
+              when:
+                not:
+                  equals:
+                    container.name: "oai-nrf"
+          - dissect:
+              tokenizer: '[%{timestamp}] [%{module}] [%{loglevel}] %{message_content}'
+              field: "message"
+              target_prefix: "application"
+              ignore_failure: true
 
 processors:
-  # - decode_json_fields:
-  #     fields: ["message"]
-  #     target: "zeek"
-  #   when:
-  #     not:
-  #       equals:
-  #         source: application
+  - decode_json_fields:
+      fields: ["message"]
+      target: "zeek"
+      overwrite_keys: true
+      when:
+        not:
+          equals:
+            source: application
+
   # SHA 256 hash proccessor
   - script:
       lang: javascript

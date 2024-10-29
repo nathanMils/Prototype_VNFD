@@ -93,7 +93,7 @@ services:
 
   oai-nrf:
     container_name: "oai-nrf"
-    image: oaisoftwarealliance/oai-nrf:v2.1.0
+    image: oaisoftwarealliance/oai-nrf:v2.0.1
     expose:
         - 80/tcp
         - 8080/tcp
