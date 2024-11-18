@@ -91,19 +91,35 @@ services:
       - elasticsearch
     restart: unless-stopped
 
-  oai-nrf:
-    container_name: "oai-nrf"
-    image: oaisoftwarealliance/oai-nrf:v2.0.1
-    expose:
-        - 80/tcp
-        - 8080/tcp
-    volumes:
-        - ./conf/basic_vpp_nrf_config.yaml:/openair-nrf/etc/config.yaml
-    environment:
-        - TZ=Europe/Paris
-    networks:
-        public_net:
-            ipv4_address: 192.168.70.130
+  # oai-nrf:
+  #   container_name: "oai-nrf"
+  #   image: oaisoftwarealliance/oai-nrf:v2.0.1
+  #   expose:
+  #       - 80/tcp
+  #       - 8080/tcp
+  #   volumes:
+  #       - ./conf/basic_vpp_nrf_config.yaml:/openair-nrf/etc/config.yaml
+  #   environment:
+  #       - TZ=Europe/Paris
+  #   networks:
+  #       public_net:
+  #           ipv4_address: 192.168.70.130
+
+  oai-ausf:
+      container_name: "oai-ausf"
+      image: oaisoftwarealliance/oai-ausf:v2.0.1
+      expose:
+          - 80/tcp
+          - 8080/tcp
+      volumes:
+          - ./conf/basic_vpp_nrf_config.yaml:/openair-ausf/etc/config.yaml
+      environment:
+          - TZ=Europe/Paris
+      # depends_on:
+      #     - oai-nrf
+      networks:
+          public_net:
+              ipv4_address: 192.168.70.138
 
   filebeat:
     build:

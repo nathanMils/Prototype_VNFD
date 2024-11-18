@@ -21,7 +21,7 @@ filebeat.autodiscover:
               when:
                 not:
                   equals:
-                    container.name: "oai-nrf"
+                    container.name: "oai-ausf"
           - dissect:
               tokenizer: '[%{timestamp}] [%{module}] [%{loglevel}] %{message_content}'
               field: "message"
