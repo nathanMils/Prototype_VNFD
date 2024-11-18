@@ -80,4 +80,3 @@ The VNFDs (Virtual Network Function Descriptors) directory contains various VNFs
 
 ## RAN and UE Simulation: Ostinato + UERANSIM
 ![RAN and UE Simulation: Ostinato + UERANSIM](Diagrams/RAN_UE_Simulation.png)
-

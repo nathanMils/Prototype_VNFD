@@ -4,6 +4,25 @@
 
 name: filebeat
 
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      hints.enabled: true
+      hints.default_config:
+        type: container
+        paths:
+          - /var/lib/docker/containers/${data.container.id}/*-json.log
+        fields:
+          source: application
+          vnf: ${VNF_TYPE}
+          id: ${VNF_ID}
+        processors:
+          - dissect:
+              tokenizer: '[%{timestamp}] [%{module}] [%{loglevel}] %{message_content}'
+              field: "message"
+              target_prefix: "application"
+              ignore_failure: true
+
 filebeat.inputs:
   - type: log
     enabled: true
@@ -99,6 +118,11 @@ processors:
   - decode_json_fields:
       fields: ["message"]
       target: "zeek"
+      overwrite_keys: true
+      when:
+        not:
+          equals:
+            source: application
   # SHA 256 hash proccessor
   - script:
       lang: javascript
